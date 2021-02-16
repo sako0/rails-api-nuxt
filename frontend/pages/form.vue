@@ -95,15 +95,13 @@ export default {
     };
   },
   mounted () {
-    let baseurl = "http//127.0.0.1:3000/api/v1"
+    let baseurl = "http://localhost:3000/api/v1"
     axios
-        .get('http://localhost:3000/api/v1/users')
+        .get(baseurl+'/users')
         .then(response => (this.links = response.data))
   },
   methods: {
     onSubmit() {
-      console.log("submit!");
-      const response = this.$axios.$post("/v1/tweet")
     }
   }
 };
