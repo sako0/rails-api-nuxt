@@ -2,7 +2,7 @@
   <v-tabs left>
     <v-tab>
       <v-icon>mdi-face</v-icon>
-      Profile
+      {{ tab_name }}
     </v-tab>
     <v-tab>
       <v-icon>mdi-face</v-icon>
@@ -14,3 +14,9 @@
     </v-tab>
   </v-tabs>
 </template>
+<script>
+export default {
+  name: 'Tab',
+  props: ['tab_name'],
+}
+</script>

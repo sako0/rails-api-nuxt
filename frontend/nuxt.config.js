@@ -6,18 +6,18 @@ export default {
     titleTemplate: '%s - frontend',
     title: 'frontend',
     meta: [
-      {charset: 'utf-8'},
-      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {hid: 'description', name: 'description', content: ''},
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'description', name: 'description', content: '' },
     ],
-    link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
   generate: {
     // Nuxt.jsでビルドされるファイルの出力先を、publicに変更
-    dir: '../public'
+    dir: '../public',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],
@@ -44,7 +44,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    prefix: '/api'
+    prefix: '/api',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -57,9 +57,9 @@ export default {
     '/api': {
       target: 'http://127.0.0.1:3000',
       pathRewrite: {
-        '^/api': '/'
-      }
-    }
+        '^/api': '/',
+      },
+    },
   },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
