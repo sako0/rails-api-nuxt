@@ -1,15 +1,15 @@
 <template>
   <v-app id="inspire">
     <v-app-bar
-        app
-        color="white"
-        flat
+      app
+      color="white"
+      flat
     >
       <v-container class="py-0 fill-height">
         <v-avatar
-            class="mr-10"
-            color="grey darken-1"
-            size="32"
+          class="mr-10"
+          color="grey darken-1"
+          size="32"
         ></v-avatar>
 
         <v-btn color="white lighten-2"
@@ -24,11 +24,11 @@
 
         <v-responsive max-width="260">
           <v-text-field
-              dense
-              flat
-              hide-details
-              rounded
-              solo-inverted
+            dense
+            flat
+            hide-details
+            rounded
+            solo-inverted
           ></v-text-field>
         </v-responsive>
       </v-container>
@@ -41,9 +41,9 @@
             <v-sheet rounded="lg">
               <v-list color="transparent">
                 <v-list-item
-                    v-for="n in 5"
-                    :key="n"
-                    link
+                  v-for="n in 5"
+                  :key="n"
+                  link
                 >
                   <v-list-item-content>
                     <v-list-item-title>
@@ -55,8 +55,8 @@
                 <v-divider class="my-2"></v-divider>
 
                 <v-list-item
-                    link
-                    color="grey lighten-4"
+                  link
+                  color="grey lighten-4"
                 >
                   <v-list-item-content>
                     <v-list-item-title>
@@ -70,8 +70,8 @@
 
           <v-col>
             <v-sheet
-                min-height="70vh"
-                rounded="lg"
+              min-height="70vh"
+              rounded="lg"
             >
             </v-sheet>
           </v-col>
@@ -97,8 +97,8 @@ export default {
   mounted () {
     let baseurl = "http://localhost:3000/api/v1"
     axios
-        .get(baseurl+'/users')
-        .then(response => (this.links = response.data))
+      .get(baseurl+'/users')
+      .then(response => (this.links = response.data))
   },
   methods: {
     onSubmit() {
