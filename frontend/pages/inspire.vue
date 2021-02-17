@@ -49,5 +49,11 @@ export default {
     HorizontalCards,
     ProfileCard,
   },
+  mounted() {
+    const url = '/api/v1/users'
+    this.$axios.get(url).then((res) => {
+      console.log(res)
+    })
+  },
 }
 </script>

@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+const BASEURL = 'http://localhost:3000'
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -40,25 +42,23 @@ export default {
     '@nuxtjs/proxy',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/auth',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    prefix: '/api',
+    proxy: true,
+    baseURL: BASEURL,
+    browserBaseURL: BASEURL,
+  },
+  proxy: {
+    '/api': '/',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en',
-    },
-  },
-  proxy: {
-    '/api': {
-      target: 'http://127.0.0.1:3000',
-      pathRewrite: {
-        '^/api': '/',
-      },
+      lang: 'ja',
     },
   },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -79,21 +79,24 @@ export default {
       },
     },
   },
-
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-    babel: {
-      presets({ isServer }) {
-        return [
-          [
-            require.resolve('@nuxt/babel-preset-app'),
-            // require.resolve('@nuxt/babel-preset-app-edge'), // For nuxt-edge users
-            {
-              buildTarget: isServer ? 'server' : 'client',
-              corejs: { version: 3 },
-            },
-          ],
-        ]
+  auth: {
+    redirect: {
+      login: '/login', // 未ログイン時に認証ルートへアクセスした際のリダイレクトURL
+      logout: '/login', // ログアウト時のリダイレクトURL
+      callback: false, // Oauth認証等で必要となる コールバックルート
+      home: '/', // ログイン後のリダイレクトURL
+    },
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/api/v1/login',
+            method: 'post',
+            propertyName: 'token',
+          },
+          user: { url: '/api/v1/me', method: 'get', propertyName: false },
+          logout: false,
+        },
       },
     },
   },
