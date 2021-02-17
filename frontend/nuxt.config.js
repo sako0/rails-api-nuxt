@@ -14,15 +14,14 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
-
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['element-ui/lib/theme-chalk/index.css'],
   generate: {
     // Nuxt.jsでビルドされるファイルの出力先を、publicに変更
     dir: '../public',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['~plugins/element-ui'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
