@@ -61,6 +61,7 @@ export default {
             return response
           },
           (error) => {
+            console.log(error.statusText)
             return error
           }
         )

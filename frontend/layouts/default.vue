@@ -37,8 +37,41 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
+      <div class="text-center">
+        <v-menu offset-y>
+          <template #activator="{ on, attrs }">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              color="orange darken-3"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon dark>mdi-format-list-bulleted-square</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in userMenus"
+              :key="index"
+              @click.stop="userPullDown = !userPullDown"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
+
+      <v-btn
+        v-btn
+        class="mx-2"
+        fab
+        dark
+        color="gray"
+        @click.stop="rightDrawer = !rightDrawer"
+      >
+        <v-icon dark color="teal accent-2">mdi-account-check</v-icon>
       </v-btn>
     </v-app-bar>
     <v-main>
@@ -81,9 +114,18 @@ export default {
           to: '/inspire',
         },
       ],
+      userMenus: [
+        {
+          title: 'ユーザページ',
+        },
+        {
+          title: 'ログアウト',
+        },
+      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
+      userPullDown: false,
       title: 'Vuetify.js',
     }
   },

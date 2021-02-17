@@ -89,11 +89,11 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: '/api/v1/login',
+            url: '/api/v1/sessions',
             method: 'post',
             propertyName: 'token',
           },
-          user: { url: '/api/v1/me', method: 'get', propertyName: false },
+          user: { url: '/api/v1/users', method: 'get', propertyName: false },
           logout: false,
         },
       },

@@ -14,8 +14,20 @@ gem 'puma', '~> 5.0'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
+# パスワードをハッシュ化するための最先端のハッシュ関数
+ gem 'bcrypt', '~> 3.1.7'
+# テスト用ユーザ等の追加
+gem "faker"
+# ページネーション用のgem
+gem "will_paginate"
+# 画像のトリミングに使う
+gem 'image_processing'
+gem 'mini_magick'
+gem "active_storage_validations"
+# ログの出力先を標準出力にする
+gem 'rails_semantic_logger'
+# 画像の保存先をS3に変更
+gem "aws-sdk-s3", require: false
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
@@ -38,3 +50,5 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+# guardの動作にrexmlが必要
+gem "rexml"
