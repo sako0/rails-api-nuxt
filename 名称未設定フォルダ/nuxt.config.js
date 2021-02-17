@@ -6,11 +6,11 @@ export default {
     titleTemplate: '%s - frontend',
     title: 'frontend',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      {charset: 'utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {hid: 'description', name: 'description', content: ''},
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -90,11 +90,11 @@ export default {
             // require.resolve('@nuxt/babel-preset-app-edge'), // For nuxt-edge users
             {
               buildTarget: isServer ? 'server' : 'client',
-              corejs: { version: 3 },
-            },
-          ],
+              corejs: { version: 3 }
+            }
+          ]
         ]
-      },
+      }
     },
   },
 }
