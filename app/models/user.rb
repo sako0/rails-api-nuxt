@@ -1,9 +1,4 @@
 class User < ApplicationRecord
-  # Include default devise modules.
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-  include DeviseTokenAuth::Concerns::User
-  # ここまでdeviseモジュール
   has_many :microposts, dependent: :destroy
   has_one(:profiles, dependent: :destroy, class_name: "Profile")
   accepts_nested_attributes_for :profiles
@@ -22,8 +17,9 @@ class User < ApplicationRecord
   validates(:email, presence: true, length: { maximum: 255 })
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates(:email, format: { with: VALID_EMAIL_REGEX }, uniqueness: true)
+  has_secure_password
   validates(:password, presence: true, length: { minimum: 6 }, allow_nil: true)
-  before_create :default_image, :default_back_ground_image
+  before_create :default_image, :default_back_ground_image, :create_activation_digest
   before_save :downcase_email
   attr_accessor :remember_token, :activation_token, :reset_token
   validates :image, content_type: { in: %w[image/jpeg image/gif image/png],
@@ -39,15 +35,29 @@ class User < ApplicationRecord
                                                   message: "must be a valid image format" },
             size: { less_than: 5.megabytes, message: "should be less than 5MB" }
 
+  # 渡された文字列のハッシュ値を返す
+  def digest(string)
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
+             BCrypt::Engine.cost
+    BCrypt::Password.create(string, cost: cost)
+  end
+
   # ランダムなトークンを返す
   def User.new_token
     SecureRandom.urlsafe_base64
   end
 
-  # 認証済かどうか確認する(confirmed_atか)
-  def authenticated?(attribute)
-    digest = self.send("#{attribute}")
-    false if digest.nil?
+  # 認証済かどうか確認する
+  def authenticated?(attribute, token)
+    digest = self.send("#{attribute}_digest")
+    return false if digest.nil?
+    BCrypt::Password.new(digest).is_password?(token)
+  end
+
+  # ランダムな文字列（トークン）を作成し、それをハッシュ化し、DBのremember_digestに保存
+  def remember
+    self.remember_token = User.new_token
+    update_attribute(:remember_digest, digest(self.remember_token))
   end
 
   # DBのremember_digestを破棄
@@ -100,6 +110,11 @@ class User < ApplicationRecord
   # プレビューイメージを圧縮する
   def preview_background_image()
     back_ground_preview.variant(gravity: :center, resize: "310x180^", crop: "300x140+0+0") if self.back_ground.attached?
+  end
+
+  # channelを使用したリアルタイム表示の際に差し替えるhtmlテンプレートを生成する
+  def user_widget_html
+    ApplicationController.renderer.render partial: "users/user_widget", locals: { preview: false, user: self, current_user: self }
   end
 
   # other_userのフォローを行う
@@ -166,10 +181,10 @@ class User < ApplicationRecord
     self.email = email.downcase
   end
 
-  # def create_activation_digest
-  #   self.activation_token = User.new_token
-  #   self.activation_digest = digest(activation_token)
-  # end
+  def create_activation_digest
+    self.activation_token = User.new_token
+    self.activation_digest = digest(activation_token)
+  end
 
   def default_image
     if !self.image.attached?

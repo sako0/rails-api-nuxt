@@ -7,13 +7,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 @user = User.create(name: "koda",
                     email: "kodakoda@gmail.com",
-                    confirmed_at: "2021/01/01",
                     password: "11111111",)
 @user.build_profiles(job: "a")
 @user.save
 @user = User.create(name: "bibi",
                     email: "bi@gmail.com",
-                    confirmed_at: "2021/01/01",
                     password: "11111111",)
 @user.build_profiles(job: "bibiWEB")
 @user.save

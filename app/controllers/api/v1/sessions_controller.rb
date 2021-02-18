@@ -1,6 +1,11 @@
 class Api::V1::SessionsController < ApplicationController
-  #before_action :authenticate_api_user!
-  def index
-    render json: current_user.all.as_json
+
+  def create
+    logger.error(params)
+    user = User.find_by(email: params[:email].downcase)
+    if user && user.authenticate(params[:password])
+      base = SecureRandom.urlsafe_base64.downcase
+      render json: base
+    end
   end
 end

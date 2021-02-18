@@ -21,7 +21,11 @@ export default {
     dir: '../public',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: '~/plugins/localStorage.js', ssr: false }],
+  plugins: [
+    { src: '~/plugins/localStorage.js', ssr: false },
+    '@/plugins/axios',
+    '@/plugins/auth',
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -84,31 +88,25 @@ export default {
       },
     },
   },
-  router: {
-    middleware: ['auth'],
-  },
+  router: {},
   auth: {
     redirect: {
       login: '/login', // 未ログイン時に認証ルートへアクセスした際のリダイレクトURL
       logout: '/login', // ログアウト時のリダイレクトURL
       callback: false, // Oauth認証等で必要となる コールバックルート
-      home: false, // ログイン後のリダイレクトURL
+      home: '/', // ログイン後のリダイレクトURL
     },
     strategies: {
       local: {
         endpoints: {
           login: {
-            url: '/api/v1/auth/sign_in',
+            url: '/api/v1/sessions',
             method: 'post',
-            propertyName: 'token',
+            propertyName: 'access_token',
           },
           user: false,
-          //   {
-          //   url: '/api/v1/users',
-          //   method: 'get',
-          //   propertyName: 'user',
-          // },
           logout: false,
+          clientId: true,
         },
       },
     },
