@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     end
     scope :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
+      # , controllers: {
+      #   sessions: 'api/v1/auth/sessions'
+      # }
     end
   end
 end

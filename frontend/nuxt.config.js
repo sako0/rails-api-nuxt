@@ -21,7 +21,7 @@ export default {
     dir: '../public',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: '~/plugins/localStorage.js', ssr: false }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -92,7 +92,7 @@ export default {
       login: '/login', // 未ログイン時に認証ルートへアクセスした際のリダイレクトURL
       logout: '/login', // ログアウト時のリダイレクトURL
       callback: false, // Oauth認証等で必要となる コールバックルート
-      home: '/', // ログイン後のリダイレクトURL
+      home: false, // ログイン後のリダイレクトURL
     },
     strategies: {
       local: {
@@ -102,11 +102,12 @@ export default {
             method: 'post',
             propertyName: 'token',
           },
-          user: {
-            url: '/api/v1/sessions',
-            method: 'index',
-            propertyName: false,
-          },
+          user: false,
+          //   {
+          //   url: '/api/v1/users',
+          //   method: 'get',
+          //   propertyName: 'user',
+          // },
           logout: false,
         },
       },

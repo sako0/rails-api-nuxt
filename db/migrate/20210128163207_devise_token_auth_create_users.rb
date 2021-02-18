@@ -40,7 +40,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.1]
       ## User Info
       t.string :name
       t.string :email
-      t.datetim :last_action_at
+      t.datetime :last_action_at
 
       ## Tokens
       t.text :tokens
