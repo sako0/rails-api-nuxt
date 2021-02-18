@@ -14,8 +14,12 @@ gem 'puma', '~> 5.0'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
-# パスワードをハッシュ化するための最先端のハッシュ関数
- gem 'bcrypt', '~> 3.1.7'
+# devise関連
+gem 'devise'
+gem 'devise_token_auth'
+gem 'omniauth', '1.9.1'
+# パスワード等をハッシュ化するための最先端のハッシュ関数
+gem 'bcrypt', '~> 3.1.7'
 # テスト用ユーザ等の追加
 gem "faker"
 # ページネーション用のgem
