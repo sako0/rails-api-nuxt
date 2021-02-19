@@ -109,11 +109,6 @@ export default {
             propertyName: 'access_token',
           },
           user: false,
-          //   {
-          //   url: '/api/v1/sessions',
-          //   method: 'get',
-          //   propertyName: 'user',
-          // },
           logout: false,
           clientId: true,
         },

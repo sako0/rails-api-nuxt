@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :microposts, dependent: :destroy
+  has_many :micropost, dependent: :destroy
   has_one(:profiles, dependent: :destroy, class_name: "Profile")
   accepts_nested_attributes_for :profiles
   # active_relation(follower_id)を持つユーザは、それを通して、さらにfollowing_idを持っている。
@@ -92,23 +92,23 @@ class User < ApplicationRecord
   end
 
   # ユーザプロフィールイメージを圧縮する
-  def display_image()
+  def display_image
     image.variant(gravity: :center, resize: "640x640^", crop: "640x640+0+0") if self.image.attached?
   end
 
   # ユーザプロフィールイメージを圧縮する
-  def display_background_image()
+  def display_background_image
     back_ground.variant(gravity: :center, resize: "280x180^", crop: "300x140+0+0") if self.back_ground.attached?
   end
 
   # プレビューイメージを圧縮する
-  def preview_image()
+  def preview_image
 
     image_preview.variant(gravity: :center, resize: "640x640^", crop: "640x640+0+0") if self.image.attached?
   end
 
   # プレビューイメージを圧縮する
-  def preview_background_image()
+  def preview_background_image
     back_ground_preview.variant(gravity: :center, resize: "310x180^", crop: "300x140+0+0") if self.back_ground.attached?
   end
 
@@ -172,6 +172,14 @@ class User < ApplicationRecord
                      WHERE follower_id = '#{self.id}'"
     Micropost.where("user_id IN (#{follow_user_sql})
                      AND content like ?", "%#{value}%")
+  end
+
+  # 画像のURLを返す
+  def image_url
+    # url_forは基本modelでは使えないが以下を参考に実施した
+    # https://qiita.com/ogawatti/items/f60f757cdb6a67256885
+    routes = Rails.application.routes.url_helpers
+    url = routes.url_for(self.display_image.processed)
   end
 
   private

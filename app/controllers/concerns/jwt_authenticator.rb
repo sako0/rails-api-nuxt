@@ -10,10 +10,8 @@ module JwtAuthenticator
     # headers['Authorization'] = "Bearer XXXXX..."
     request.headers.sort.map { |k, v| logger.error "#{k}:#{v}" }
     encoded_token = request.headers['Authorization'].split('Bearer ').last
-    logger.error(encoded_token)
     # トークンを復号化する(トークンが復号できない場合、有効期限切れの場合はここで例外が発生します。)
     payload = decode(encoded_token)
-    logger.error(payload["user_id"])
     # Payloadから取得したユーザーIDでログインしているユーザー情報を取得
     @current_user = User.find_by(id: payload["user_id"])
     logger.error("認証できません。") if @current_user.blank?

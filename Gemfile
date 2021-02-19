@@ -32,6 +32,8 @@ gem 'rails_semantic_logger'
 gem "aws-sdk-s3", require: false
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+# Jsonを加工しやすくする
+gem 'active_model_serializers', require: true
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false

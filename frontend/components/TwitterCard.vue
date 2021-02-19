@@ -5,7 +5,7 @@
         <v-img
           class="elevation-6"
           alt=""
-          src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+          :src="micropost.user.image_url"
         ></v-img>
       </v-list-item-avatar>
       <span class="title font-weight-light">Twitter</span>
@@ -46,3 +46,14 @@
     </v-card-actions>
   </v-card>
 </template>
+<script>
+export default {
+  props: {
+    // Object形に変換
+    micropost: Object,
+  },
+  mounted() {
+    console.log(this.micropost)
+  },
+}
+</script>
