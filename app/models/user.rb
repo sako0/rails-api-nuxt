@@ -34,6 +34,7 @@ class User < ApplicationRecord
   validates :back_ground_preview, content_type: { in: %w[image/jpeg image/gif image/png],
                                                   message: "must be a valid image format" },
             size: { less_than: 5.megabytes, message: "should be less than 5MB" }
+  include Rails.application.routes.url_helpers
 
   # 渡された文字列のハッシュ値を返す
   def digest(string)
@@ -179,7 +180,7 @@ class User < ApplicationRecord
     # url_forは基本modelでは使えないが以下を参考に実施した
     # https://qiita.com/ogawatti/items/f60f757cdb6a67256885
     routes = Rails.application.routes.url_helpers
-    url = routes.url_for(self.display_image.processed)
+    routes.url_for(self.display_image.processed)
   end
 
   private

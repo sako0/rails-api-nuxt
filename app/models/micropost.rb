@@ -8,6 +8,7 @@ class Micropost < ApplicationRecord
   validates :image, content_type: { in: %w[image/jpeg image/gif image/png],
                                     message: "must be a valid image format" },
             size: { less_than: 5.megabytes, message: "should be less than 5MB" }
+  include Rails.application.routes.url_helpers
   # アタッチされている画像を圧縮する
   def display_image
     image.variant(resize_to_limit: [500, 500])
@@ -23,8 +24,7 @@ class Micropost < ApplicationRecord
     if self.image.attached?
       # url_forは基本modelでは使えないが以下を参考に実施した
       # https://qiita.com/ogawatti/items/f60f757cdb6a67256885
-      routes = Rails.application.routes.url_helpers
-      url = routes.url_for(self.display_image.processed)
+      image_path(self.display_image.processed)
     end
   end
 end

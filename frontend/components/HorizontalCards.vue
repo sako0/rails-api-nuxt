@@ -12,7 +12,7 @@
     <v-container>
       <v-row dense>
         <v-col v-for="(micropost, i) in microposts" :key="i" cols="12">
-          <twitterCard micropost="micropost" />
+          <twitterCard :micropost="micropost" />
         </v-col>
         <v-col v-for="(item, i) in items" :key="i" cols="12">
           <v-card :color="item.color" dark>
@@ -45,7 +45,7 @@ export default {
   },
   props: {
     // Object形に変換
-    microposts: Array,
+    microposts: Object,
   },
   data: () => ({
     items: [

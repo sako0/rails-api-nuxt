@@ -5,7 +5,7 @@
         <v-img
           class="elevation-6"
           alt=""
-          :src="micropost.user.image_url"
+          :src="micropost[0].attributes.post_user_image"
         ></v-img>
       </v-list-item-avatar>
       <span class="title font-weight-light">Twitter</span>
