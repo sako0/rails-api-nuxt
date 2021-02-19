@@ -24,7 +24,10 @@
         <v-col cols="8">
           <v-row class="mt-5">
             <v-col cols="12">
-              <horizontalCards :microposts="microposts" />
+              <horizontalCards
+                :microposts="microposts"
+                :current_user="currentUser"
+              />
             </v-col>
           </v-row>
         </v-col>

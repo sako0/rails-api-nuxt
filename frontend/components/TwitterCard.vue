@@ -1,23 +1,24 @@
 <template>
   <v-card class="mx-auto" color="#1F7087" dark>
-    <v-card-title>
+    <v-card-title class="d-flex">
       <v-list-item-avatar color="grey darken-3">
         <v-img
           class="elevation-6"
           alt=""
-          :src="micropost[0].attributes.post_user_image"
+          :src="micropost.attributes.post_user_image"
         ></v-img>
       </v-list-item-avatar>
-      <span class="title font-weight-light">Twitter</span>
+      <span class="title font-weight-light">{{
+        micropost.attributes.user.name
+      }}</span>
     </v-card-title>
 
     <div class="d-flex flex-no-wrap justify-space-between">
-      <v-card-text class="body-1">
-        "Turns out semicolon-less style is easier and safer in TS because most
-        gotcha edge cases are type invalid as well."
+      <v-card-text class="body-1 text-left">
+        {{ micropost.attributes.content }}
       </v-card-text>
-      <v-avatar class="ma-3" size="125" tile>
-        <v-img src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"></v-img>
+      <v-avatar class="d-flex ma-3" size="" tile>
+        <v-img :src="micropost.attributes.image"></v-img>
       </v-avatar>
     </div>
 
@@ -27,7 +28,7 @@
           <v-img
             class="elevation-6"
             alt=""
-            src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+            :src="current_user.user.image"
           ></v-img>
         </v-list-item-avatar>
 
@@ -51,6 +52,7 @@ export default {
   props: {
     // Object形に変換
     micropost: Object,
+    current_user: Object,
   },
   mounted() {
     console.log(this.micropost)

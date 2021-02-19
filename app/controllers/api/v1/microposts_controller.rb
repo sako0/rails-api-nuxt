@@ -7,7 +7,7 @@ class Api::V1::MicropostsController < ApplicationController
     # https://qiita.com/eggc/items/29a3c9a41d77227fb10a
     logger.error(@current_user.id)
     # @micropost = Micropost.find_by(user_id: @current_user.id)
-    @micropost = @current_user.micropost
+    @micropost = @current_user.micropost.all
     render json: @micropost, each_serializer: MicropostSerializer
   end
 end

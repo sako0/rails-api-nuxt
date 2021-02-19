@@ -1,5 +1,5 @@
 class MicropostSerializer < ActiveModel::Serializer
-  attributes :id, :content, :user_id, :created_at, :image, :post_user_image
+  attributes :id, :content, :user_id, :user, :created_at, :image, :post_user_image
 
   # 画像のURLを返す
   def image
