@@ -27,6 +27,7 @@
               <horizontalCards
                 :microposts="microposts"
                 :current_user="currentUser"
+                @myEvent="postClick"
               />
             </v-col>
           </v-row>
@@ -50,22 +51,19 @@ export default {
   async asyncData({ $axios }) {
     const currentUser = await $axios.get('api/v1/sessions')
     const microposts = await $axios.get('api/v1/microposts')
+    console.log(microposts)
     // 配列で返ってくるのでJSONにして返却
     return { currentUser: currentUser.data, microposts: microposts.data }
   },
-  mounted() {
-    console.log(this.microposts)
+  mounted() {},
+  methods: {
+    postClick(param) {
+      if (param === 'success') {
+        this.$axios
+          .get('api/v1/microposts')
+          .then((response) => (this.microposts = response.data))
+      }
+    },
   },
-  //   const url = 'api/v1/sessions'
-  //   const token = this.$auth.strategy.token.get()
-  //   // headerにログイン時に受け取ったtokenをセット
-  //   this.$auth.strategy.token.set(token)
-  //   // user情報を取得
-  //   const currentUser = this.$axios.get(url).then((res) => {
-  //     console.log(res)
-  //   })
-  //   console.log(currentUser)
-  //   return { currentUser }
-  // },
 }
 </script>
