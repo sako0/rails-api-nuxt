@@ -41,6 +41,11 @@
 <script>
 export default {
   layout: 'login',
+  middleware({ store, redirect }) {
+    if (store.$auth.loggedIn) {
+      redirect('/')
+    }
+  },
   data() {
     return {
       login: {
@@ -55,8 +60,8 @@ export default {
         const response = await this.$auth.loginWith('local', {
           data: this.login,
         })
-        console.log(this.$auth.loggedIn)
         console.log(response)
+        location.reload()
       } catch (err) {
         console.log(err)
       }

@@ -125,6 +125,7 @@ export default {
   methods: {
     async logout() {
       await this.$auth.logout() // ログアウト
+      location.reload()
     },
   },
 }

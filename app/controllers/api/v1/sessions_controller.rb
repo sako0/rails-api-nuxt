@@ -8,4 +8,8 @@ class Api::V1::SessionsController < ApplicationController
       render json: base
     end
   end
+
+  def index
+
+  end
 end

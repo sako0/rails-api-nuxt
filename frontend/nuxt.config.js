@@ -88,13 +88,13 @@ export default {
       },
     },
   },
-  router: {},
+  router: {}, // ログイン画面も含めた全体のページに認証を必要とする。例外はauth: falseで設定する
   auth: {
     redirect: {
       login: '/login', // 未ログイン時に認証ルートへアクセスした際のリダイレクトURL
-      logout: '/login', // ログアウト時のリダイレクトURL
+      logout: '/', // ログアウト時のリダイレクトURL
       callback: false, // Oauth認証等で必要となる コールバックルート
-      home: '/', // ログイン後のリダイレクトURL
+      home: '/login', // ログイン後のリダイレクトURL一度リダイレクトに成功しないとログインができないためlogin画面にリダイレクトさせている
     },
     strategies: {
       local: {
@@ -106,6 +106,10 @@ export default {
           },
           user: false,
           logout: false,
+          //   {
+          //   url: '/api/v1/sessions',
+          //   method: 'post',
+          // },
           clientId: true,
         },
       },
