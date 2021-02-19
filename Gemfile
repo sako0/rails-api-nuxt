@@ -14,6 +14,8 @@ gem 'puma', '~> 5.0'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
+# APIでcurrent_userを取得するためのJsonWebTokenの発行
+gem 'jwt'
 # パスワード等をハッシュ化する関数
 gem 'bcrypt', '~> 3.1.7'
 # テスト用ユーザ等の追加

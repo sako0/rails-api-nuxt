@@ -50,11 +50,22 @@ export default {
     ProfileCard,
   },
   middleware: 'auth',
-  // mounted() {
-  //   const url = '/api/v1/users'
-  //   this.$axios.get(url).then((res) => {
-  //     console.log(res)
-  //   })
-  // },
+  mounted() {
+    const url = 'api/v1/sessions'
+    const token = this.$auth.strategy.token.get()
+    this.$auth.strategy.token.set(token)
+    this.$axios
+      .get(
+        url
+        //   , {
+        //   headers: {
+        //     Authorization: `${token}`,
+        //   },
+        // }
+      )
+      .then((res) => {
+        console.log(res)
+      })
+  },
 }
 </script>

@@ -98,6 +98,10 @@ export default {
     },
     strategies: {
       local: {
+        token: {
+          property: 'token',
+          type: 'Bearer',
+        },
         endpoints: {
           login: {
             url: '/api/v1/sessions',
@@ -105,11 +109,12 @@ export default {
             propertyName: 'access_token',
           },
           user: false,
-          logout: false,
           //   {
           //   url: '/api/v1/sessions',
-          //   method: 'post',
+          //   method: 'get',
+          //   propertyName: 'user',
           // },
+          logout: false,
           clientId: true,
         },
       },

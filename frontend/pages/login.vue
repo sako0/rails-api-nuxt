@@ -76,7 +76,7 @@ this.$store.commit( // 'setAccessToken', // response.headers['access-token'] //
 ) // this.$store.commit('setClient', response.headers.client) //
 this.$store.commit('setUid', response.headers.uid) //
 this.$store.commit('setTokenType', response.headers['token-type']) //
-this.$auth.strategy.token.set(response.headers['access-token']) //
+this.$auth.strategy.token.set(response.headers[X-Authentication-Token]) //
 this.$auth.strategy.token.set(response.headers['access-token']) //
 this.$auth.setUserToken(response.headers['access-token']) //
 console.log(this.$auth.user) // const a = this.$axios.get('/api/v1/users/' +
