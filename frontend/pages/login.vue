@@ -57,10 +57,9 @@ export default {
   methods: {
     async loginWithAuthModule() {
       try {
-        const response = await this.$auth.loginWith('local', {
+        await this.$auth.loginWith('local', {
           data: this.login,
         })
-        console.log(response)
         location.reload()
       } catch (err) {
         console.log(err)

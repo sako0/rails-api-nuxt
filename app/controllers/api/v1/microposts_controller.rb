@@ -15,6 +15,7 @@ class Api::V1::MicropostsController < ApplicationController
       @micropost = @current_user.micropost.build(micropost_params)
       @micropost.image.attach(params[:image]) if params[:image]
       if @micropost.save
+        ActionCable.server.broadcast("micropost_channel", { method: "create", post_user_id: @current_user.id, user_id: @current_user.id })
         render json: "success"
       else
         if @micropost.errors.any?

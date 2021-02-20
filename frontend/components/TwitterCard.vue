@@ -54,8 +54,6 @@ export default {
     micropost: Object,
     current_user: Object,
   },
-  mounted() {
-    console.log(this.micropost)
-  },
+  mounted() {},
 }
 </script>

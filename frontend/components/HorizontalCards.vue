@@ -71,7 +71,7 @@ export default {
         .post('/api/v1/microposts', {
           content: this.content,
         })
-        .then((response) => this.$emit('myEvent', 'success'))
+        .then(() => this.$emit('myEvent', 'success'))
         .catch((error) => console.log(error))
     },
   },
