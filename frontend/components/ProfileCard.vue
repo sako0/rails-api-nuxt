@@ -1,14 +1,16 @@
 <template>
-  <v-card class="mx-auto" max-width="350" elevation="24" tile>
+  <v-card class="mx-auto" max-width="320" elevation="24" tile>
     <v-img height="100%" :src="user.user.background_image">
       <v-row>
         <v-col cols="2">
-          <v-icon>mdi-square-edit-outline</v-icon>
+          <v-btn text>
+            <v-icon> mdi-square-edit-outline </v-icon>
+          </v-btn>
         </v-col>
         <v-col cols="10"> </v-col>
       </v-row>
       <v-row>
-        <v-col class="pa-1" cols="12">
+        <v-col class="pa-0" cols="12">
           <v-avatar class="profile" color="grey" size="100">
             <v-img :src="user.user.image"></v-img>
           </v-avatar>
