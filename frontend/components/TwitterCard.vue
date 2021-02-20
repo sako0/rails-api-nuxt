@@ -1,5 +1,6 @@
 <template>
   <v-card class="mx-auto" color="#1F7087" dark>
+    <Dialog ref="dlg" type="postDelete"></Dialog>
     <v-card-title>
       <v-list-item-avatar color="grey darken-3">
         <v-img
@@ -24,7 +25,7 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item v-if="menu.delete" @click="deletePost()">
+              <v-list-item v-if="menu.delete" @click="openDisplay()">
                 <v-list-item-title>投稿を削除する</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -55,12 +56,7 @@
         <v-row align="center" justify="end">
           <v-col cols="8">
             <v-card-text>
-              <v-text-field
-                v-model="content"
-                :size="1"
-                label="コメントフォーム"
-              >
-              </v-text-field>
+              <v-text-field label="コメントフォーム"> </v-text-field>
             </v-card-text>
           </v-col>
           <v-col cols="2">
@@ -77,7 +73,11 @@
   </v-card>
 </template>
 <script>
+import Dialog from '@/components/dialog'
 export default {
+  components: {
+    Dialog,
+  },
   props: {
     // Object形に変換
     micropost: Object,
@@ -99,6 +99,9 @@ export default {
   methods: {
     deletePost() {
       console.log('delete')
+    },
+    openDisplay() {
+      this.$refs.dlg.isDisplay = true
     },
   },
 }
