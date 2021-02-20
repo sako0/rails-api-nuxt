@@ -64,19 +64,32 @@ export default {
       cable.subscriptions.create('MicropostChannel', {
         received: (data) => {
           const currentUserId = this.currentUser.user.id
-          console.log(data.method)
-          console.log(currentUserId)
+          // 新規投稿をした場合にdata.user_idのユーザにブロードキャストする
           if (data.method === 'create') {
-            // 投稿者と投稿が見れる全員に対して行われる処理
-            // サーバー側から受け取ったHTMLを一番上に加える
+            // サーバ側から送られてきたuser_idとcurrent_userが一致する場合
             if (currentUserId === data.user_id) {
+              // 投稿の一覧を再取得
               this.$axios
                 .get('api/v1/microposts')
                 .then((response) => (this.microposts = response.data))
             }
-            // 投稿者の場合のみフォームをクリアする
-            if (data.post_user_id === currentUserId) {
-              // フォームのリセット処理をここに記載する
+          }
+          // 投稿を削除した場合にdata.user_idのユーザにブロードキャストする
+          if (data.method === 'destroy') {
+            // オブジェクトを配列にする
+            const arr = this.microposts.data
+            const micropostsArr = Object.entries(arr)
+            // micropost_idが存在するか確認
+            for (const v of micropostsArr) {
+              Object.entries(v)
+              // 存在した場合はaxiosでgetを行う
+              if (v[1].id === data.micropost_id.toString()) {
+                // 投稿の一覧を再取得
+                this.$axios
+                  .get('api/v1/microposts')
+                  .then((response) => (this.microposts = response.data))
+                break
+              }
             }
           }
         },

@@ -102,11 +102,14 @@ export default {
         .delete('/api/v1/microposts/' + this.micropost.id, {
           content: this.content,
         })
-        .then((response) => console.log(response))
+        .then(this.closeDisplay)
         .catch((error) => console.log(error))
     },
     openDisplay() {
       this.$refs.dlg.isDisplay = true
+    },
+    closeDisplay() {
+      this.$refs.dlg.$emit('closeDisplay')
     },
   },
 }

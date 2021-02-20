@@ -69,7 +69,7 @@ export default {
         .post('/api/v1/microposts', {
           content: this.content,
         })
-        .then((response) => console.log(response))
+        .then((this.content = ''))
         .catch((error) => console.log(error))
     },
   },

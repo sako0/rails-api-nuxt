@@ -35,6 +35,9 @@ export default {
     submit() {
       this.$emit('method')
     },
+    closeDisplay() {
+      this.isDisplay = false
+    },
   },
 }
 </script>
