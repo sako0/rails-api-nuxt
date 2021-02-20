@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     submit() {
+      this.isDisplay = false
       this.$emit('method')
     },
     closeDisplay() {

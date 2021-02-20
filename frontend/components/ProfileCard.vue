@@ -31,6 +31,24 @@
         </v-col>
       </v-row>
     </v-img>
+    <v-card-subtitle class="pb-0">{{ user.user.profile.url }}</v-card-subtitle>
+
+    <v-card-text class="text--primary">
+      <div>{{ user.user.profile.skills }}</div>
+
+      <div>{{ user.user.profile.notes }}</div>
+    </v-card-text>
+
+    <v-card-actions>
+      <v-row>
+        <v-col cols="6">
+          <v-btn color="orange" text> フォロー </v-btn>
+        </v-col>
+        <v-col col="6">
+          <v-btn color="orange" text> DM </v-btn>
+        </v-col>
+      </v-row>
+    </v-card-actions>
   </v-card>
 </template>
 <script>
