@@ -61,9 +61,7 @@ export default {
       },
     },
   },
-  mounted() {
-    console.log(this.microposts.data)
-  },
+  mounted() {},
   methods: {
     submit() {
       this.success = true
@@ -71,7 +69,7 @@ export default {
         .post('/api/v1/microposts', {
           content: this.content,
         })
-        .then(() => this.$emit('myEvent', 'success'))
+        .then((response) => console.log(response))
         .catch((error) => console.log(error))
     },
   },

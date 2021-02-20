@@ -27,7 +27,6 @@
               <horizontalCards
                 :microposts="microposts"
                 :current_user="currentUser"
-                @myEvent="postClick"
               />
             </v-col>
           </v-row>

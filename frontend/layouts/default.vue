@@ -57,7 +57,6 @@
       </div>
 
       <v-btn
-        v-btn
         class="mx-2"
         fab
         dark
