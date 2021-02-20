@@ -8,7 +8,7 @@
             <v-btn @click="isDisplay = false">Close</v-btn>
           </v-col>
           <v-col cols="6" class="text-right">
-            <v-btn color="red" @click="isDisplay = false">OK</v-btn>
+            <v-btn color="red" @click="submit">OK</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -30,6 +30,11 @@ export default {
     if (this.type === 'postDelete') {
       this.title = '投稿を削除しますか？'
     }
+  },
+  methods: {
+    submit() {
+      this.$emit('method')
+    },
   },
 }
 </script>

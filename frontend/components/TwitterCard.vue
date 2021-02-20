@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" color="#1F7087" dark>
-    <Dialog ref="dlg" type="postDelete"></Dialog>
+    <Dialog ref="dlg" type="postDelete" @method="deletePost"></Dialog>
     <v-card-title>
       <v-list-item-avatar color="grey darken-3">
         <v-img
@@ -98,7 +98,12 @@ export default {
   mounted() {},
   methods: {
     deletePost() {
-      console.log('delete')
+      this.$axios
+        .delete('/api/v1/microposts/' + this.micropost.id, {
+          content: this.content,
+        })
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error))
     },
     openDisplay() {
       this.$refs.dlg.isDisplay = true
