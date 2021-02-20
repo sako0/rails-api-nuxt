@@ -99,7 +99,7 @@ class User < ApplicationRecord
 
   # ユーザプロフィールイメージを圧縮する
   def display_background_image
-    back_ground.variant(gravity: :center, resize: "280x180^", crop: "300x140+0+0") if self.back_ground.attached?
+    back_ground.variant(gravity: :center, resize: "2400x1600^", crop: "2400x1920+0+0") if self.back_ground.attached?
   end
 
   # プレビューイメージを圧縮する

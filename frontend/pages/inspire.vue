@@ -37,7 +37,6 @@
   </v-row>
 </template>
 <script>
-import ActionCable from 'actioncable'
 import CardImage from '~/components/Card_image.vue'
 import HorizontalCards from '~/components/HorizontalCards.vue'
 import ProfileCard from '~/components/ProfileCard.vue'
@@ -59,27 +58,31 @@ export default {
     return { currentUser: currentUser.data, microposts: microposts.data }
   },
   created() {
-    const cable = ActionCable.createConsumer('http://localhost:3000/cable')
-    cable.subscriptions.create('MicropostChannel', {
-      received: (data) => {
-        const currentUserId = this.currentUser.user.id
-        console.log(data.method)
-        console.log(currentUserId)
-        if (data.method === 'create') {
-          // 投稿者と投稿が見れる全員に対して行われる処理
-          // サーバー側から受け取ったHTMLを一番上に加える
-          if (currentUserId === data.user_id) {
-            this.$axios
-              .get('api/v1/microposts')
-              .then((response) => (this.microposts = response.data))
+    if (process.client) {
+      const ActionCable = require('actioncable')
+
+      const cable = ActionCable.createConsumer('http://localhost:3000/cable')
+      cable.subscriptions.create('MicropostChannel', {
+        received: (data) => {
+          const currentUserId = this.currentUser.user.id
+          console.log(data.method)
+          console.log(currentUserId)
+          if (data.method === 'create') {
+            // 投稿者と投稿が見れる全員に対して行われる処理
+            // サーバー側から受け取ったHTMLを一番上に加える
+            if (currentUserId === data.user_id) {
+              this.$axios
+                .get('api/v1/microposts')
+                .then((response) => (this.microposts = response.data))
+            }
+            // 投稿者の場合のみフォームをクリアする
+            if (data.post_user_id === currentUserId) {
+              // フォームのリセット処理をここに記載する
+            }
           }
-          // 投稿者の場合のみフォームをクリアする
-          if (data.post_user_id === currentUserId) {
-            // フォームのリセット処理をここに記載する
-          }
-        }
-      },
-    })
+        },
+      })
+    }
   },
   mounted() {},
 }
