@@ -20,6 +20,7 @@
                   >
                     <v-text-field
                       v-model="name"
+                      append-icon="mdi-account-edit"
                       :counter="35"
                       :error-messages="errors"
                       label="Name"
@@ -35,6 +36,7 @@
                   >
                     <v-text-field
                       v-model="job"
+                      append-icon="mdi-domain"
                       :counter="35"
                       :error-messages="errors"
                       label="Job"
@@ -50,6 +52,8 @@
                   >
                     <v-text-field
                       v-model="email"
+                      append-icon="mdi-at"
+                      disabled
                       :error-messages="errors"
                       label="E-mail"
                       required
@@ -64,9 +68,27 @@
                   >
                     <v-text-field
                       v-model="url"
+                      append-icon="mdi-file-find-outline"
                       :error-messages="errors"
                       label="URL"
                     ></v-text-field>
+                  </validation-provider>
+                </v-col>
+                <v-col cols="11" sm="11" md="12" lg="12" xl="12">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="Skills"
+                    rules="max:100"
+                  >
+                    <v-textarea
+                      v-model="skills"
+                      append-icon="mdi-head-dots-horizontal-outline"
+                      :counter="100"
+                      :error-messages="errors"
+                      auto-grow
+                      rows="1"
+                      label="Skills"
+                    ></v-textarea>
                   </validation-provider>
                 </v-col>
                 <v-col cols="11" sm="12" md="12" lg="12" xl="12">
@@ -77,6 +99,7 @@
                   >
                     <v-textarea
                       v-model="notes"
+                      append-icon="mdi-book-open-page-variant-outline"
                       :error-messages="errors"
                       label="Notes"
                       auto-grow
@@ -164,7 +187,7 @@ export default {
     title: '',
   }),
   mounted() {
-    this.title = 'プロフィール画像変更'
+    this.title = 'プロフィール情報変更'
   },
   methods: {
     submit() {
