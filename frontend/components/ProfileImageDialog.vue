@@ -69,6 +69,22 @@
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
+                <v-col cols="11" sm="12" md="12" lg="12" xl="12">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="notes"
+                    rules="max:220"
+                  >
+                    <v-textarea
+                      v-model="notes"
+                      :error-messages="errors"
+                      label="Notes"
+                      auto-grow
+                      rows="1"
+                      counter="220"
+                    ></v-textarea>
+                  </validation-provider>
+                </v-col>
               </v-row>
             </v-col>
           </v-row>
