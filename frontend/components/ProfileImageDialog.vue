@@ -1,18 +1,18 @@
 <template>
-  <v-dialog v-model="isDisplay" width="920px">
+  <v-dialog v-model="isDisplay" width="67%">
     <validation-observer ref="observer" v-slot="{ invalid }">
       <form @submit.prevent="submit">
         <v-card>
           <v-card-title>{{ title }}</v-card-title>
           <v-row>
-            <v-col cols="5" class="text-center">
+            <v-col cols="12" sm="12" md="5" lg="5" xl="5" class="text-center">
               <v-card-text>
                 <profileCard :user="user" :preview-flg="true" />
               </v-card-text>
             </v-col>
-            <v-col cols="6">
-              <v-row>
-                <v-col cols="6">
+            <v-col cols="12" sm="12" md="6" lg="6" xl="6">
+              <v-row justify="center">
+                <v-col cols="11" sm="11" md="6" lg="6" xl="6">
                   <validation-provider
                     v-slot="{ errors }"
                     name="Name"
@@ -27,7 +27,7 @@
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="11" sm="11" md="6" lg="6" xl="6">
                   <validation-provider
                     v-slot="{ errors }"
                     name="Job"
@@ -41,20 +41,22 @@
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
-              </v-row>
 
-              <validation-provider
-                v-slot="{ errors }"
-                name="email"
-                rules="required|email"
-              >
-                <v-text-field
-                  v-model="email"
-                  :error-messages="errors"
-                  label="E-mail"
-                  required
-                ></v-text-field>
-              </validation-provider>
+                <v-col cols="11" sm="12" md="12" lg="12" xl="12">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="email"
+                    rules="required|email"
+                  >
+                    <v-text-field
+                      v-model="email"
+                      :error-messages="errors"
+                      label="E-mail"
+                      required
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
           <v-card-actions>

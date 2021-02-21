@@ -11,7 +11,7 @@
         </blockquote>
       </v-parallax>
       <v-row>
-        <v-col cols="4">
+        <v-col cols="12" sm="12" md="4" lg="4" xl="4">
           <v-row class="mt-5">
             <v-col cols="12">
               <profileCard :user="currentUser" />
@@ -21,7 +21,7 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="8">
+        <v-col cols="12" sm="12" md="8" lg="8" xl="8">
           <v-row class="mt-5">
             <v-col cols="12">
               <horizontalCards
