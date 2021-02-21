@@ -5,7 +5,7 @@
       <v-row>
         <v-col cols="6" class="text-center">
           <v-card-text>
-            <profileCard :user="user" />
+            <profileCard :user="user" :preview-flg="true" />
           </v-card-text>
         </v-col>
         <v-col cols="6"></v-col>

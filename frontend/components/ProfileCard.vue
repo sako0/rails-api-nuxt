@@ -5,6 +5,7 @@
       <v-row>
         <v-col cols="2">
           <v-btn
+            v-if="previewFlg === false"
             icon
             color="white"
             dark
@@ -64,6 +65,7 @@ export default {
   props: {
     // Object形に変換
     user: Object,
+    previewFlg: Boolean,
   },
   methods: {
     openDisplay() {

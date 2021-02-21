@@ -44,7 +44,7 @@ services:
     build: ./frontend
     tty: true
     ports:
-      - 8000:3000
+      - 8000:80
     command: yarn dev
     volumes:
       - .:/myapp

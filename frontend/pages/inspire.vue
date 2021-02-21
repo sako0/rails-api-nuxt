@@ -47,20 +47,21 @@ export default {
     ProfileCard,
   },
   middleware: 'auth',
-  async asyncData({ $axios, $auth }) {
-    $auth.$storage.removeState('user_id')
-    const currentUser = await $axios.get('api/v1/sessions')
-    $auth.$storage.setState('user_id', currentUser.data.user.id)
-    const microposts = await $axios.get('api/v1/microposts')
-    console.log(microposts)
-    // 配列で返ってくるのでJSONにして返却
-    return { currentUser: currentUser.data, microposts: microposts.data }
+  async asyncData({ $axios, redirect }) {
+    try {
+      const currentUser = await $axios.get('api/v1/sessions')
+      const microposts = await $axios.get('api/v1/microposts')
+      // 配列で返ってくるのでJSONにして返却
+      return { currentUser: currentUser.data, microposts: microposts.data }
+    } catch (err) {
+      return redirect('/')
+    }
   },
   created() {
     if (process.client) {
       const ActionCable = require('actioncable')
 
-      const cable = ActionCable.createConsumer('http://localhost:3000/cable')
+      const cable = ActionCable.createConsumer(process.env.NUXT_ENV_RAILS_URL + '/cable')
       cable.subscriptions.create('MicropostChannel', {
         received: (data) => {
           const currentUserId = this.currentUser.user.id
