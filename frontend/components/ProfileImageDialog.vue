@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isDisplay" width="67%">
+  <v-dialog v-model="isDisplay" width="63%">
     <validation-observer ref="observer" v-slot="{ invalid }">
       <form @submit.prevent="submit">
         <v-card>
@@ -56,6 +56,19 @@
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
+                <v-col cols="11" sm="12" md="12" lg="12" xl="12">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="url"
+                    rules="regex:https?://([\w-]+\.)+[\w-]+(/[\w- .?%&=]*)?"
+                  >
+                    <v-text-field
+                      v-model="url"
+                      :error-messages="errors"
+                      label="URL"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
               </v-row>
             </v-col>
           </v-row>
@@ -107,12 +120,12 @@ extend('required', {
 
 extend('max', {
   ...max,
-  message: '{_field_} may not be greater than {length} characters',
+  message: '{_field_} は {length} 文字以内で入力して下さい',
 })
 
 extend('regex', {
   ...regex,
-  message: '{_field_} {_value_} does not match {regex}',
+  message: '{_field_} を正しく入力して下さい',
 })
 
 extend('email', {

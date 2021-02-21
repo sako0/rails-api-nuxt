@@ -4,6 +4,7 @@
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
+      color="blue-grey darken-4"
       fixed
       app
     >
@@ -23,6 +24,14 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template #append>
+        <v-row>
+          <v-col cols="8"> </v-col>
+          <v-col cols="2" class="pb-5">
+            <v-btn block><v-icon>mdi-tune</v-icon></v-btn>
+          </v-col>
+        </v-row>
+      </template>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
