@@ -61,7 +61,9 @@ export default {
     if (process.client) {
       const ActionCable = require('actioncable')
 
-      const cable = ActionCable.createConsumer(process.env.NUXT_ENV_RAILS_URL + '/cable')
+      const cable = ActionCable.createConsumer(
+        process.env.NUXT_ENV_RAILS_URL + '/cable'
+      )
       cable.subscriptions.create('MicropostChannel', {
         received: (data) => {
           const currentUserId = this.currentUser.user.id

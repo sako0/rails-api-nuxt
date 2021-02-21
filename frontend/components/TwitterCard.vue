@@ -2,20 +2,69 @@
   <v-card class="mx-auto" color="#1F7087" dark>
     <Dialog ref="dlg" type="postDelete" @method="deletePost"></Dialog>
     <v-card-title>
-      <v-list-item-avatar color="grey darken-3">
-        <v-img
-          class="elevation-6"
-          alt=""
-          :src="micropost.attributes.post_user_image"
-        ></v-img>
-      </v-list-item-avatar>
+      <!--      <v-list-item-avatar color="grey darken-3">-->
+      <!--        <v-img-->
+      <!--          class="elevation-6"-->
+      <!--          alt=""-->
+      <!--          :src="micropost.attributes.post_user_image"-->
+      <!--        ></v-img>-->
+      <!--      </v-list-item-avatar>-->
       <v-row>
-        <v-col cols="2">
+        <v-col cols="1" class="text-left">
+          <v-menu
+            v-model="menu.profileIcon"
+            bottom
+            right
+            transition="scale-transition"
+            origin="top left"
+          >
+            <template #activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs">
+                <v-avatar color="grey darken-3" v-on="on">
+                  <v-img :src="micropost.attributes.post_user_image"></v-img>
+                </v-avatar>
+              </v-btn>
+            </template>
+            <v-card width="300">
+              <v-list dark>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-img :src="micropost.attributes.post_user_image"></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{
+                      micropost.attributes.user.name
+                    }}</v-list-item-title>
+                    <v-list-item-subtitle>{{
+                      micropost.attributes.user.email
+                    }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn icon @click="menu.profileIcon = false">
+                      <v-icon>mdi-close-circle</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+              <v-list>
+                <v-list-item @click="menu.profileIcon = false">
+                  <v-list-item-action>
+                    <v-icon>mdi-briefcase</v-icon>
+                  </v-list-item-action>
+                  <v-list-item-subtitle>{{
+                    micropost.attributes.user.email
+                  }}</v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
+        </v-col>
+        <v-col cols="10" class="text-left pl-7">
           <span class="title font-weight-light">{{
             micropost.attributes.user.name
           }}</span>
         </v-col>
-        <v-col cols="10">
+        <v-col cols="1" class="text-right">
           <v-menu offset-y>
             <template #activator="{ on, attrs }">
               <v-btn text class="float-right" v-bind="attrs" v-on="on">
@@ -87,6 +136,7 @@ export default {
     return {
       menu: {
         delete: false,
+        profileIcon: false,
       },
     }
   },
