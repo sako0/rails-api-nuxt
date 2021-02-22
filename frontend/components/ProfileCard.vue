@@ -180,26 +180,34 @@ export default {
       this.$refs.imageDlg.isDisplay = true
     },
     imageGet(e) {
-      const image = e.target.files[0]
-      const url = `/api/v1/profiles`
-      const data = new FormData()
-      data.append('image', image)
-      const headers = { 'content-type': 'multipart/form-data' }
-      this.$axios
-        .post(url, data, { headers })
-        .then((response) => (this.pImageUrl = response.data))
-        .catch((error) => console.log(error))
+      if (e.target.files[0]) {
+        const image = e.target.files[0]
+        const url = `/api/v1/profiles`
+        const data = new FormData()
+        data.append('image', image)
+        const headers = { 'content-type': 'multipart/form-data' }
+        this.$axios
+          .post(url, data, { headers })
+          .then((response) => (this.pImageUrl = response.data))
+          .catch((error) => console.log(error))
+      } else {
+        this.pImageUrl = this.user.user.image
+      }
     },
     backgroundGet(e) {
-      const image = e.target.files[0]
-      const url = `/api/v1/profiles`
-      const data = new FormData()
-      data.append('background', image)
-      const headers = { 'content-type': 'multipart/form-data' }
-      this.$axios
-        .post(url, data, { headers })
-        .then((response) => (this.pBackgroundUrl = response.data))
-        .catch((error) => console.log(error))
+      if (e.target.files[0]) {
+        const image = e.target.files[0]
+        const url = `/api/v1/profiles`
+        const data = new FormData()
+        data.append('background', image)
+        const headers = { 'content-type': 'multipart/form-data' }
+        this.$axios
+          .post(url, data, { headers })
+          .then((response) => (this.pBackgroundUrl = response.data))
+          .catch((error) => console.log(error))
+      } else {
+        this.pBackgroundUrl = this.user.user.background_image
+      }
     },
   },
 }
