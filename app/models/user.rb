@@ -94,15 +94,15 @@ class User < ApplicationRecord
 
   # ユーザプロフィールイメージを圧縮する
   def display_image
-    image.variant(gravity: :center, resize: "640x640^", crop: "640x640+0+0") if self.image.attached?
+    self.image.variant(gravity: :center, resize: "640x640^", crop: "640x640+0+0") if self.image.attached?
   end
 
   # ユーザプロフィールイメージを圧縮する
   def display_background_image
-    back_ground.variant(gravity: :center, resize: "2400x1600^", crop: "2400x1920+0+0") if self.back_ground.attached?
+    self.back_ground.variant(gravity: :center, resize: "2400x1600^", crop: "2400x1920+0+0") if self.back_ground.attached?
   end
 
-  # プレビューイメージを圧縮する
+  # プレビューイメージを圧縮したURLを返す
   def preview_image(image)
     self.image_preview.attach(image)
     routes = Rails.application.routes.url_helpers
@@ -110,7 +110,7 @@ class User < ApplicationRecord
     routes.url_for(image.processed)
   end
 
-  # プレビューイメージを圧縮する
+  # プレビューイメージを圧縮したURLを返す
   def preview_background_image(image)
     self.back_ground_preview.attach(image)
     routes = Rails.application.routes.url_helpers

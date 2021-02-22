@@ -24,16 +24,16 @@
           :key="i"
           cols="12"
         >
-          <v-lazy
-            v-model="micropost.isActive"
-            :options="{
-              threshold: 0.5,
-            }"
-            min-height="100"
-            transition="fab-transition"
-          >
-            <twitterCard :micropost="micropost" :current_user="current_user" />
-          </v-lazy>
+          <!--          <v-lazy-->
+          <!--            v-model="micropost.isActive"-->
+          <!--            :options="{-->
+          <!--              threshold: 0.1,-->
+          <!--            }"-->
+          <!--            min-height="1"-->
+          <!--            transition="fab-transition"-->
+          <!--          >-->
+          <twitterCard :micropost="micropost" :current_user="current_user" />
+          <!--          </v-lazy>-->
         </v-col>
       </v-row>
     </v-container>
@@ -58,7 +58,7 @@ export default {
       content: '',
       // 送信が成功したかどうかのフラグ
       success: false,
-      isActive: false,
+      isActive: true,
     }
   },
   computed: {

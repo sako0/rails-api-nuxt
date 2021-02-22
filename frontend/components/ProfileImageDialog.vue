@@ -7,7 +7,12 @@
           <v-row>
             <v-col cols="12" sm="12" md="5" lg="5" xl="5" class="text-center">
               <v-card-text>
-                <profileCard :user="user" :preview-flg="true" />
+                <profilePreview
+                  :user="user"
+                  :preview-flg="true"
+                  @backgroundFileGet="backgroundFileGet"
+                  @imageFileGet="imageFileGet"
+                />
               </v-card-text>
             </v-col>
             <v-col cols="12" sm="12" md="6" lg="6" xl="6">
@@ -19,7 +24,7 @@
                     rules="required|max:35"
                   >
                     <v-text-field
-                      :value="user.user.name"
+                      v-model="name"
                       append-icon="mdi-account-edit"
                       :counter="35"
                       :error-messages="errors"
@@ -35,7 +40,7 @@
                     rules="max:35"
                   >
                     <v-text-field
-                      :value="user.user.profile.job"
+                      v-model="job"
                       append-icon="mdi-domain"
                       :counter="35"
                       :error-messages="errors"
@@ -66,7 +71,7 @@
                     rules="regex:https?://([\w-]+\.)+[\w-]+(/[\w- .?%&=]*)?"
                   >
                     <v-text-field
-                      :value="user.user.profile.url"
+                      v-model="url"
                       append-icon="mdi-file-find-outline"
                       :error-messages="errors"
                       label="URL"
@@ -80,7 +85,7 @@
                     rules="max:100"
                   >
                     <v-textarea
-                      :value="user.user.profile.skills"
+                      v-model="skills"
                       append-icon="mdi-head-dots-horizontal-outline"
                       :counter="100"
                       :error-messages="errors"
@@ -97,7 +102,7 @@
                     rules="max:220"
                   >
                     <v-textarea
-                      :value="user.user.profile.notes"
+                      v-model="notes"
                       append-icon="mdi-book-open-page-variant-outline"
                       :error-messages="errors"
                       label="Notes"
@@ -135,7 +140,7 @@
 </template>
 
 <script>
-import ProfileCard from '@/components/ProfileCard'
+import ProfilePreview from '@/components/ProfilePreview'
 import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
 import {
   extend,
@@ -173,7 +178,7 @@ extend('email', {
 
 export default {
   components: {
-    ProfileCard,
+    ProfilePreview,
     ValidationProvider,
     ValidationObserver,
   },
@@ -181,18 +186,48 @@ export default {
     // Object形に変換
     user: Object,
   },
-  data: () => ({
-    isDisplay: false,
-    title: '',
-    textInput: '初期値はここに入れておく',
-  }),
+  data() {
+    return {
+      isDisplay: false,
+      title: '',
+      uploadImage: '',
+      uploadBackground: '',
+      name: this.user.user.name,
+      job: this.user.user.profile.job,
+      url: this.user.user.profile.url,
+      skills: this.user.user.profile.skills,
+      notes: this.user.user.profile.notes,
+    }
+  },
   mounted() {
     this.title = 'プロフィール情報変更'
   },
   methods: {
     submit() {
       this.isDisplay = false
-      this.$emit('method')
+      const url = '/api/v1/users/' + this.user.user.id
+      const data = new FormData()
+      if (this.uploadImage) {
+        data.append('user[image]', this.uploadImage)
+      }
+      if (this.uploadBackground) {
+        data.append('user[background]', this.uploadBackground)
+      }
+      data.append('user[name]', this.name)
+      data.append('user[profiles_attributes][job]', this.job)
+      data.append('user[profiles_attributes][url]', this.url)
+      data.append('user[profiles_attributes][skills]', this.skills)
+      data.append('user[profiles_attributes][notes]', this.notes)
+      const headers = { 'content-type': 'multipart/form-data' }
+      this.$axios.patch(url, data, { headers }).then((response) => {
+        console.log(response)
+      })
+    },
+    imageFileGet(value) {
+      this.uploadImage = value
+    },
+    backgroundFileGet(value) {
+      this.uploadBackground = value
     },
     closeDisplay() {
       this.isDisplay = false
