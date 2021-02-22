@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="isDisplay" width="63%">
     <validation-observer ref="observer" v-slot="{ invalid }">
-      <form @submit.prevent="submit">
+      <form>
         <v-card>
           <v-card-title>{{ title }}</v-card-title>
           <v-row>
@@ -123,7 +123,6 @@
               <v-col cols="6" class="text-right">
                 <v-btn
                   class="mr-4"
-                  type="submit"
                   :disabled="invalid"
                   color="orange darken-3"
                   @click="submit"
@@ -214,12 +213,24 @@ export default {
         data.append('user[background]', this.uploadBackground)
       }
       data.append('user[name]', this.name)
-      data.append('user[profiles_attributes][job]', this.job)
-      data.append('user[profiles_attributes][url]', this.url)
-      data.append('user[profiles_attributes][skills]', this.skills)
-      data.append('user[profiles_attributes][notes]', this.notes)
+      data.append(
+        'user[profiles_attributes][job]',
+        this.job === null ? ' ' : this.job
+      )
+      data.append(
+        'user[profiles_attributes][url]',
+        this.url === null ? ' ' : this.url
+      )
+      data.append(
+        'user[profiles_attributes][skills]',
+        this.skills === null ? ' ' : this.skills
+      )
+      data.append(
+        'user[profiles_attributes][notes]',
+        this.notes === null ? ' ' : this.notes
+      )
       const headers = { 'content-type': 'multipart/form-data' }
-      this.$axios.patch(url, data, { headers }).then((response) => {
+      this.$axios.put(url, data, { headers }).then((response) => {
         console.log(response)
       })
     },

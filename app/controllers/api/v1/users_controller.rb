@@ -5,8 +5,14 @@ class Api::V1::UsersController < ApplicationController
   def update
     logger.error(params)
     user = @current_user
-    user.image.attach(params[:user][:image]).processed if params[:user][:image]
-    user.back_ground.attach(params[:user][:background]).processed if params[:user][:background]
+    if params[:user][:image]
+      user.image.attach(params[:user][:image])
+      user.display_image.processed
+    end
+    if params[:user][:background]
+      user.back_ground.attach(params[:user][:background])
+      user.display_background_image.processed
+    end
     if user.update(user_params)
       render json: { status: "success" }
     end

@@ -170,6 +170,8 @@ export default {
           .catch((error) => console.log(error))
       } else {
         this.pImageUrl = this.user.user.image
+        e.currentTarget.value = ''
+        this.imageFile = ''
       }
     },
     backgroundGet(e) {
@@ -192,6 +194,8 @@ export default {
           .catch((error) => console.log(error))
       } else {
         this.pBackgroundUrl = this.user.user.background_image
+        e.currentTarget.value = ''
+        this.backgroundFile = ''
       }
     },
   },
