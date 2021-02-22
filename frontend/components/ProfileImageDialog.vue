@@ -48,7 +48,7 @@
                   <validation-provider
                     v-slot="{ errors }"
                     name="email"
-                    rules="required|email"
+                    rules="email"
                   >
                     <v-text-field
                       v-model="email"
@@ -56,7 +56,6 @@
                       disabled
                       :error-messages="errors"
                       label="E-mail"
-                      required
                     ></v-text-field>
                   </validation-provider>
                 </v-col>

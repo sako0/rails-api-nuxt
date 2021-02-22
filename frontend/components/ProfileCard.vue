@@ -40,9 +40,7 @@
                         @mouseout="overlay = true"
                       >
                         <v-img :src="user.user.image">
-                          <v-icon dark class="pt-4">
-                            mdi-file-image-outline</v-icon
-                          >
+                          <v-icon dark class="pt-4"> mdi-tooltip-image</v-icon>
                         </v-img>
                         <v-file-input type="file" title style="display: none" />
                         <v-fade-transition>
