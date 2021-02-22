@@ -10,7 +10,7 @@
         <input type="file" style="display: none" @change="backgroundGet" />
         <v-img
           height="100%"
-          :src="user.user.background_image"
+          :src="pBackgroundUrl"
           :elevation="hover ? 24 : 2"
           :class="{ 'on-hover': hover }"
           @mouseenter="overlay = true"
@@ -172,6 +172,7 @@ export default {
     return {
       overlay: true,
       pImageUrl: this.user.user.image,
+      pBackgroundUrl: this.user.user.background_image,
     }
   },
   methods: {
@@ -179,7 +180,6 @@ export default {
       this.$refs.imageDlg.isDisplay = true
     },
     imageGet(e) {
-      console.log('aaa')
       const image = e.target.files[0]
       const url = `/api/v1/profiles`
       const data = new FormData()
@@ -188,17 +188,18 @@ export default {
       this.$axios
         .post(url, data, { headers })
         .then((response) => (this.pImageUrl = response.data))
-        // .then((response) => console.log(response.data))
         .catch((error) => console.log(error))
     },
     backgroundGet(e) {
-      const images = this.$refs.file
-      const image = images[0]
+      const image = e.target.files[0]
       const url = `/api/v1/profiles`
       const data = new FormData()
-      data.append('file', image)
+      data.append('background', image)
       const headers = { 'content-type': 'multipart/form-data' }
-      this.$axios.post(url, data, { headers })
+      this.$axios
+        .post(url, data, { headers })
+        .then((response) => (this.pBackgroundUrl = response.data))
+        .catch((error) => console.log(error))
     },
   },
 }

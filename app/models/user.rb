@@ -111,8 +111,11 @@ class User < ApplicationRecord
   end
 
   # プレビューイメージを圧縮する
-  def preview_background_image
-    back_ground_preview.variant(gravity: :center, resize: "2400x1600^", crop: "2400x1920+0+0") if self.back_ground.attached?
+  def preview_background_image(image)
+    self.back_ground_preview.attach(image)
+    routes = Rails.application.routes.url_helpers
+    image = back_ground_preview.variant(gravity: :center, resize: "2400x1600^", crop: "2400x1920+0+0")
+    routes.url_for(image.processed)
   end
 
   # other_userのフォローを行う
