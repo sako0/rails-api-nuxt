@@ -19,7 +19,7 @@
                     rules="required|max:35"
                   >
                     <v-text-field
-                      v-model="name"
+                      :value="user.user.name"
                       append-icon="mdi-account-edit"
                       :counter="35"
                       :error-messages="errors"
@@ -35,7 +35,7 @@
                     rules="max:35"
                   >
                     <v-text-field
-                      v-model="job"
+                      :value="user.user.profile.job"
                       append-icon="mdi-domain"
                       :counter="35"
                       :error-messages="errors"
@@ -51,7 +51,7 @@
                     rules="email"
                   >
                     <v-text-field
-                      v-model="email"
+                      :value="user.user.email"
                       append-icon="mdi-at"
                       disabled
                       :error-messages="errors"
@@ -66,7 +66,7 @@
                     rules="regex:https?://([\w-]+\.)+[\w-]+(/[\w- .?%&=]*)?"
                   >
                     <v-text-field
-                      v-model="url"
+                      :value="user.user.profile.url"
                       append-icon="mdi-file-find-outline"
                       :error-messages="errors"
                       label="URL"
@@ -80,7 +80,7 @@
                     rules="max:100"
                   >
                     <v-textarea
-                      v-model="skills"
+                      :value="user.user.profile.skills"
                       append-icon="mdi-head-dots-horizontal-outline"
                       :counter="100"
                       :error-messages="errors"
@@ -97,7 +97,7 @@
                     rules="max:220"
                   >
                     <v-textarea
-                      v-model="notes"
+                      :value="user.user.profile.notes"
                       append-icon="mdi-book-open-page-variant-outline"
                       :error-messages="errors"
                       label="Notes"
@@ -184,6 +184,7 @@ export default {
   data: () => ({
     isDisplay: false,
     title: '',
+    textInput: '初期値はここに入れておく',
   }),
   mounted() {
     this.title = 'プロフィール情報変更'

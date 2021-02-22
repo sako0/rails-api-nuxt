@@ -103,19 +103,16 @@ class User < ApplicationRecord
   end
 
   # プレビューイメージを圧縮する
-  def preview_image
-
-    image_preview.variant(gravity: :center, resize: "640x640^", crop: "640x640+0+0") if self.image.attached?
+  def preview_image(image)
+    self.image_preview.attach(image)
+    routes = Rails.application.routes.url_helpers
+    image = image_preview.variant(gravity: :center, resize: "640x640^", crop: "640x640+0+0")
+    routes.url_for(image.processed)
   end
 
   # プレビューイメージを圧縮する
   def preview_background_image
-    back_ground_preview.variant(gravity: :center, resize: "310x180^", crop: "300x140+0+0") if self.back_ground.attached?
-  end
-
-  # channelを使用したリアルタイム表示の際に差し替えるhtmlテンプレートを生成する
-  def user_widget_html
-    ApplicationController.renderer.render partial: "users/user_widget", locals: { preview: false, user: self, current_user: self }
+    back_ground_preview.variant(gravity: :center, resize: "2400x1600^", crop: "2400x1920+0+0") if self.back_ground.attached?
   end
 
   # other_userのフォローを行う

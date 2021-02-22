@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :show]
       resources :microposts
       resources :sessions, only: [:index, :create]
+      resources :profiles, only: [:create]
     end
   end
 end

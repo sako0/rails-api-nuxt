@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_api_user!
+  include JwtAuthenticator
+  before_action :jwt_authenticate
 
   def show
     user = User.find_by(id: params[:id])

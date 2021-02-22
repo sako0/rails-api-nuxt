@@ -7,7 +7,7 @@
       @input="overlay = true"
     >
       <label>
-        <v-file-input type="file" title style="display: none" />
+        <input type="file" style="display: none" @change="backgroundGet" />
         <v-img
           height="100%"
           :src="user.user.background_image"
@@ -39,10 +39,14 @@
                         @mouseenter="overlay = false"
                         @mouseout="overlay = true"
                       >
-                        <v-img :src="user.user.image">
+                        <v-img :src="pImageUrl">
                           <v-icon dark class="pt-4"> mdi-tooltip-image</v-icon>
                         </v-img>
-                        <v-file-input type="file" title style="display: none" />
+                        <input
+                          type="file"
+                          style="display: none"
+                          @change="imageGet"
+                        />
                         <v-fade-transition>
                           <v-overlay
                             v-if="hover"
@@ -93,7 +97,7 @@
         </v-img>
       </label>
     </v-hover>
-    <dev v-if="previewFlg === false">
+    <div v-if="previewFlg === false">
       <v-img height="100%" :src="user.user.background_image">
         <v-row>
           <v-col cols="2">
@@ -133,11 +137,11 @@
           </v-col>
         </v-row>
       </v-img>
-    </dev>
+    </div>
     <div class="text-left">
-      <v-card-subtitle class="pb-0">{{
-        user.user.profile.url
-      }}</v-card-subtitle>
+      <v-card-subtitle class="pb-0"
+        >{{ user.user.profile.url }}
+      </v-card-subtitle>
 
       <v-card-text class="text--primary">
         <div>{{ user.user.profile.skills }}</div>
@@ -167,11 +171,34 @@ export default {
   data() {
     return {
       overlay: true,
+      pImageUrl: this.user.user.image,
     }
   },
   methods: {
     openDisplay() {
       this.$refs.imageDlg.isDisplay = true
+    },
+    imageGet(e) {
+      console.log('aaa')
+      const image = e.target.files[0]
+      const url = `/api/v1/profiles`
+      const data = new FormData()
+      data.append('image', image)
+      const headers = { 'content-type': 'multipart/form-data' }
+      this.$axios
+        .post(url, data, { headers })
+        .then((response) => (this.pImageUrl = response.data))
+        // .then((response) => console.log(response.data))
+        .catch((error) => console.log(error))
+    },
+    backgroundGet(e) {
+      const images = this.$refs.file
+      const image = images[0]
+      const url = `/api/v1/profiles`
+      const data = new FormData()
+      data.append('file', image)
+      const headers = { 'content-type': 'multipart/form-data' }
+      this.$axios.post(url, data, { headers })
     },
   },
 }
