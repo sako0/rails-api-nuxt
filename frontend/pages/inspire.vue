@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col class="text-center">
+    <v-col class="center">
       <!--      <img src="/v.png" alt="Vuetify.js" class="mb-5" />-->
       <v-parallax
         height="100"
