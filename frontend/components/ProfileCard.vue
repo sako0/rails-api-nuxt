@@ -13,8 +13,8 @@
           :src="user.user.background_image"
           :elevation="hover ? 24 : 2"
           :class="{ 'on-hover': hover }"
-          @mouseover="overlay = true"
           @mouseenter="overlay = true"
+          @mouseover="overlay = true"
         >
           <v-row>
             <v-col cols="3">
@@ -29,29 +29,27 @@
                   <label>
                     <v-hover v-slot="{ hover }" @input="overlay = false">
                       <v-avatar
-                        :class="{ 'on-hover': hover }"
                         class="profile"
                         color="grey"
                         size="100"
                         style="z-index: 10"
+                        :class="{ 'on-hover': hover }"
                         @mouseover="overlay = false"
                         @mousemove="overlay = false"
+                        @mouseenter="overlay = false"
+                        @mouseout="overlay = true"
                       >
                         <v-img :src="user.user.image">
-                          <v-file-input
-                            type="file"
-                            title
-                            style="display: none"
-                          />
                           <v-icon dark class="pt-4">
                             mdi-file-image-outline</v-icon
                           >
                         </v-img>
+                        <v-file-input type="file" title style="display: none" />
                         <v-fade-transition>
                           <v-overlay
                             v-if="hover"
                             absolute
-                            color="cyan accent-2"
+                            color="orange lighten-2"
                           >
                           </v-overlay>
                           <v-overlay
@@ -138,14 +136,17 @@
         </v-row>
       </v-img>
     </dev>
-    <v-card-subtitle class="pb-0">{{ user.user.profile.url }}</v-card-subtitle>
+    <div class="text-left">
+      <v-card-subtitle class="pb-0">{{
+        user.user.profile.url
+      }}</v-card-subtitle>
 
-    <v-card-text class="text--primary">
-      <div>{{ user.user.profile.skills }}</div>
+      <v-card-text class="text--primary">
+        <div>{{ user.user.profile.skills }}</div>
 
-      <div>{{ user.user.profile.notes }}</div>
-    </v-card-text>
-
+        <div>{{ user.user.profile.notes }}</div>
+      </v-card-text>
+    </div>
     <v-card-actions>
       <v-row class="text-center">
         <v-col cols="6">
