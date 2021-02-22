@@ -235,10 +235,18 @@ export default {
       })
     },
     imageFileGet(value) {
-      this.uploadImage = value
+      if (value) {
+        this.uploadImage = value
+      } else {
+        this.uploadImage = ''
+      }
     },
     backgroundFileGet(value) {
-      this.uploadBackground = value
+      if (value) {
+        this.uploadBackground = value
+      } else {
+        this.uploadBackground = ''
+      }
     },
     closeDisplay() {
       this.isDisplay = false

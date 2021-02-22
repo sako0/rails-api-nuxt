@@ -172,6 +172,7 @@ export default {
         this.pImageUrl = this.user.user.image
         e.currentTarget.value = ''
         this.imageFile = ''
+        this.$emit('imageFileGet', false)
       }
     },
     backgroundGet(e) {
@@ -196,6 +197,7 @@ export default {
         this.pBackgroundUrl = this.user.user.background_image
         e.currentTarget.value = ''
         this.backgroundFile = ''
+        this.$emit('backgroundFileGet', false)
       }
     },
   },
