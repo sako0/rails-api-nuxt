@@ -8,7 +8,14 @@
     >
       <label>
         <input type="file" style="display: none" @change="backgroundGet" />
+        <v-skeleton-loader
+          v-if="pBackgraundLoading"
+          :loading="pBackgraundLoading"
+          type="image"
+        >
+        </v-skeleton-loader>
         <v-img
+          v-if="!pBackgraundLoading"
           height="100%"
           :src="pBackgroundUrl"
           :elevation="hover ? 24 : 2"
@@ -39,9 +46,10 @@
                         @mouseenter="overlay = false"
                         @mouseout="overlay = true"
                       >
-                        <v-img :src="pImageUrl">
+                        <v-img v-if="!pImageUrlLoading" :src="pImageUrl">
                           <v-icon dark class="pt-4"> mdi-tooltip-image</v-icon>
                         </v-img>
+
                         <input
                           type="file"
                           style="display: none"
@@ -61,6 +69,12 @@
                           >
                           </v-overlay>
                         </v-fade-transition>
+                        <v-skeleton-loader
+                          v-if="pImageUrlLoading"
+                          :loading="pImageUrlLoading"
+                          type="avatar"
+                        >
+                        </v-skeleton-loader>
                       </v-avatar>
                     </v-hover>
                   </label>
@@ -173,6 +187,8 @@ export default {
       overlay: true,
       pImageUrl: this.user.user.image,
       pBackgroundUrl: this.user.user.background_image,
+      pImageUrlLoading: false,
+      pBackgraundLoading: false,
     }
   },
   methods: {
@@ -181,6 +197,7 @@ export default {
     },
     imageGet(e) {
       if (e.target.files[0]) {
+        this.pImageUrlLoading = true
         const image = e.target.files[0]
         const url = `/api/v1/profiles`
         const data = new FormData()
@@ -188,7 +205,10 @@ export default {
         const headers = { 'content-type': 'multipart/form-data' }
         this.$axios
           .post(url, data, { headers })
-          .then((response) => (this.pImageUrl = response.data))
+          .then((response) => {
+            this.pImageUrl = response.data
+            this.pImageUrlLoading = false
+          })
           .catch((error) => console.log(error))
       } else {
         this.pImageUrl = this.user.user.image
@@ -196,6 +216,7 @@ export default {
     },
     backgroundGet(e) {
       if (e.target.files[0]) {
+        this.pBackgraundLoading = true
         const image = e.target.files[0]
         const url = `/api/v1/profiles`
         const data = new FormData()
@@ -203,7 +224,10 @@ export default {
         const headers = { 'content-type': 'multipart/form-data' }
         this.$axios
           .post(url, data, { headers })
-          .then((response) => (this.pBackgroundUrl = response.data))
+          .then((response) => {
+            this.pBackgroundUrl = response.data
+            this.pBackgraundLoading = false
+          })
           .catch((error) => console.log(error))
       } else {
         this.pBackgroundUrl = this.user.user.background_image
