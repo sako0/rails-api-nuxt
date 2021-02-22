@@ -29,8 +29,8 @@
             :options="{
               threshold: 0.5,
             }"
-            min-height="20"
-            transition="fade-transition"
+            min-height="100"
+            transition="fab-transition"
           >
             <twitterCard :micropost="micropost" :current_user="current_user" />
           </v-lazy>
