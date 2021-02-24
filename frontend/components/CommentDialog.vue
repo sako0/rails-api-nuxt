@@ -1,9 +1,9 @@
 <template>
-  <v-dialog v-model="commentDlgIsDisplay" width="40%" scrollable>
+  <v-dialog v-model="commentDlgIsDisplay" width="50%" scrollable>
     <v-card>
       <v-card-title>投稿コメント</v-card-title>
 
-      <v-card-text style="height: 200px">
+      <v-card-text style="max-height: 600px">
         <v-card class="mx-auto" color="#1F7087" dark>
           <v-card-title>
             <v-row>
@@ -77,13 +77,8 @@
               <v-img :src="micropost.attributes.image"></v-img>
             </v-avatar>
           </div>
-          <div v-for="(comment, i) in commentsData" :key="i">
-            <v-divider class="mx-4"></v-divider>
-            <v-card-title>Tonight's availability</v-card-title>
-
-            <v-card-text>
-              <p>{{ comment }}</p>
-            </v-card-text>
+          <div v-for="(comment, i) in commentsData.data" :key="i">
+            <comment :comment="comment" />
           </div>
         </v-card>
       </v-card-text>
@@ -109,7 +104,11 @@
   </v-dialog>
 </template>
 <script>
+import Comment from '@/components/Comment'
 export default {
+  components: {
+    Comment,
+  },
   props: {
     // Object形に変換
     micropost: Object,

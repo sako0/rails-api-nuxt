@@ -6,7 +6,7 @@ class MicropostSerializer < ActiveModel::Serializer
     object.image_url
   end
 
-  # 画像のURLを返す
+  # 投稿者の画像のURLを返す
   def post_user_image
     object.user.image_url
     # routes = Rails.application.routes.url_helpers

@@ -13,7 +13,7 @@ class Api::V1::PostCommentsController < ApplicationController
 
   def index
     post_comment_index = PostComment.where(micropost_id: params[:micropost_id])
-    render json: post_comment_index
+    render json: post_comment_index, each_serializer: PostCommentSerializer
   end
 
   private
