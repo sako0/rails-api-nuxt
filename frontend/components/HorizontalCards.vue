@@ -9,13 +9,26 @@
       <v-spacer></v-spacer>
     </v-app-bar>
     <v-card-text>
-      <v-text-field v-model="content" label="投稿用メッセージフォーム">
-      </v-text-field>
-    </v-card-text>
-    <v-card-actions>
-      <v-btn text @click="submit">送信する</v-btn>
+      <v-row>
+        <v-col cols="10">
+          <v-text-field
+            v-model="content"
+            label="投稿用メッセージフォーム"
+            @keydown.enter.exact="keyDownEnter"
+            @keyup.enter.exact="keyUpEnter"
+            @keydown.enter.shift="keyEnterShift"
+            class="text-right"
+          >
+          </v-text-field>
+        </v-col>
+        <v-col cols="1" class="text-left">
+          <v-btn icon class="pt-8" @click="submit"
+            ><v-icon>mdi-send</v-icon></v-btn
+          >
+        </v-col>
+      </v-row>
       <span v-if="success">送信成功！</span>
-    </v-card-actions>
+    </v-card-text>
     <v-divider></v-divider>
     <v-container>
       <v-row dense>
@@ -82,6 +95,19 @@ export default {
         .then((this.content = ''))
         .catch((error) => console.log(error))
     },
+    keyDownEnter(e) {
+      this.keyDownCode = e.keyCode // enterを押した時のkeycodeを記録
+      e.preventDefault()
+    },
+    keyUpEnter(e) {
+      if (this.keyDownCode === 229) {
+        // 日本語コードの場合は処理をストップ
+        return
+      }
+      e.preventDefault()
+      this.submit()
+    },
+    keyEnterShift(e) {},
   },
 }
 </script>

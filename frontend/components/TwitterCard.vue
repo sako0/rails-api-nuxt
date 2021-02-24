@@ -1,14 +1,12 @@
 <template>
   <v-card class="mx-auto" color="#1F7087" dark>
     <Dialog ref="dlg" type="postDelete" @method="deletePost"></Dialog>
+    <commentDialog
+      ref="commentDlg"
+      :micropost="micropost"
+      :current_user="current_user"
+    ></commentDialog>
     <v-card-title>
-      <!--      <v-list-item-avatar color="grey darken-3">-->
-      <!--        <v-img-->
-      <!--          class="elevation-6"-->
-      <!--          alt=""-->
-      <!--          :src="micropost.attributes.post_user_image"-->
-      <!--        ></v-img>-->
-      <!--      </v-list-item-avatar>-->
       <v-row>
         <v-col cols="1" class="text-left">
           <v-menu
@@ -94,27 +92,16 @@
 
     <v-card-actions>
       <v-list-item class="grow">
-        <v-list-item-avatar color="grey darken-3">
-          <v-img
-            class="elevation-6"
-            alt=""
-            :src="current_user.user.image"
-          ></v-img>
-        </v-list-item-avatar>
-        <!--        <v-list-item-content> </v-list-item-content>-->
         <v-row align="center" justify="end">
-          <v-col cols="8">
-            <v-card-text>
-              <v-text-field label="コメントフォーム"> </v-text-field>
-            </v-card-text>
-          </v-col>
-          <v-col cols="2">
-            <v-icon class="mr-1"> mdi-heart</v-icon>
-            <span class="subheading mr-2">256</span>
-          </v-col>
-          <v-col cols="2">
-            <v-icon class="mr-1"> mdi-share-variant</v-icon>
-            <span class="subheading">45</span>
+          <v-col cols="10">
+            <v-btn icon @click="openCommentDisplay"
+              ><v-icon>mdi-comment-text-multiple</v-icon></v-btn
+            >
+            <span class="subheading">256</span></v-col
+          >
+          <v-col cols="2" class="text-center">
+            <v-btn icon><v-icon class="mr-1"> mdi-heart</v-icon></v-btn>
+            <span class="subheading">256</span>
           </v-col>
         </v-row>
       </v-list-item>
@@ -123,9 +110,11 @@
 </template>
 <script>
 import Dialog from '@/components/dialog'
+import CommentDialog from '@/components/CommentDialog'
 export default {
   components: {
     Dialog,
+    CommentDialog,
   },
   props: {
     // Object形に変換
@@ -160,6 +149,10 @@ export default {
     },
     closeDisplay() {
       this.$refs.dlg.$emit('closeDisplay')
+    },
+    openCommentDisplay() {
+      this.$refs.commentDlg.commentDlgIsDisplay = true
+      // this.$refs.commentDlg.commentData = ！！！！！！！！！！！！！！！！！！！！！！
     },
   },
 }
