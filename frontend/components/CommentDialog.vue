@@ -77,24 +77,14 @@
               <v-img :src="micropost.attributes.image"></v-img>
             </v-avatar>
           </div>
-          <v-divider class="mx-4"></v-divider>
-          <v-card-title>Tonight's availability</v-card-title>
+          <div v-for="(comment, i) in commentsData" :key="i">
+            <v-divider class="mx-4"></v-divider>
+            <v-card-title>Tonight's availability</v-card-title>
 
-          <v-card-text>
-            <v-chip-group
-              v-model="selection"
-              active-class="deep-purple accent-4 white--text"
-              column
-            >
-              <v-chip>5:30PM</v-chip>
-
-              <v-chip>7:30PM</v-chip>
-
-              <v-chip>8:00PM</v-chip>
-
-              <v-chip>9:00PM</v-chip>
-            </v-chip-group>
-          </v-card-text>
+            <v-card-text>
+              <p>{{ comment }}</p>
+            </v-card-text>
+          </div>
         </v-card>
       </v-card-text>
 
@@ -107,9 +97,8 @@
           <v-col cols="6" class="text-right">
             <v-btn
               class="mr-4"
-              :disabled="invalid"
               color="orange darken-3"
-              @click="submit"
+              @click="postCommentsGet"
             >
               更新
             </v-btn>
@@ -129,11 +118,23 @@ export default {
   data() {
     return {
       commentDlgIsDisplay: false,
-      commentData: '',
+      commentsData: '',
       menu: {
         profileIcon: false,
       },
+      content: '',
     }
+  },
+  methods: {
+    postCommentsGet() {
+      this.$axios
+        .post('/api/v1/post_comments', {
+          content: this.content,
+          micropost_id: this.micropost.id,
+        })
+        .then((request) => console.log(request))
+        .catch((error) => console.log(error))
+    },
   },
 }
 </script>

@@ -14,10 +14,10 @@
           <v-text-field
             v-model="content"
             label="投稿用メッセージフォーム"
+            class="text-right"
             @keydown.enter.exact="keyDownEnter"
             @keyup.enter.exact="keyUpEnter"
             @keydown.enter.shift="keyEnterShift"
-            class="text-right"
           >
           </v-text-field>
         </v-col>

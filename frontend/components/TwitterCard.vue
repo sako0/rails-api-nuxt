@@ -2,7 +2,7 @@
   <v-card class="mx-auto" color="#1F7087" dark>
     <Dialog ref="dlg" type="postDelete" @method="deletePost"></Dialog>
     <commentDialog
-      ref="commentDlg"
+      ref="commentsDlg"
       :micropost="micropost"
       :current_user="current_user"
     ></commentDialog>
@@ -151,8 +151,23 @@ export default {
       this.$refs.dlg.$emit('closeDisplay')
     },
     openCommentDisplay() {
-      this.$refs.commentDlg.commentDlgIsDisplay = true
-      // this.$refs.commentDlg.commentData = ！！！！！！！！！！！！！！！！！！！！！！
+      this.$refs.commentsDlg.commentDlgIsDisplay = true
+      this.$axios
+        .get('/api/v1/post_comments', {
+          params: {
+            micropost_id: this.micropost.id,
+          },
+        })
+        .then((response) => {
+          console.log(response)
+          if (response.data) {
+            console.log(response.data)
+            this.$refs.commentsDlg.commentsData = response.data
+          } else {
+            this.$refs.commentsDlg.commentsData = ''
+          }
+        })
+        .catch((error) => console.log(error))
     },
   },
 }

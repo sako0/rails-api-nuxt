@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :microposts
       resources :sessions, only: [:index, :create]
       resources :profiles, only: [:create]
+      resources :post_comments
     end
   end
 end
