@@ -21,10 +21,8 @@
           >
           </v-text-field>
         </v-col>
-        <v-col cols="1" class="text-left">
-          <v-btn icon class="pt-8" @click="submit"
-            ><v-icon>mdi-send</v-icon></v-btn
-          >
+        <v-col cols="1" class="text-left pt-8">
+          <v-btn icon @click="submit"><v-icon>mdi-send</v-icon></v-btn>
         </v-col>
       </v-row>
       <span v-if="success">送信成功！</span>
