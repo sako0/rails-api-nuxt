@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="commentDlgIsDisplay" width="50%" scrollable>
+  <v-dialog v-model="commentDlgIsDisplay" max-width="60%" scrollable>
     <v-card>
       <v-card-title>投稿コメント</v-card-title>
 
@@ -122,6 +122,53 @@ export default {
         profileIcon: false,
       },
       content: '',
+    }
+  },
+  created() {
+    if (process.client) {
+      const ActionCable = require('actioncable')
+
+      const cable = ActionCable.createConsumer(
+        process.env.NUXT_ENV_RAILS_URL + '/cable'
+      )
+      cable.subscriptions.create('PostCommentsChannel', {
+        received: (data) => {
+          const micropostId = this.micropost.id
+          // 新規投稿をした場合にmicropost_idを持つユーザにブロードキャストする
+          if (data.method === 'create') {
+            // サーバ側から送られてきたmicropost_idとフロント側が一致する場合
+            if (micropostId === data.micropost_id) {
+              // 投稿の一覧を再取得
+              this.$axios
+                .get('/api/v1/post_comments', {
+                  params: {
+                    micropost_id: this.micropost.id,
+                  },
+                })
+                .then((response) => {
+                  this.commentsData = response.data
+                  console.log(this.commentsData)
+                })
+            }
+          }
+          // 投稿を削除した場合にdata.user_idのユーザにブロードキャストする
+          if (data.method === 'destroy') {
+            // オブジェクトを配列にする
+            if (this.micropost.id === data.micropost_id) {
+              this.$axios
+                .get('api/v1/post_comments', {
+                  params: {
+                    micropost_id: this.micropost.id,
+                  },
+                })
+                .then((response) => {
+                  this.commentsData = response.data
+                  console.log(this.commentsData)
+                })
+            }
+          }
+        },
+      })
     }
   },
   methods: {

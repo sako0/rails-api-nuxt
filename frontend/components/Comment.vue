@@ -61,7 +61,7 @@
         }}</span>
       </v-col>
       <v-col cols="2" class="text-right">
-        <v-btn icon><v-icon>mdi-delete</v-icon></v-btn>
+        <v-btn icon @click="deleteComment"><v-icon>mdi-delete</v-icon></v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -85,6 +85,14 @@ export default {
       },
       content: '',
     }
+  },
+  methods: {
+    deleteComment() {
+      this.$axios
+        .delete('/api/v1/post_comments/' + this.comment.id)
+        .then((request) => console.log(request))
+        .catch((error) => console.log(error))
+    },
   },
 }
 </script>
