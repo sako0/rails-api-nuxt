@@ -62,7 +62,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: aws/web-task-definition.json # レポジトリ以下のタスク定義ファイルがあるPath
-          container-name: migration-web
+          container-name: web-migrate
           image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       - name: Modify Amazon ECS task definition
         id: render-web-container
