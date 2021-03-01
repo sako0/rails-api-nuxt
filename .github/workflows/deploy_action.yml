@@ -21,10 +21,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: install # will run `yarn install` command
-          working-directory: ./frontend
+      - name: Build the Docker image
+        run: yarn install
+        working-directory: ./frontend
       - name: Build the Docker image
         run: docker-compose build
         working-directory: ./
