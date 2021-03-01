@@ -1,4 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
+require('dotenv').config()
+
+const BASEURL = process.env.NUXT_ENV_RAILS_URL
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -12,7 +15,6 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
-
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
   generate: {
@@ -20,7 +22,11 @@ export default {
     dir: '../public',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    { src: '~/plugins/localStorage.js', ssr: false },
+    '@/plugins/axios',
+    '@/plugins/auth',
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -31,34 +37,39 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/dotenv',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/proxy',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/proxy',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/auth-next',
   ],
-
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    prefix: '/api',
+    proxy: true,
+    prefix: BASEURL,
+    // baseURL: BASEURL,
+    // browserBaseURL: BASEURL,
+  },
+  proxy: {
+    '/api': {
+      // ターゲット先のURLを指定
+      target: BASEURL,
+      pathRewrite: {
+        '^/api': '/',
+      },
+    },
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en',
-    },
-  },
-  proxy: {
-    '/api': {
-      target: 'http://127.0.0.1:3000',
-      pathRewrite: {
-        '^/api': '/',
-      },
+      lang: 'ja',
     },
   },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -79,21 +90,30 @@ export default {
       },
     },
   },
-
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-    babel: {
-      presets({ isServer }) {
-        return [
-          [
-            require.resolve('@nuxt/babel-preset-app'),
-            // require.resolve('@nuxt/babel-preset-app-edge'), // For nuxt-edge users
-            {
-              buildTarget: isServer ? 'server' : 'client',
-              corejs: { version: 3 },
-            },
-          ],
-        ]
+  router: {}, // ログイン画面も含めた全体のページに認証を必要とする。例外はauth: falseで設定する
+  auth: {
+    redirect: {
+      login: '/login', // 未ログイン時に認証ルートへアクセスした際のリダイレクトURL
+      logout: '/', // ログアウト時のリダイレクトURL
+      callback: false, // Oauth認証等で必要となる コールバックルート
+      home: '/login', // ログイン後のリダイレクトURL一度リダイレクトに成功しないとログインができないためlogin画面にリダイレクトさせている
+    },
+    strategies: {
+      local: {
+        token: {
+          property: 'token',
+          type: 'Bearer',
+        },
+        endpoints: {
+          login: {
+            url: '/api/v1/sessions',
+            method: 'post',
+            propertyName: 'access_token',
+          },
+          user: false,
+          logout: false,
+          clientId: true,
+        },
       },
     },
   },
