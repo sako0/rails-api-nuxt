@@ -109,8 +109,8 @@
   </v-card>
 </template>
 <script>
-import Dialog from '@/components/dialog'
-import CommentDialog from '@/components/CommentDialog'
+import Dialog from './Dialog'
+import CommentDialog from './CommentDialog'
 export default {
   components: {
     Dialog,

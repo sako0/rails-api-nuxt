@@ -197,13 +197,13 @@ class User < ApplicationRecord
 
   def default_image
     if !self.image.attached?
-      self.image.attach(io: File.open(Rails.root.join('public', 'images', 'user_default.png')), filename: 'user_default.png', content_type: 'image/png')
+      self.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'user_default.png')), filename: 'user_default.png', content_type: 'image/png')
     end
   end
 
   def default_back_ground_image
     if !self.back_ground.attached?
-      self.back_ground.attach(io: File.open(Rails.root.join('public', 'images', 'photo4.jpg')), filename: 'photo4.jpg', content_type: 'image/jpg')
+      self.back_ground.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'photo4.jpg')), filename: 'photo4.jpg', content_type: 'image/jpg')
     end
   end
 end

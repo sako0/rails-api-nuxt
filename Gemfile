@@ -20,8 +20,6 @@ gem 'jwt'
 gem 'bcrypt', '~> 3.1.7'
 # テスト用ユーザ等の追加
 gem "faker"
-# ページネーション用のgem
-gem "will_paginate"
 # 画像のトリミングに使う
 gem 'image_processing'
 gem 'mini_magick'

@@ -139,7 +139,6 @@
 </template>
 
 <script>
-import ProfilePreview from '@/components/ProfilePreview'
 import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
 import {
   extend,
@@ -147,6 +146,7 @@ import {
   ValidationProvider,
   setInteractionMode,
 } from 'vee-validate'
+import ProfilePreview from './ProfilePreview'
 
 setInteractionMode('eager')
 

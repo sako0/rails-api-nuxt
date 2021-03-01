@@ -20,6 +20,7 @@
     }
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.13.8",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/auth-next": "^5.0.0-1612791489.a5d8c28",
     "@nuxtjs/axios": "^5.12.5",
@@ -27,8 +28,9 @@
     "@nuxtjs/proxy": "^2.1.0",
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/style-resources": "^1.0.0",
+    "actioncable": "^5.2.4-5",
+    "babel-eslint": "^10.1.0",
     "core-js": "2.6.11",
-    "element-ui": "^2.15.0",
     "nuxt": "^2.14.12",
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
@@ -38,7 +40,6 @@
     "@nuxtjs/vuetify": "^1.11.3",
     "@vue/test-utils": "^1.1.2",
     "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
     "eslint": "^7.18.0",
     "eslint-config-prettier": "^7.2.0",

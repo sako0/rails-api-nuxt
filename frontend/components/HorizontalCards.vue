@@ -52,7 +52,6 @@
 </template>
 
 <script>
-// import axios from '@/plugins/axios'
 import TwitterCard from '~/components/TwitterCard.vue'
 
 export default {

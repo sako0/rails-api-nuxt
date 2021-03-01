@@ -104,7 +104,7 @@
   </v-dialog>
 </template>
 <script>
-import Comment from '@/components/Comment'
+import Comment from './Comment'
 export default {
   components: {
     Comment,

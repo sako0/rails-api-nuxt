@@ -1,0 +1,95 @@
+name: Docker Image CI/CD
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
+      FRONTEND_REPOSITORY: ${{ secrets.AWS_ECR_FRONTEND_REPO_NAME }}
+      IMAGE_TAG: latest
+      WEB_CONTAINER_NAME: rails-api-nuxt_web
+      FRONTEND_CONTAINER_NAME: rails-api-nuxt_frontend
+      CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+      WEB_SERVICE_NAME: ${{ secrets.WEB_SERVICE_NAME }}
+      FRONTEND_SERVICE_NAME: ${{ secrets.FRONTEND_SERVICE_NAME }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: install # will run `yarn install` command
+          working-directory: ./frontend
+      - name: Build the Docker image
+        run: docker-compose build
+        working-directory: ./
+      - name: docker-compose up
+        run: |
+          docker-compose down
+          docker-compose up -d
+          sleep 10
+      #          docker-compose exec -T web bash -c "rails db:migrate:reset RAILS_ENV=test"
+      #          docker-compose exec -T web bash -c "rails db:seed RAILS_ENV=test"
+      #      - name: Rails-test
+      #        run: docker-compose exec -T web bash -c "rails test"
+      - name: Configure AWS Credentials # AWSアクセス権限設定
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name: Login to Amazon ECR # ECRログイン処理
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR # ECRイメージPush
+        run: |
+          docker tag $WEB_CONTAINER_NAME $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: FRONTEND, Build, tag, and push image to Amazon ECR # ECRイメージPush
+        run: |
+          docker tag $FRONTEND_CONTAINER_NAME $ECR_REGISTRY/$FRONTEND_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$FRONTEND_REPOSITORY:$IMAGE_TAG
+
+      - name: Render migration task definition # ECSタスク定義ファイルレンダリング
+        id: render-migration-web-container
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: aws/web-task-definition.json # レポジトリ以下のタスク定義ファイルがあるPath
+          container-name: migration-web
+          image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Modify Amazon ECS task definition
+        id: render-web-container
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-migration-web-container.outputs.task-definition }}
+          container-name: web
+          image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Frontend task definition # フロントエンドECSタスク定義
+        id: frontend-task-definition
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: aws/frontend-task-definition.json # レポジトリ以下のタスク定義ファイルがあるPath
+          container-name: frontend
+          image: $ECR_REGISTRY/$FRONTEND_REPOSITORY:$IMAGE_TAG
+
+      - name: Deploy to Amazon ECS service # ECSサービスデプロイ
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+          service: $WEB_SERVICE_NAME
+          cluster: $CLUSTER_NAME
+      - name: Deploy Frontend to Amazon ECS service # フロントECSサービスデプロイ
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.frontend-task-definition.outputs.task-definition }}
+          service: $FRONTEND_SERVICE_NAME
+          cluster: $CLUSTER_NAME
+
