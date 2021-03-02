@@ -17,8 +17,8 @@ jobs:
       WEB_CONTAINER_NAME: rails-api-nuxt_web
       FRONTEND_CONTAINER_NAME: rails-api-nuxt_frontend
       CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
-      WEB_SERVICE_NAME: ${{ secrets.WEB_SERVICE_NAME }}
-      FRONTEND_SERVICE_NAME: ${{ secrets.FRONTEND_SERVICE_NAME }}
+    #      WEB_SERVICE_NAME: ${{ secrets.WEB_SERVICE_NAME }}
+    #      FRONTEND_SERVICE_NAME: ${{ secrets.FRONTEND_SERVICE_NAME }}
 
     steps:
       - uses: actions/checkout@v2
@@ -83,12 +83,12 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: aws/web-task-definition.json
-          service: $WEB_SERVICE_NAME
-          cluster: $CLUSTER_NAME
+          service: nuxt-rails-service
+          cluster: nuxt-rails-cluster
       - name: Deploy Frontend to Amazon ECS service # フロントECSサービスデプロイ
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: aws/frontend-task-definition.json
-          service: $FRONTEND_SERVICE_NAME
-          cluster: $CLUSTER_NAME
+          service: frontend-nuxt-rails-service
+          cluster: nuxt-rails-cluster
 
