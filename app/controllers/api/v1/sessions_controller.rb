@@ -19,8 +19,8 @@ class Api::V1::SessionsController < ApplicationController
                        name: @current_user.name,
                        email: @current_user.email,
                        profile: @current_user.profiles,
-                       image: url_for(@current_user.display_image.processed),
-                       background_image: url_for(@current_user.display_background_image.processed),
+                       image: url_for(@current_user.display_image),
+                       background_image: url_for(@current_user.display_background_image),
                      }
     }
   end
