@@ -22,6 +22,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: replace json
+        run: |
+          WEB_IMAGE_NAME=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          FRONTEND_IMAGE_NAME=$ECR_REGISTRY/$FRONTEND_REPOSITORY:$IMAGE_TAG
+          sed -i'' -e "s/%WEB_IMAGE_NAME%/${WEB_IMAGE_NAME}/g" aws/web-task-definition.json
+          sed -i'' -e "s/%FRONTEND_IMAGE_NAME%/${FRONTEND_IMAGE_NAME}/g" aws/frontend-task-definition.json
       - name: yarn install for FRONTEND
         run: yarn install
         working-directory: ./frontend

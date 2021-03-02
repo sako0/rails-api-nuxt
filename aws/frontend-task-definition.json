@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "frontend",
-      "image": "282706015608.dkr.ecr.ap-northeast-1.amazonaws.com/frontend:latest",
+      "image": "%FRONTEND_IMAGE_NAME",
       "cpu": 0,
       "memoryReservation": 300,
       "portMappings": [

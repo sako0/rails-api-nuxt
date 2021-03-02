@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "web",
-      "image": "282706015608.dkr.ecr.ap-northeast-1.amazonaws.com/web:latest",
+      "image": "%WEB_IMAGE_NAME",
       "cpu": 0,
       "memoryReservation": 300,
       "portMappings": [
@@ -55,7 +55,7 @@
     },
     {
       "name": "web-migrate",
-      "image": "282706015608.dkr.ecr.ap-northeast-1.amazonaws.com/web:latest",
+      "image": "%WEB_IMAGE_NAME",
       "cpu": 0,
       "memoryReservation": 300,
       "portMappings": [
