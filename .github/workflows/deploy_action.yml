@@ -24,8 +24,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: yarn install for FRONTEND
         run: |
-          npm install -g yarn
-          yarn install --check-files
+          sudo npm install -g yarn
+          sudo yarn install --check-files
         working-directory: ./frontend
       - name: Build the Docker image
         run: docker-compose build
