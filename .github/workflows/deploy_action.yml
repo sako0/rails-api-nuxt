@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: yarn install for FRONTEND
-        run: yarn install
+        run: yarn install --check-files
         working-directory: ./frontend
       - name: Build the Docker image
         run: docker-compose build
