@@ -42,6 +42,7 @@ services:
       RAILS_DB_USER: root # MYSQL_USERと一致させる
       RAILS_DB_PASSWORD: password # MYSQL_PASSWORDと一致させる
       RAILS_ENV: development
+      RAILS_HOST_URL: localhost:3000
   # ここから追加
   frontend:
     build: ./frontend
