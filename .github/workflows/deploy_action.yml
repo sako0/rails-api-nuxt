@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-      ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
-      FRONTEND_REPOSITORY: ${{ secrets.AWS_ECR_FRONTEND_REPO_NAME }}
+      ECR_REPOSITORY: web
+      FRONTEND_REPOSITORY: frontend
       IMAGE_TAG: latest
       WEB_CONTAINER_NAME: rails-api-nuxt_web
       FRONTEND_CONTAINER_NAME: rails-api-nuxt_frontend
@@ -22,12 +22,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: replace json
-        run: |
-          WEB_IMAGE_NAME=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          FRONTEND_IMAGE_NAME=$ECR_REGISTRY/$FRONTEND_REPOSITORY:$IMAGE_TAG
-          sed -i'' -e "s/%WEB_IMAGE_NAME%/${WEB_IMAGE_NAME}/g" aws/web-task-definition.json
-          sed -i'' -e "s/%FRONTEND_IMAGE_NAME%/${FRONTEND_IMAGE_NAME}/g" aws/frontend-task-definition.json
       - name: yarn install for FRONTEND
         run: yarn install
         working-directory: ./frontend
