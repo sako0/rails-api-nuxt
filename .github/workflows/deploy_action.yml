@@ -82,7 +82,7 @@ jobs:
       - name: Deploy to Amazon ECS service # ECSサービスデプロイ
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+          task-definition: ${{ steps.render-migration-web-container.outputs.task-definition }}
           service: $WEB_SERVICE_NAME
           cluster: $CLUSTER_NAME
       - name: Deploy Frontend to Amazon ECS service # フロントECSサービスデプロイ
