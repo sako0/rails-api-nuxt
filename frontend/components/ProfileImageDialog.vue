@@ -36,15 +36,16 @@
                 <v-col cols="11" sm="11" md="6" lg="6" xl="6">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="Job"
+                    name="age"
                     rules="max:35"
                   >
                     <v-text-field
                       v-model="age"
                       append-icon="mdi-domain"
                       :counter="35"
+                      disabled
                       :error-messages="errors"
-                      label="Job"
+                      label="Age"
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
@@ -81,7 +82,7 @@
                 <v-col cols="11" sm="11" md="12" lg="12" xl="12">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="Skills"
+                    name="trend"
                     rules="max:100"
                   >
                     <v-textarea
@@ -91,7 +92,7 @@
                       :error-messages="errors"
                       auto-grow
                       rows="1"
-                      label="Skills"
+                      label="よく利用するお店等"
                     ></v-textarea>
                   </validation-provider>
                 </v-col>
@@ -105,7 +106,7 @@
                       v-model="notes"
                       append-icon="mdi-book-open-page-variant-outline"
                       :error-messages="errors"
-                      label="Notes"
+                      label="自己紹介"
                       auto-grow
                       rows="1"
                       counter="220"
@@ -228,8 +229,8 @@ export default {
         this.url === null ? '' : this.url
       )
       data.append(
-        'user[profiles_attributes][skills]',
-        this.skills === null ? '' : this.trend
+        'user[profiles_attributes][trend]',
+        this.trend === null ? '' : this.trend
       )
       data.append(
         'user[profiles_attributes][notes]',
