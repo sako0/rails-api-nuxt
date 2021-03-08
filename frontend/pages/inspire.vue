@@ -14,7 +14,7 @@
         <v-col cols="12" sm="12" md="4" lg="4" xl="4">
           <v-row class="mt-5">
             <v-col cols="12">
-              <profileCard :user="currentUser" />
+              <profileCard :user="currentUser" @getUser="getUser" />
             </v-col>
           </v-row>
         </v-col>
@@ -39,17 +39,6 @@ export default {
     ProfileCard,
   },
   middleware: 'auth',
-  async asyncData({ $axios, redirect }) {
-    try {
-      const currentUser = await $axios.get('api/v1/sessions')
-      const foodPosts = await $axios.get('api/v1/food_posts')
-      // 配列で返ってくるのでJSONにして返却
-      console.log(foodPosts.data)
-      return { currentUser: currentUser.data, foodPosts: foodPosts.data }
-    } catch (err) {
-      return redirect('/')
-    }
-  },
   // created() {
   //   if (process.client) {
   //     const ActionCable = require('actioncable')
@@ -92,6 +81,30 @@ export default {
   //     })
   //   }
   // },
-  mounted() {},
+  async asyncData({ $axios, redirect }) {
+    try {
+      const currentUser = await $axios.get('api/v1/sessions')
+      const foodPosts = await $axios.get('api/v1/food_posts')
+      // 配列で返ってくるのでJSONにして返却
+      console.log(foodPosts.data)
+      return { currentUser: currentUser.data, foodPosts: foodPosts.data }
+    } catch (err) {
+      return redirect('/')
+    }
+  },
+  data() {
+    return {
+      currentUser: '',
+      foodPosts: '',
+    }
+  },
+  methods: {
+    getUser() {
+      this.$axios.get('api/v1/sessions').then((response) => {
+        console.log(response.data)
+        this.currentUser = response.data
+      })
+    },
+  },
 }
 </script>

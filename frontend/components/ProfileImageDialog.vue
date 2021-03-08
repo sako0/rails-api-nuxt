@@ -40,7 +40,7 @@
                     rules="max:35"
                   >
                     <v-text-field
-                      v-model="job"
+                      v-model="age"
                       append-icon="mdi-domain"
                       :counter="35"
                       :error-messages="errors"
@@ -85,7 +85,7 @@
                     rules="max:100"
                   >
                     <v-textarea
-                      v-model="skills"
+                      v-model="trend"
                       append-icon="mdi-head-dots-horizontal-outline"
                       :counter="100"
                       :error-messages="errors"
@@ -192,11 +192,21 @@ export default {
       uploadImage: '',
       uploadBackground: '',
       name: this.user.user.name,
-      job: this.user.user.profile.job,
+      age: this.user.user.profile.age,
       url: this.user.user.profile.url,
-      skills: this.user.user.profile.skills,
+      trend: this.user.user.profile.trend,
       notes: this.user.user.profile.notes,
     }
+  },
+  computed: {
+    userComputed: {
+      get() {
+        return this.$props.user
+      },
+      set(value) {
+        this.$emit('change', value)
+      },
+    },
   },
   mounted() {
     this.title = 'プロフィール情報変更'
@@ -214,24 +224,20 @@ export default {
       }
       data.append('user[name]', this.name)
       data.append(
-        'user[profiles_attributes][job]',
-        this.job === null ? ' ' : this.job
-      )
-      data.append(
         'user[profiles_attributes][url]',
-        this.url === null ? ' ' : this.url
+        this.url === null ? '' : this.url
       )
       data.append(
         'user[profiles_attributes][skills]',
-        this.skills === null ? ' ' : this.skills
+        this.skills === null ? '' : this.trend
       )
       data.append(
         'user[profiles_attributes][notes]',
-        this.notes === null ? ' ' : this.notes
+        this.notes === null ? '' : this.notes
       )
       const headers = { 'content-type': 'multipart/form-data' }
       this.$axios.put(url, data, { headers }).then((response) => {
-        console.log(response)
+        this.getUser()
       })
     },
     imageFileGet(value) {
@@ -248,8 +254,8 @@ export default {
         this.uploadBackground = ''
       }
     },
-    closeDisplay() {
-      this.isDisplay = false
+    getUser() {
+      this.$emit('getUser')
     },
   },
 }

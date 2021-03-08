@@ -82,7 +82,7 @@
               <v-list-item color="rgba(0, 0, 0, .4)" dark>
                 <v-list-item-content>
                   <v-list-item-title class="title">
-                    {{ user.user.name }}
+                    {{ user.name }}
                   </v-list-item-title>
                   <v-list-item-subtitle
                     >{{ user.user.profile.job }}
