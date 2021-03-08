@@ -16,18 +16,12 @@
             <v-col cols="12">
               <profileCard :user="currentUser" />
             </v-col>
-            <v-col cols="12">
-              <CardImage />
-            </v-col>
           </v-row>
         </v-col>
         <v-col cols="12" sm="12" md="8" lg="8" xl="8">
           <v-row class="mt-5">
             <v-col cols="12">
-              <horizontalCards
-                :microposts="microposts"
-                :current_user="currentUser"
-              />
+              <foodPostCard :foods="foodPosts" />
             </v-col>
           </v-row>
         </v-col>
@@ -36,69 +30,68 @@
   </v-row>
 </template>
 <script>
-import CardImage from '~/components/Card_image.vue'
-import HorizontalCards from '~/components/HorizontalCards.vue'
+import FoodPostCard from '~/components/FoodPostCard.vue'
 import ProfileCard from '~/components/ProfileCard.vue'
 
 export default {
   components: {
-    CardImage,
-    HorizontalCards,
+    FoodPostCard,
     ProfileCard,
   },
   middleware: 'auth',
   async asyncData({ $axios, redirect }) {
     try {
       const currentUser = await $axios.get('api/v1/sessions')
-      const microposts = await $axios.get('api/v1/microposts')
+      const foodPosts = await $axios.get('api/v1/food_posts')
       // 配列で返ってくるのでJSONにして返却
-      return { currentUser: currentUser.data, microposts: microposts.data }
+      console.log(foodPosts.data)
+      return { currentUser: currentUser.data, foodPosts: foodPosts.data }
     } catch (err) {
       return redirect('/')
     }
   },
-  created() {
-    if (process.client) {
-      const ActionCable = require('actioncable')
-
-      const cable = ActionCable.createConsumer(
-        process.env.NUXT_ENV_RAILS_URL + '/cable'
-      )
-      cable.subscriptions.create('MicropostChannel', {
-        received: (data) => {
-          const currentUserId = this.currentUser.user.id
-          // 新規投稿をした場合にdata.user_idのユーザにブロードキャストする
-          if (data.method === 'create') {
-            // サーバ側から送られてきたuser_idとcurrent_userが一致する場合
-            if (currentUserId === data.user_id) {
-              // 投稿の一覧を再取得
-              this.$axios
-                .get('api/v1/microposts')
-                .then((response) => (this.microposts = response.data))
-            }
-          }
-          // 投稿を削除した場合にdata.user_idのユーザにブロードキャストする
-          if (data.method === 'destroy') {
-            // オブジェクトを配列にする
-            const arr = this.microposts.data
-            const micropostsArr = Object.entries(arr)
-            // micropost_idが存在するか確認
-            for (const v of micropostsArr) {
-              Object.entries(v)
-              // 存在した場合はaxiosでgetを行う
-              if (v[1].id === data.micropost_id.toString()) {
-                // 投稿の一覧を再取得
-                this.$axios
-                  .get('api/v1/microposts')
-                  .then((response) => (this.microposts = response.data))
-                break
-              }
-            }
-          }
-        },
-      })
-    }
-  },
+  // created() {
+  //   if (process.client) {
+  //     const ActionCable = require('actioncable')
+  //
+  //     const cable = ActionCable.createConsumer(
+  //       process.env.NUXT_ENV_RAILS_URL + '/cable'
+  //     )
+  //     cable.subscriptions.create('MicropostChannel', {
+  //       received: (data) => {
+  //         const currentUserId = this.currentUser.user.id
+  //         // 新規投稿をした場合にdata.user_idのユーザにブロードキャストする
+  //         if (data.method === 'create') {
+  //           // サーバ側から送られてきたuser_idとcurrent_userが一致する場合
+  //           if (currentUserId === data.user_id) {
+  //             // 投稿の一覧を再取得
+  //             this.$axios
+  //               .get('api/v1/microposts')
+  //               .then((response) => (this.microposts = response.data))
+  //           }
+  //         }
+  //         // 投稿を削除した場合にdata.user_idのユーザにブロードキャストする
+  //         if (data.method === 'destroy') {
+  //           // オブジェクトを配列にする
+  //           const arr = this.microposts.data
+  //           const micropostsArr = Object.entries(arr)
+  //           // micropost_idが存在するか確認
+  //           for (const v of micropostsArr) {
+  //             Object.entries(v)
+  //             // 存在した場合はaxiosでgetを行う
+  //             if (v[1].id === data.micropost_id.toString()) {
+  //               // 投稿の一覧を再取得
+  //               this.$axios
+  //                 .get('api/v1/microposts')
+  //                 .then((response) => (this.microposts = response.data))
+  //               break
+  //             }
+  //           }
+  //         }
+  //       },
+  //     })
+  //   }
+  // },
   mounted() {},
 }
 </script>

@@ -10,12 +10,12 @@
                     password: "11111111",)
 @user.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'user_default.png')), filename: 'user_default.png', content_type: 'image/png')
 @user.back_ground.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'photo4.jpg')), filename: 'photo4.jpg', content_type: 'image/jpg')
-@user.build_profiles(job: "a")
+@user.build_profiles(notes: "コンビニメイン")
 @user.save
 @user = User.create(name: "bibi",
                     email: "bi@gmail.com",
                     password: "11111111",)
 @user.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'user_default.png')), filename: 'user_default.png', content_type: 'image/png')
 @user.back_ground.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'photo4.jpg')), filename: 'photo4.jpg', content_type: 'image/jpg')
-@user.build_profiles(job: "bibiWEB")
+@user.build_profiles(notes: "レストラン")
 @user.save

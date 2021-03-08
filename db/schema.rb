@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_08_130046) do
+ActiveRecord::Schema.define(version: 2021_03_03_200758) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -50,36 +50,31 @@ ActiveRecord::Schema.define(version: 2021_02_08_130046) do
     t.index ["following_id"], name: "index_follow_relations_on_following_id_and_following_id", unique: true
   end
 
-  create_table "microposts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "content"
+  create_table "food_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "food_code"
     t.bigint "user_id"
+    t.string "product_name"
+    t.string "par"
+    t.float "calorie"
+    t.float "protein"
+    t.float "lipid"
+    t.float "carbohydrate"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at"
-    t.index ["user_id"], name: "index_microposts_on_user_id"
-  end
-
-  create_table "post_comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "micropost_id"
-    t.bigint "user_id"
-    t.string "content"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["micropost_id", "user_id", "created_at"], name: "index_post_comments_on_micropost_id_and_user_id_and_created_at"
-    t.index ["micropost_id"], name: "index_post_comments_on_micropost_id"
-    t.index ["user_id"], name: "index_post_comments_on_user_id"
+    t.index ["user_id", "created_at"], name: "index_food_posts_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_food_posts_on_user_id"
   end
 
   create_table "profiles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "job"
-    t.string "location"
-    t.string "skills"
+    t.string "age"
+    t.string "sex"
+    t.string "trend"
     t.string "notes"
     t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["skills", "created_at", "updated_at"], name: "index_profiles_on_skills_and_created_at_and_updated_at"
+    t.index ["created_at", "updated_at"], name: "index_profiles_on_created_at_and_updated_at"
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
@@ -95,13 +90,12 @@ ActiveRecord::Schema.define(version: 2021_02_08_130046) do
     t.datetime "reset_sent_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "line_id"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "microposts", "users"
-  add_foreign_key "post_comments", "microposts"
-  add_foreign_key "post_comments", "users"
+  add_foreign_key "food_posts", "users"
   add_foreign_key "profiles", "users"
 end
