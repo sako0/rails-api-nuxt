@@ -5,7 +5,11 @@
       :user="user"
       @getUser="getUser"
     ></ProfileImageDialog>
-    <v-img height="100%" :src="userComputed.user.background_image">
+    <v-img
+      max-height="220px"
+      height="100%"
+      :src="userComputed.user.background_image"
+    >
       <v-row>
         <v-col cols="2">
           <v-btn
