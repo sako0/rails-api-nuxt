@@ -116,10 +116,12 @@ export default {
       }
     },
     onClickCancel() {
+      this.isDisplay = false
       this.$emit('cancel', 'cameraCancel')
     },
     onSuccess(code) {
       console.log(code)
+      this.isDisplay = false
       this.$emit('code', code)
     },
     closeDisplay() {

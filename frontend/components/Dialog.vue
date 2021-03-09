@@ -2,6 +2,7 @@
   <v-dialog v-model="isDisplay" width="400px">
     <v-card>
       <v-card-title>{{ title }}</v-card-title>
+      <v-card-text>{{ content }}</v-card-text>
       <v-card-actions>
         <v-row justify="center">
           <v-col cols="6">
@@ -20,6 +21,7 @@
 export default {
   props: {
     type: String,
+    content: String,
   },
   data: () => ({
     isDisplay: false,
@@ -28,6 +30,9 @@ export default {
   mounted() {
     if (this.type === 'postDelete') {
       this.title = '投稿を削除しますか？'
+    }
+    if (this.type === 'cameraDialog') {
+      this.title = '続けてスキャンしますか？'
     }
   },
   methods: {
