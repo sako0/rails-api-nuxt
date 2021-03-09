@@ -6,7 +6,7 @@
       @getUser="getUser"
     ></ProfileImageDialog>
     <v-img
-      max-height="220px"
+      max-height="200px"
       height="100%"
       :src="userComputed.user.background_image"
     >

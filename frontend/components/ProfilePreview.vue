@@ -11,7 +11,7 @@
         </v-skeleton-loader>
         <v-img
           v-if="!pBackgraundLoading"
-          max-height="220px"
+          max-height="200px"
           height="100%"
           :src="pBackgroundUrl"
           :elevation="hover ? 24 : 2"

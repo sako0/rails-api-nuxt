@@ -26,7 +26,6 @@ export default {
     title: '',
   }),
   mounted() {
-    console.log(this.type)
     if (this.type === 'postDelete') {
       this.title = '投稿を削除しますか？'
     }

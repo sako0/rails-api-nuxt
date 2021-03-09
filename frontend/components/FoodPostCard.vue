@@ -1,9 +1,12 @@
 <template>
   <v-card class="mx-auto" max-width="500" elevation="24">
+    <Dialog ref="dlg" type="postDelete" @method="deletePost" />
     <v-system-bar color="indigo darken-2" dark> </v-system-bar>
 
     <v-toolbar color="indigo" dark>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-btn icon>
+        <v-icon>mdi-pencil-plus</v-icon>
+      </v-btn>
 
       <v-toolbar-title>登録商品一覧</v-toolbar-title>
 
@@ -32,9 +35,30 @@
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
               height="200px"
             >
-              <v-card-title
-                v-text="food.attributes.product_name"
-              ></v-card-title>
+              <v-row>
+                <v-col cols="10">
+                  <v-card-title
+                    v-text="food.attributes.product_name"
+                  ></v-card-title>
+                </v-col>
+                <v-col cols="2" class="text-right">
+                  <v-menu offset-y>
+                    <template #activator="{ on, attrs }">
+                      <v-btn text class="float-right" v-bind="attrs" v-on="on">
+                        <v-icon class="font-weight-regular">
+                          mdi-dots-horizontal
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item @click="openDisplay()">
+                        <v-list-item-title>投稿を削除する</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-col>
+              </v-row>
+
               <v-card-text>
                 <div>
                   単位：{{ food.attributes.par }}
@@ -72,7 +96,11 @@
   </v-card>
 </template>
 <script>
+import Dialog from './Dialog'
 export default {
+  components: {
+    Dialog,
+  },
   props: {
     foods: Object,
   },
@@ -95,5 +123,21 @@ export default {
       },
     ],
   }),
+  methods: {
+    openDisplay() {
+      this.$refs.dlg.isDisplay = true
+    },
+    deletePost() {
+      this.$axios
+        .delete('/api/v1/microposts/' + this.micropost.id, {
+          content: this.content,
+        })
+        .then(this.closeDisplay)
+        .catch((error) => console.log(error))
+    },
+    closeDisplay() {
+      this.$refs.dlg.$emit('closeDisplay')
+    },
+  },
 }
 </script>
