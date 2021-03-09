@@ -1,0 +1,158 @@
+<template>
+  <div>
+    <!-- カメラの映像を表示させるDIV -->
+    <v-dialog
+      v-model="isDisplay"
+      v-click-outside="closeDisplay"
+      max-width="300px"
+    >
+      <div id="camera-area" class="camera-area">
+        <!-- 青い四角のDIV -->
+        <div class="detect-area"></div>
+      </div>
+
+      <!-- 右上の閉じるボタン -->
+      <button
+        class="modal-close is-large"
+        aria-label="close"
+        @click.prevent.stop="onClickCancel"
+      ></button>
+    </v-dialog>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      isDisplay: false,
+    }
+  },
+  watch: {
+    isDisplay(val) {
+      this.$nextTick(() => {
+        if (val) {
+          // モーダル表示時、Quaggaを起動
+          this.initQuagga()
+        } else {
+          // モーダル非表示時、Quaggaを停止
+          this.Quagga.stop()
+        }
+      })
+    },
+  },
+  methods: {
+    initQuagga() {
+      // requireで読み込み
+      this.Quagga = require('quagga')
+
+      // 解析中に呼び出される処理を設定
+      this.Quagga.onProcessed(this.onProcessed)
+      // バーコード検出時の処理を設定
+      this.Quagga.onDetected(this.onDetected)
+
+      // Quaggaの設定項目
+      const config = {
+        // カメラの映像の設定
+        inputStream: {
+          type: 'LiveStream',
+          // カメラ映像を表示するHTML要素の設定
+          target: document.querySelector('#camera-area'),
+          // バックカメラの利用を設定. (フロントカメラは"user")
+          constraints: { facingMode: 'environment' },
+          // 検出範囲の指定: 上下30%は対象外
+          area: { top: '30%', right: '0%', left: '0%', bottom: '30%' },
+        },
+        // 解析するワーカ数の設定
+        numOfWorkers: navigator.hardwareConcurrency || 4,
+        // バーコードの種類を設定: ISBNは"ean_reader"
+        decoder: { readers: ['ean_reader'] },
+      }
+      // 初期化の開始。合わせて、初期化後の処理を設定
+      this.Quagga.init(config, this.onInitilize)
+    },
+    /**
+     * Quaggaの初期化完了後の処理
+     * errorがなければ、起動する
+     */
+    onInitilize(error) {
+      if (error) {
+        // エラーがある場合は、キャンセルをEmitする
+        console.error(`Error: ${error}`, error)
+        this.onClickCancel()
+        return
+      }
+
+      // エラーがない場合は、読み取りを開始
+      console.info('Initialization finished. Ready to start')
+      this.Quagga.start()
+    },
+
+    /**
+     * バーコード検出時の処理
+     */
+    onDetected(success) {
+      // ISBNは'success.codeResult.code'から取得
+      const isbn = success.codeResult.code
+      // ISBNをEmitで返却する
+      this.onSuccess(isbn)
+    },
+    onProcessed(data) {
+      const ctx = this.Quagga.canvas.ctx.overlay
+      const canvas = this.Quagga.canvas.dom.overlay
+
+      if (!data) return
+
+      // 認識したバーコードを緑の枠で囲む
+      if (data.boxes) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        const hasNotRead = (box) => box !== data.box
+        data.boxes.filter(hasNotRead).forEach((box) => {
+          this.Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, ctx, {
+            color: 'green',
+            lineWidth: 2,
+          })
+        })
+      }
+    },
+    onClickCancel() {
+      this.$emit('cancel', 'cameraCancel')
+    },
+    onSuccess(code) {
+      console.log(code)
+      this.$emit('code', code)
+    },
+    closeDisplay() {
+      this.isDisplay = false
+    },
+  },
+}
+</script>
+<style lang="scss">
+.camera-area {
+  overflow: hidden;
+  height: 300px;
+  width: 300px;
+
+  /**
+   * 指定したDIV配下にvideoとcanvasが追加される
+   * 4:3になるため、margin-topで調整
+   */
+  video,
+  canvas {
+    margin-top: -50px;
+    width: 300px;
+    height: 400px;
+  }
+  /* 検出範囲のサイズに合わせ枠線を引く */
+  .detect-area {
+    position: relative;
+    top: 30%;
+    bottom: 30%;
+    left: 10%;
+    right: 10%;
+
+    border: 2px solid #0000ff;
+  }
+}
+</style>

@@ -2,7 +2,12 @@
   <v-card class="mx-auto" max-width="320" elevation="24" tile>
     <v-hover v-slot="{ hover }" @input="overlay = true">
       <label>
-        <input type="file" style="display: none" @change="backgroundGet" />
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/bmp"
+          style="display: none"
+          @change="backgroundGet"
+        />
         <v-skeleton-loader
           v-if="pBackgraundLoading"
           :loading="pBackgraundLoading"
@@ -48,6 +53,7 @@
 
                         <input
                           type="file"
+                          accept="image/jpeg,image/png,image/bmp"
                           style="display: none"
                           @change="imageGet"
                         />
