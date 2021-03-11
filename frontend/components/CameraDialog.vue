@@ -142,18 +142,19 @@ export default {
    */
   video,
   canvas {
-    margin-top: -50px;
+    margin-top: -140px;
     width: 300px;
     height: 400px;
   }
   /* 検出範囲のサイズに合わせ枠線を引く */
   .detect-area {
     position: relative;
-    top: 30%;
-    bottom: 30%;
-    left: 10%;
-    right: 10%;
-
+    width: 200px;
+    top: 100px;
+    bottom: 120px;
+    left: 50px;
+    right: 50px;
+    height: 90px;
     border: 2px solid #0000ff;
   }
 }
