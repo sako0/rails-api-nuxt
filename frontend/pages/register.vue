@@ -5,7 +5,7 @@
         <v-col cols="12" class="mt-5">
           <v-card>
             <v-card-title>aaa</v-card-title>
-            <Dialog ref="dlg" type="cameraDialog" :content="num" />
+            <FoodRegisterDialog ref="dlg" :number="num" />
             <cameraDialog ref="cameraDlg" @cancel="cancel" @code="code" />
           </v-card>
         </v-col>
@@ -15,11 +15,11 @@
 </template>
 <script>
 import CameraDialog from '@/components/CameraDialog'
-import Dialog from '@/components/Dialog'
+import FoodRegisterDialog from '@/components/FoodRegisterDialog'
 export default {
   components: {
     CameraDialog,
-    Dialog,
+    FoodRegisterDialog,
   },
   middleware: 'auth',
   data() {
