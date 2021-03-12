@@ -2,7 +2,6 @@
   <v-dialog v-model="isDisplay" width="600px">
     <v-card>
       <v-card-title>{{ title }}</v-card-title>
-      <v-card-text>{{ number }}</v-card-text>
       <v-row justify="center">
         <v-col cols="11" sm="11" md="11" lg="11" xl="11">
           <validation-provider
@@ -12,7 +11,7 @@
           >
             <v-text-field
               v-model="productName"
-              append-icon="mdi-border-color"
+              append-icon="mdi-briefcase"
               :error-messages="errors"
               :counter="35"
               label="商品名"
@@ -34,7 +33,7 @@
             ></v-text-field>
           </validation-provider>
         </v-col>
-        <v-col cols="3" sm="3" md="3" lg="3" xl="3">
+        <v-col cols="4" sm="4" md="3" lg="3" xl="3">
           <validation-provider
             v-slot="{ errors }"
             rules="required|max:35"
@@ -42,7 +41,7 @@
           >
             <v-text-field
               v-model.number="calorie"
-              suffix="g"
+              suffix="kcal"
               append-icon="mdi-food-fork-drink"
               :error-messages="errors"
               type="number"
@@ -50,7 +49,16 @@
             ></v-text-field>
           </validation-provider>
         </v-col>
-        <v-col cols="3" sm="3" md="3" lg="3" xl="3">
+        <v-col cols="6" sm="6" md="4" lg="4" xl="4">
+          <v-text-field
+            :value="number"
+            append-icon="mdi-barcode"
+            disabled
+            label="商品コード"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="1" sm="1" md="4" lg="4" xl="4"> </v-col>
+        <v-col cols="4" sm="4" md="3" lg="3" xl="3">
           <validation-provider
             v-slot="{ errors }"
             rules="required|max:35"
@@ -59,14 +67,14 @@
             <v-text-field
               v-model.number="protein"
               suffix="g"
-              append-icon="mdi-food-turkey"
+              append-icon="mdi-food-drumstick"
               :error-messages="errors"
               type="number"
               label="たんぱく質"
             ></v-text-field>
           </validation-provider>
         </v-col>
-        <v-col cols="2" sm="2" md="2" lg="2" xl="2">
+        <v-col cols="3" sm="3" md="3" lg="3" xl="3">
           <validation-provider
             v-slot="{ errors }"
             rules="required|max:35"
@@ -82,7 +90,7 @@
             ></v-text-field>
           </validation-provider>
         </v-col>
-        <v-col cols="3" sm="3" md="3" lg="3" xl="3">
+        <v-col cols="4" sm="4" md="3" lg="3" xl="3">
           <validation-provider
             v-slot="{ errors }"
             rules="required|max:35"
@@ -91,13 +99,14 @@
             <v-text-field
               v-model.number="carbohydrate"
               suffix="g"
-              append-icon="mdi-noodles"
+              append-icon="mdi-rice"
               :error-messages="errors"
               type="number"
               label="炭水化物"
             ></v-text-field>
           </validation-provider>
         </v-col>
+        <v-col cols="0" sm="0" md="2" lg="2" xl="2"> </v-col>
       </v-row>
 
       <v-card-actions>
@@ -154,7 +163,7 @@ export default {
       if (val) {
         console.log(this.$props.number)
         this.$axios
-          .get('/api/v1/web_search/', { params: { id: this.$props.number } })
+          .get('/api/v1/foods/' + this.$props.number)
           .then((response) => {
             if (response.data) {
               this.title = '情報を入力して下さい'
@@ -176,6 +185,19 @@ export default {
     submit() {
       this.isDisplay = false
       this.$emit('method')
+      const url = '/api/v1/food_posts'
+      const data = new FormData()
+      data.append('food_posts[food_code]', this.$props.number)
+      data.append('food_posts[product_name]', this.productName)
+      data.append('food_posts[par]', this.par)
+      data.append('food_posts[calorie]', this.calorie)
+      data.append('food_posts[protein]', this.protein)
+      data.append('food_posts[lipid]', this.lipid)
+      data.append('food_posts[carbohydrate]', this.carbohydrate)
+      const headers = { 'content-type': 'multipart/form-data' }
+      this.$axios.post(url, data, { headers }).then((response) => {
+        console.log(response)
+      })
     },
     closeDisplay() {
       this.isDisplay = false
