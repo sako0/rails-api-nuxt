@@ -12,16 +12,23 @@ class Api::V1::FoodPostsController < ApplicationController
 
   def create
     logger.error(params)
-    if params[:micropost][:content].present?
+    if params[:food_posts].present?
       @food_posts = @current_user.food_posts.build(food_posts_params)
       @food_posts.image.attach(params[:image]) if params[:image]
-      if @food_posts.save
-        render json: "投稿に成功しました"
+      search_food_code = FoodPost.find_by(food_code: @food_posts.food_code)
+      if search_food_code
+        search_food_code.updated_at = Time.now
+        search_food_code.update(food_posts_params)
+        render json: "更新に成功しました"
       else
-        if @food_posts.errors.any?
-          render json: @food_posts.errors.full_messages.to_s.gsub(",", "<br>").gsub("[", "").gsub("]", "").gsub('"', "").to_json
+        if @food_posts.save
+          render json: "投稿に成功しました"
         else
-          render json: "不明なエラー"
+          if @food_posts.errors.any?
+            render json: @food_posts.errors.full_messages.to_s.gsub(",", "<br>").gsub("[", "").gsub("]", "").gsub('"', "").to_json
+          else
+            render json: "不明なエラー"
+          end
         end
       end
     end
@@ -39,7 +46,7 @@ class Api::V1::FoodPostsController < ApplicationController
   private
 
   def food_posts_params
-    params.require(:food_posts).permit(:id, :content, :image)
+    params.require(:food_posts).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :image)
   end
 
   def destroy_id_get

@@ -8,8 +8,7 @@ Rails.application.routes.draw do
       resources :food_posts
       resources :sessions, only: [:index, :create]
       resources :profiles, only: [:create]
-      resources :post_comments
+      resources :foods
     end
   end
-  get '/api/v1/web_search' => 'api/v1/foods#web_search'
 end
