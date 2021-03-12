@@ -2,7 +2,12 @@
   <v-card class="mx-auto" max-width="320" elevation="24" tile>
     <v-hover v-slot="{ hover }" @input="overlay = true">
       <label>
-        <input type="file" style="display: none" @change="backgroundGet" />
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/bmp"
+          style="display: none"
+          @change="backgroundGet"
+        />
         <v-skeleton-loader
           v-if="pBackgraundLoading"
           :loading="pBackgraundLoading"
@@ -11,6 +16,7 @@
         </v-skeleton-loader>
         <v-img
           v-if="!pBackgraundLoading"
+          max-height="200px"
           height="100%"
           :src="pBackgroundUrl"
           :elevation="hover ? 24 : 2"
@@ -47,6 +53,7 @@
 
                         <input
                           type="file"
+                          accept="image/jpeg,image/png,image/bmp"
                           style="display: none"
                           @change="imageGet"
                         />
@@ -82,7 +89,7 @@
               <v-list-item color="rgba(0, 0, 0, .4)" dark>
                 <v-list-item-content>
                   <v-list-item-title class="title">
-                    {{ user.user.name }}
+                    {{ user.name }}
                   </v-list-item-title>
                   <v-list-item-subtitle
                     >{{ user.user.profile.job }}

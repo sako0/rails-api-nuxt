@@ -36,15 +36,16 @@
                 <v-col cols="11" sm="11" md="6" lg="6" xl="6">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="Job"
+                    name="age"
                     rules="max:35"
                   >
                     <v-text-field
-                      v-model="job"
+                      v-model="age"
                       append-icon="mdi-domain"
                       :counter="35"
+                      disabled
                       :error-messages="errors"
-                      label="Job"
+                      label="Age"
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
@@ -81,17 +82,17 @@
                 <v-col cols="11" sm="11" md="12" lg="12" xl="12">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="Skills"
+                    name="trend"
                     rules="max:100"
                   >
                     <v-textarea
-                      v-model="skills"
+                      v-model="trend"
                       append-icon="mdi-head-dots-horizontal-outline"
                       :counter="100"
                       :error-messages="errors"
                       auto-grow
                       rows="1"
-                      label="Skills"
+                      label="よく利用するお店等"
                     ></v-textarea>
                   </validation-provider>
                 </v-col>
@@ -105,7 +106,7 @@
                       v-model="notes"
                       append-icon="mdi-book-open-page-variant-outline"
                       :error-messages="errors"
-                      label="Notes"
+                      label="自己紹介"
                       auto-grow
                       rows="1"
                       counter="220"
@@ -192,11 +193,21 @@ export default {
       uploadImage: '',
       uploadBackground: '',
       name: this.user.user.name,
-      job: this.user.user.profile.job,
+      age: this.user.user.profile.age,
       url: this.user.user.profile.url,
-      skills: this.user.user.profile.skills,
+      trend: this.user.user.profile.trend,
       notes: this.user.user.profile.notes,
     }
+  },
+  computed: {
+    userComputed: {
+      get() {
+        return this.$props.user
+      },
+      set(value) {
+        this.$emit('change', value)
+      },
+    },
   },
   mounted() {
     this.title = 'プロフィール情報変更'
@@ -214,24 +225,20 @@ export default {
       }
       data.append('user[name]', this.name)
       data.append(
-        'user[profiles_attributes][job]',
-        this.job === null ? ' ' : this.job
-      )
-      data.append(
         'user[profiles_attributes][url]',
-        this.url === null ? ' ' : this.url
+        this.url === null ? '' : this.url
       )
       data.append(
-        'user[profiles_attributes][skills]',
-        this.skills === null ? ' ' : this.skills
+        'user[profiles_attributes][trend]',
+        this.trend === null ? '' : this.trend
       )
       data.append(
         'user[profiles_attributes][notes]',
-        this.notes === null ? ' ' : this.notes
+        this.notes === null ? '' : this.notes
       )
       const headers = { 'content-type': 'multipart/form-data' }
       this.$axios.put(url, data, { headers }).then((response) => {
-        console.log(response)
+        this.getUser()
       })
     },
     imageFileGet(value) {
@@ -248,8 +255,8 @@ export default {
         this.uploadBackground = ''
       }
     },
-    closeDisplay() {
-      this.isDisplay = false
+    getUser() {
+      this.$emit('getUser')
     },
   },
 }

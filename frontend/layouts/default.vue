@@ -113,8 +113,13 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Inspire',
+          title: 'Mypage',
           to: '/inspire',
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Register',
+          to: '/register',
         },
       ],
       userMenus: [

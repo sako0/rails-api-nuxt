@@ -53,7 +53,6 @@
 
 <script>
 import TwitterCard from '~/components/TwitterCard.vue'
-
 export default {
   components: {
     TwitterCard,
@@ -82,29 +81,29 @@ export default {
     },
   },
   mounted() {},
-  methods: {
-    submit() {
-      this.success = true
-      this.$axios
-        .post('/api/v1/microposts', {
-          content: this.content,
-        })
-        .then((this.content = ''))
-        .catch((error) => console.log(error))
-    },
-    keyDownEnter(e) {
-      this.keyDownCode = e.keyCode // enterを押した時のkeycodeを記録
-      e.preventDefault()
-    },
-    keyUpEnter(e) {
-      if (this.keyDownCode === 229) {
-        // 日本語コードの場合は処理をストップ
-        return
-      }
-      e.preventDefault()
-      this.submit()
-    },
-    keyEnterShift(e) {},
-  },
+  // methods: {
+  //   submit() {
+  //     this.success = true
+  //     this.$axios
+  //       .post('/api/v1/microposts', {
+  //         content: this.content,
+  //       })
+  //       .then((this.content = ''))
+  //       .catch((error) => console.log(error))
+  //   },
+  //   keyDownEnter(e) {
+  //     this.keyDownCode = e.keyCode // enterを押した時のkeycodeを記録
+  //     e.preventDefault()
+  //   },
+  //   keyUpEnter(e) {
+  //     if (this.keyDownCode === 229) {
+  //       // 日本語コードの場合は処理をストップ
+  //       return
+  //     }
+  //     e.preventDefault()
+  //     this.submit()
+  //   },
+  //   keyEnterShift(e) {},
+  // },
 }
 </script>
