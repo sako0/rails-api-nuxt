@@ -1,0 +1,2 @@
+class FoodPostUsed < ApplicationRecord
+end

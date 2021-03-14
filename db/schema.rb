@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_03_200758) do
+ActiveRecord::Schema.define(version: 2021_03_14_132234) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -48,6 +48,15 @@ ActiveRecord::Schema.define(version: 2021_03_03_200758) do
     t.index ["follower_id"], name: "index_follow_relations_on_follower_id"
     t.index ["following_id"], name: "index_follow_relations_on_following_id"
     t.index ["following_id"], name: "index_follow_relations_on_following_id_and_following_id", unique: true
+  end
+
+  create_table "food_post_useds", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "food_code"
+    t.string "food_post_id"
+    t.integer "target_user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "food_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
