@@ -7,7 +7,7 @@ class Api::V1::FoodPostsController < ApplicationController
     # 参考
     # https://qiita.com/eggc/items/29a3c9a41d77227fb10a
     @food_posts = @current_user.food_posts.all
-    render json: @food_posts, each_serializer: FoodPostsSerializer
+    render json: @food_posts, each_serializer: FoodPostsSerializer, include: [:user]
   end
 
   def create
@@ -36,7 +36,6 @@ class Api::V1::FoodPostsController < ApplicationController
 
   def destroy
     if @food_posts.destroy
-      ActionCable.server.broadcast("micropost_channel", { method: "destroy", post_user_id: @current_user.id, micropost_id: @micropost.id })
       render json: "削除完了しました"
     else
       render json: "削除に失敗しました"

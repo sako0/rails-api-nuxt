@@ -116,6 +116,18 @@
                 </validation-provider>
               </v-col>
               <v-col cols="0" sm="0" md="2" lg="2" xl="2"> </v-col>
+              <v-col cols="4">
+                <v-file-input
+                  v-model="image"
+                  accept="image/jpeg,image/png,image/bmp"
+                  placeholder="画像を選択して下さい"
+                  @change="Preview_image"
+                >
+                </v-file-input>
+              </v-col>
+              <v-col cols="7">
+                <v-img :src="url"></v-img>
+              </v-col>
             </v-row>
 
             <v-card-actions>
@@ -244,7 +256,6 @@ export default {
   },
   data: () => ({
     isDisplay: false,
-    title: '',
     productName: '',
     par: '',
     calorie: null,
@@ -253,6 +264,8 @@ export default {
     carbohydrate: null,
     tab: 0,
     items: ['商品情報', '登録'],
+    url: null,
+    image: null,
   }),
   watch: {
     isDisplay(val) {
@@ -262,12 +275,8 @@ export default {
           .get('/api/v1/foods/' + this.$props.number)
           .then((response) => {
             if (response.data) {
-              this.title = '情報を入力して下さい'
               console.log(response.data)
-              this.productName =
-                response.data.product_name == null
-                  ? ''
-                  : response.data.product_name
+              this.productName = response.data.product_name
               this.par = response.data.par
               this.calorie = response.data.calorie
               this.protein = response.data.protein
@@ -303,6 +312,13 @@ export default {
     },
     closeDisplay() {
       this.isDisplay = false
+    },
+    Preview_image(e) {
+      if (e !== null) {
+        this.url = URL.createObjectURL(this.image)
+      } else {
+        this.url = ''
+      }
     },
   },
 }
