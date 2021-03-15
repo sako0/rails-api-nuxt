@@ -7,9 +7,9 @@ class Api::V1::FoodsController < ApplicationController
     if @current_user.food_posts.find_by(food_code: params[:id])
       code = @current_user.food_posts.find_by(food_code: params[:id])
       render json: code.to_json
-      elsif FoodPost.find(FoodPostUsed.group(params[:id]).order('count(id) desc').limit(1).pluck(:food_post_id))
-        code = FoodPost.find(FoodPostUsed.group(params[:id]).order('count(id) desc').limit(1).pluck(:food_post_id))
-        render json: code.to_json
+    elsif FoodPost.find(FoodPostUsed.group(params[:id]).order('count(food_post_id) desc').limit(1).pluck(:food_post_id)).present?
+      code = FoodPost.find(FoodPostUsed.group(params[:id]).order('count(food_post_id) desc').limit(1).pluck(:food_post_id))
+      render json: code.to_json
     else
       web_search(params[:id])
     end
