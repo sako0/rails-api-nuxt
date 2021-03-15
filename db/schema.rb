@@ -51,12 +51,15 @@ ActiveRecord::Schema.define(version: 2021_03_14_132234) do
   end
 
   create_table "food_post_useds", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.integer "user_id"
-    t.string "food_code"
-    t.string "food_post_id"
-    t.integer "target_user_id"
+    t.bigint "user_id", null: false
+    t.string "food_code", null: false
+    t.bigint "food_post_id", null: false
+    t.bigint "target_user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["food_post_id"], name: "index_food_post_useds_on_food_post_id"
+    t.index ["target_user_id"], name: "index_food_post_useds_on_target_user_id"
+    t.index ["user_id"], name: "index_food_post_useds_on_user_id"
   end
 
   create_table "food_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -105,6 +108,9 @@ ActiveRecord::Schema.define(version: 2021_03_14_132234) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "food_post_useds", "food_posts"
+  add_foreign_key "food_post_useds", "users"
+  add_foreign_key "food_post_useds", "users", column: "target_user_id"
   add_foreign_key "food_posts", "users"
   add_foreign_key "profiles", "users"
 end

@@ -8,6 +8,7 @@ class User < ApplicationRecord
   # passive_relation(following_id)を持つユーザは、それを通して、さらにfollower_idを持っている。
   has_many :passive_relation, class_name: "FollowRelation", foreign_key: :following_id, dependent: :destroy
   has_many :follower, through: :passive_relation, source: :follower
+  has_many :food_post_useds, dependent: :destroy
   # 画像のアタッチ
   has_one_attached :image
   has_one_attached :back_ground

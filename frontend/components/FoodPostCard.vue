@@ -27,8 +27,8 @@
           <v-card color="grey darken-2">
             <v-img
               :src="
-                food.image
-                  ? food.image
+                food.attributes.image
+                  ? food.attributes.image
                   : 'https://cdn.vuetifyjs.com/images/cards/house.jpg'
               "
               class="white--text align-start"

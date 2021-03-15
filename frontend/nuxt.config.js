@@ -27,6 +27,10 @@ export default {
     '@/plugins/axios',
     '@/plugins/auth',
   ],
+  build: {
+    transpile: ['vee-validate'], // 追加 https://qiita.com/TK-C/items/9cab072c65d2f9ade5d0
+    extend(config, ctx) {},
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

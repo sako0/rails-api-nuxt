@@ -1,10 +1,10 @@
 class CreateFoodPostUseds < ActiveRecord::Migration[6.1]
   def change
     create_table :food_post_useds do |t|
-      t.integer :user_id
-      t.string :food_code
-      t.string :food_post_id
-      t.integer :target_user_id
+      t.references :user, foreign_key: true, null: false
+      t.string :food_code, null: false
+      t.references :food_post, foreign_key: true, null: false
+      t.references :target_user, foreign_key: { to_table: :users }, null: false
 
       t.timestamps
     end
