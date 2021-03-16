@@ -274,7 +274,7 @@
               </v-col>
               <v-col cols="4" sm="4" md="3" lg="3" xl="3">
                 <v-text-field
-                  v-model.number="calorie"
+                  v-model.number="calorie_total"
                   suffix="kcal"
                   append-icon="mdi-food-fork-drink"
                   type="number"
@@ -293,7 +293,7 @@
               <v-col cols="1" sm="1" md="4" lg="4" xl="4"> </v-col>
               <v-col cols="4" sm="4" md="3" lg="3" xl="3">
                 <v-text-field
-                  v-model.number="protein"
+                  v-model.number="protein_total"
                   suffix="g"
                   append-icon="mdi-food-drumstick"
                   type="number"
@@ -303,7 +303,7 @@
               </v-col>
               <v-col cols="3" sm="3" md="3" lg="3" xl="3">
                 <v-text-field
-                  v-model.number="lipid"
+                  v-model.number="lipid_total"
                   suffix="g"
                   append-icon="mdi-food-steak"
                   type="number"
@@ -313,7 +313,7 @@
               </v-col>
               <v-col cols="4" sm="4" md="3" lg="3" xl="3">
                 <v-text-field
-                  v-model.number="carbohydrate"
+                  v-model.number="carbohydrate_total"
                   suffix="g"
                   append-icon="mdi-rice"
                   type="number"
@@ -326,10 +326,21 @@
 
             <v-card-actions>
               <v-row justify="center">
-                <v-col cols="6">
+                <v-col cols="4">
                   <v-btn @click="isDisplay = false">Close</v-btn>
                 </v-col>
-                <v-col cols="6" class="text-right">
+                <v-col cols="5">
+                  <v-select
+                    v-model="begin"
+                    :items="percent"
+                    menu-props="auto"
+                    label="Select"
+                    hide-details
+                    prepend-icon="mdi-percent-outline"
+                    single-line
+                  ></v-select>
+                </v-col>
+                <v-col cols="2" class="text-right">
                   <v-btn color="red" @click="submit">OK</v-btn>
                 </v-col>
               </v-row>
@@ -371,9 +382,13 @@ export default {
     productName: '',
     par: '',
     calorie: null,
+    calorie_total: null,
     protein: null,
+    protein_total: null,
     lipid: null,
+    lipid_total: null,
     carbohydrate: null,
+    carbohydrate_total: null,
     func: null,
     tab: 0,
     items: ['商品情報', '登録'],
@@ -383,6 +398,22 @@ export default {
     fix: false,
     post_id: null,
     food_code: null,
+    percent: [
+      { text: 25 },
+      { text: 50 },
+      { text: 100 },
+      { text: 150 },
+      { text: 200 },
+      { text: 300 },
+      { text: 400 },
+      { text: 500 },
+      { text: 600 },
+      { text: 700 },
+      { text: 800 },
+      { text: 900 },
+      { text: 1000 },
+    ],
+    begin: 100,
   }),
   watch: {
     isDisplay(val) {
@@ -400,6 +431,11 @@ export default {
                   this.protein = response.data.protein
                   this.lipid = response.data.lipid
                   this.carbohydrate = response.data.carbohydrate
+                  this.calorie_total = (this.calorie * this.begin) / 100
+                  this.protein_total = (this.protein * this.begin) / 100
+                  this.lipid_total = (this.lipid * this.begin) / 100
+                  this.carbohydrate_total =
+                    (this.carbohydrate * this.begin) / 100
                 }
                 this.func = 'web'
               } else {
@@ -410,6 +446,10 @@ export default {
                 this.protein = response.data.data.attributes.protein
                 this.lipid = response.data.data.attributes.lipid
                 this.carbohydrate = response.data.data.attributes.carbohydrate
+                this.calorie_total = (this.calorie * this.begin) / 100
+                this.protein_total = (this.protein * this.begin) / 100
+                this.lipid_total = (this.lipid * this.begin) / 100
+                this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
                 this.url = response.data.data.attributes.image
                 this.post_id = parseInt(response.data.data.id)
                 this.post_user_id = response.data.data.attributes.user_id
@@ -424,6 +464,12 @@ export default {
             }
           })
       }
+    },
+    begin(val) {
+      this.calorie_total = (this.calorie * val) / 100
+      this.protein_total = (this.protein * val) / 100
+      this.lipid_total = (this.lipid * val) / 100
+      this.carbohydrate_total = (this.carbohydrate * val) / 100
     },
   },
   methods: {
