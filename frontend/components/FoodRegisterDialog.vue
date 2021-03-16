@@ -238,14 +238,14 @@
                 </v-file-input>
               </v-col>
               <v-col cols="7">
-                <v-img :src="url"></v-img>
+                <v-img v-if="url" :src="url"></v-img>
               </v-col>
             </v-row>
 
             <v-card-actions>
               <v-row justify="center">
                 <v-col cols="6">
-                  <v-btn @click="isDisplay = false">Close</v-btn>
+                  <v-btn @click="closeDisplay">Close</v-btn>
                 </v-col>
                 <v-col cols="6" class="text-right">
                   <v-btn color="blue" @click="nextTab">次へ</v-btn>
@@ -426,7 +426,9 @@ export default {
             if (response.data) {
               if (response.data.web_search) {
                 if (response.data.content) {
+                  console.log(response.data)
                   this.productName = response.data.product_name
+                  this.food_code = response.data.food_code
                   this.par = response.data.par
                   this.calorie = response.data.calorie
                   this.protein = response.data.protein
@@ -473,8 +475,11 @@ export default {
       this.carbohydrate_total = (this.carbohydrate * val) / 100
     },
   },
+  mounted() {
+    this.reset()
+  },
   methods: {
-    submit() {
+    async submit() {
       this.isDisplay = false
       this.$emit('method')
       // fixフラグがonの場合のみバーコード情報の登録を行う
@@ -492,21 +497,24 @@ export default {
           data.append('food_posts[image]', this.image_file)
         }
         const headers = { 'content-type': 'multipart/form-data' }
-        this.$axios.post(url, data, { headers }).then((response) => {
+        await this.$axios.post(url, data, { headers }).then((response) => {
           console.log(response)
-          this.food_eat()
-          this.post_used()
+          this.post_id = response.data
         })
+        await this.food_eat()
+        await this.post_used()
       } else {
-        this.food_eat()
-        this.post_used()
+        await this.food_eat()
+        await this.post_used()
       }
+      this.reset()
     },
     nextTab() {
       this.tab = 1
     },
     closeDisplay() {
       this.isDisplay = false
+      this.reset()
     },
     Preview_image(e) {
       if (e !== null) {
@@ -516,37 +524,51 @@ export default {
         this.url = ''
       }
     },
-    post_used() {
+    async post_used() {
       const url = '/api/v1/foods'
       const headers = { 'content-type': 'application/json' }
       let data = ''
       if (this.func === 'my') {
         data = {
+          func: 'my',
           food_code: this.food_code,
           food_post_id: this.post_id,
-          target_user_id: this.post_user_id,
         }
       }
-      this.$axios.post(url, data, { headers }).then((response) => {
+      if (this.func === 'web') {
+        data = {
+          func: 'my',
+          food_code: this.food_code,
+          food_post_id: this.post_id,
+        }
+      }
+      await this.$axios.post(url, data, { headers }).then((response) => {
         console.log(response)
       })
     },
-    food_eat() {
+    async food_eat() {
       const url = '/api/v1/food_eat'
       const headers = { 'content-type': 'application/json' }
-      const data = {
-        user_id: this.post_user_id,
-        food_code: this.food_code,
-        product_name: this.productName,
-        par: this.par,
-        calorie: this.calorie_total,
-        protein: this.protein_total,
-        lipid: this.lipid_total,
-        carbohydrate: this.calorie_total,
+      let data = ''
+      if (this.func === 'my' || this.func === 'web') {
+        data = {
+          food_code: this.food_code,
+          food_post_id: this.post_id,
+          product_name: this.productName,
+          par: this.par,
+          calorie: this.calorie_total,
+          protein: this.protein_total,
+          lipid: this.lipid_total,
+          carbohydrate: this.calorie_total,
+          percent: this.begin,
+        }
       }
-      this.$axios.post(url, data, { headers }).then((response) => {
+      await this.$axios.post(url, data, { headers }).then((response) => {
         console.log(response)
       })
+    },
+    reset() {
+      Object.assign(this.$data, this.$options.data())
     },
   },
 }

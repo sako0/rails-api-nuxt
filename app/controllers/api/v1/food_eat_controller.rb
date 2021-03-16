@@ -4,8 +4,9 @@ class Api::V1::FoodEatController < ApplicationController
 
   def create
     logger.error(params)
-    if params[:food_code].present?
+    if params[:food_eat].present?
       food_eat = @current_user.food_eats.build(food_eat_params)
+      food_eat.user_id = @current_user.id
       if food_eat.save
         render json: "投稿に成功しました"
       end
@@ -13,6 +14,6 @@ class Api::V1::FoodEatController < ApplicationController
   end
 
   def food_eat_params
-    params.require(:food_eat).permit(:id, :user_id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate)
+    params.require(:food_eat).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :percent)
   end
 end

@@ -9,9 +9,10 @@ class CreateFoodEats < ActiveRecord::Migration[6.1]
       t.float :protein, null: false
       t.float :lipid, null: false
       t.float :carbohydrate, null: false
+      t.float :percent, null: false
       t.timestamps
     end
   end
-
-  add_index :food_eats, [:user_id, :updated_at, :created_at]
+  #
+  # add_index :food_eats, [:updated_at, :created_at]
 end

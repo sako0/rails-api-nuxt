@@ -17,8 +17,9 @@ class Api::V1::FoodsController < ApplicationController
 
   def create
     logger.error(params)
-    if params[:food_code].present?
+    if params[:food][:func] == "web" || params[:food][:func] == "my"
       @food_post_useds_params = @current_user.food_post_useds.build(food_post_useds_params)
+      @food_post_useds_params.target_user_id = @current_user.id
       search_food_code = FoodPostUsed.find_by(food_code: @food_post_useds_params.food_code)
       if search_food_code
         search_food_code.updated_at = Time.now
@@ -57,9 +58,9 @@ class Api::V1::FoodsController < ApplicationController
       protein = capas[1].text.gsub('g', '').to_f
       lipid = capas[2].text.gsub('g', '').to_f
       carbohydrate = capas[3].text.gsub('g', '').to_f
-      json = { web_search: true, content: true, product_name: name[0].text, par: par[0].text, calorie: calorie, protein: protein, lipid: lipid, carbohydrate: carbohydrate }.to_json
+      json = { web_search: true, food_code: code, content: true, product_name: name[0].text, par: par[0].text, calorie: calorie, protein: protein, lipid: lipid, carbohydrate: carbohydrate }.to_json
     else
-      json = { web_search: true, content: false }
+      json = { web_search: true, food_code: code, content: false }
     end
     render json: json
   end
