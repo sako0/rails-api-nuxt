@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_14_132234) do
+ActiveRecord::Schema.define(version: 2021_03_16_120436) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -48,6 +48,20 @@ ActiveRecord::Schema.define(version: 2021_03_14_132234) do
     t.index ["follower_id"], name: "index_follow_relations_on_follower_id"
     t.index ["following_id"], name: "index_follow_relations_on_following_id"
     t.index ["following_id"], name: "index_follow_relations_on_following_id_and_following_id", unique: true
+  end
+
+  create_table "food_eats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "product_name", null: false
+    t.string "food_code", null: false
+    t.string "par", null: false
+    t.float "calorie", null: false
+    t.float "protein", null: false
+    t.float "lipid", null: false
+    t.float "carbohydrate", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_food_eats_on_user_id"
   end
 
   create_table "food_post_useds", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -108,6 +122,7 @@ ActiveRecord::Schema.define(version: 2021_03_14_132234) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "food_eats", "users"
   add_foreign_key "food_post_useds", "food_posts"
   add_foreign_key "food_post_useds", "users"
   add_foreign_key "food_post_useds", "users", column: "target_user_id"

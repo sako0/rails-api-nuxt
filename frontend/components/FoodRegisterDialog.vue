@@ -494,8 +494,11 @@ export default {
         const headers = { 'content-type': 'multipart/form-data' }
         this.$axios.post(url, data, { headers }).then((response) => {
           console.log(response)
+          this.food_eat()
+          this.post_used()
         })
       } else {
+        this.food_eat()
         this.post_used()
       }
     },
@@ -523,6 +526,23 @@ export default {
           food_post_id: this.post_id,
           target_user_id: this.post_user_id,
         }
+      }
+      this.$axios.post(url, data, { headers }).then((response) => {
+        console.log(response)
+      })
+    },
+    food_eat() {
+      const url = '/api/v1/food_eat'
+      const headers = { 'content-type': 'application/json' }
+      const data = {
+        user_id: this.post_user_id,
+        food_code: this.food_code,
+        product_name: this.productName,
+        par: this.par,
+        calorie: this.calorie_total,
+        protein: this.protein_total,
+        lipid: this.lipid_total,
+        carbohydrate: this.calorie_total,
       }
       this.$axios.post(url, data, { headers }).then((response) => {
         console.log(response)

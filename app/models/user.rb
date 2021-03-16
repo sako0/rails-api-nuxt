@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :food_posts, dependent: :destroy
+  has_many :food_eats, dependent: :destroy
   has_one :profiles, dependent: :destroy, class_name: "Profile"
   accepts_nested_attributes_for :profiles
   # active_relation(follower_id)を持つユーザは、それを通して、さらにfollowing_idを持っている。

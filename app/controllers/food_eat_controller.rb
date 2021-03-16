@@ -1,0 +1,2 @@
+class FoodEatController < ApplicationController
+end
