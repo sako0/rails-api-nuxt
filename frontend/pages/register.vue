@@ -56,6 +56,13 @@ export default {
       num: '',
     }
   },
+  mounted() {
+    const today = this.$moment().format('YYYY-MM-DD')
+    const url = '/api/v1/food_eat/' + today
+    this.$axios.get(url).then((response) => {
+      console.log(response)
+    })
+  },
   methods: {
     cancel() {},
     code(code) {

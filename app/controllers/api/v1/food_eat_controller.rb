@@ -13,6 +13,14 @@ class Api::V1::FoodEatController < ApplicationController
     end
   end
 
+  def show
+    date = Date.strptime(params[:id], "%Y-%m-%d")
+    food_eat_at_day = FoodEat.where("created_at >= ?", date)
+    render json: food_eat_at_day, each_serializer: FoodEatSerializer
+  end
+
+  private
+
   def food_eat_params
     params.require(:food_eat).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :percent)
   end
