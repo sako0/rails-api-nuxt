@@ -336,7 +336,8 @@
                     menu-props="auto"
                     label="Select"
                     hide-details
-                    prepend-icon="mdi-percent-outline"
+                    suffix="％"
+                    append-icon="mdi-format-list-bulleted-triangle"
                     single-line
                   ></v-select>
                 </v-col>
