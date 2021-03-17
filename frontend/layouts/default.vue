@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -7,6 +7,7 @@
       color="blue-grey darken-4"
       fixed
       app
+      bottom
     >
       <v-list>
         <v-list-item
@@ -24,6 +25,16 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <v-list>
+        <v-list-item @click="logout">
+          <v-list-item-action>
+            <v-icon>mdi-logout-variant</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>ログアウト</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
       <template #append>
         <v-row>
           <v-col cols="8"> </v-col>
@@ -34,7 +45,6 @@
       </template>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
       <v-btn
         icon
         class="d-none d-lg-block"
@@ -50,49 +60,72 @@
       <!--      </v-btn>-->
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <div class="text-center">
-        <v-menu offset-y>
-          <template #activator="{ on, attrs }">
-            <v-btn class="mx-2" fab dark color="gray" v-bind="attrs" v-on="on">
-              <v-icon dark>mdi-format-list-bulleted-square</v-icon>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item
-              v-for="(item, index) in userMenus"
-              :key="index"
-              @click="logout()"
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </div>
+      <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
+      <!--      <div class="text-center">-->
+      <!--        <v-menu offset-y>-->
+      <!--          <template #activator="{ on, attrs }">-->
+      <!--            <v-btn class="mx-2" fab dark color="gray" v-bind="attrs" v-on="on">-->
+      <!--              <v-icon dark>mdi-format-list-bulleted-square</v-icon>-->
+      <!--            </v-btn>-->
+      <!--          </template>-->
+      <!--          <v-list>-->
+      <!--            <v-list-item-->
+      <!--              v-for="(item, index) in userMenus"-->
+      <!--              :key="index"-->
+      <!--              @click="logout()"-->
+      <!--            >-->
+      <!--              <v-list-item-title>{{ item.title }}</v-list-item-title>-->
+      <!--            </v-list-item>-->
+      <!--          </v-list>-->
+      <!--        </v-menu>-->
+      <!--      </div>-->
 
-      <v-btn
-        class="mx-2"
-        fab
-        dark
-        color="gray"
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon dark color="teal accent-2">mdi-account-check</v-icon>
-      </v-btn>
+      <!--      <v-btn-->
+      <!--        class="mx-2"-->
+      <!--        fab-->
+      <!--        dark-->
+      <!--        color="gray"-->
+      <!--        @click.stop="rightDrawer = !rightDrawer"-->
+      <!--      >-->
+      <!--        <v-icon dark color="teal accent-2">mdi-account-check</v-icon>-->
+      <!--      </v-btn>-->
     </v-app-bar>
     <v-main>
       <v-container>
         <nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item>
-          <v-list-item-title>ログイン中のユーザ</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <!--    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>-->
+    <!--      <v-list>-->
+    <!--        <v-list-item>-->
+    <!--          <v-list-item-title>ログイン中のユーザ</v-list-item-title>-->
+    <!--        </v-list-item>-->
+    <!--      </v-list>-->
+    <!--    </v-navigation-drawer>-->
     <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <v-row justify="center" class="d-lg-none">
+        <v-col cols="3">
+          <v-btn text to="/register"
+            ><v-icon dark>mdi-pencil-plus</v-icon></v-btn
+          >
+        </v-col>
+        <v-col cols="3">
+          <v-btn text to="/inspire"
+            ><v-icon dark>mdi-notebook-multiple</v-icon></v-btn
+          >
+        </v-col>
+        <v-col cols="3">
+          <v-btn text to="/"
+            ><v-icon dark>mdi-information-outline</v-icon></v-btn
+          >
+        </v-col>
+        <v-col cols="3">
+          <v-btn text to="/inspire"><v-icon dark>mdi-cog</v-icon></v-btn>
+        </v-col>
+      </v-row>
+      <span class="d-none d-lg-block"
+        >&copy; {{ new Date().getFullYear() }}</span
+      >
     </v-footer>
   </v-app>
 </template>
@@ -102,24 +135,24 @@ export default {
   data() {
     return {
       clipped: true,
-      drawer: true,
+      drawer: null,
       fixed: true,
       user: null,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
+          icon: 'mdi-information-outline',
+          title: '使い方',
           to: '/',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Mypage',
-          to: '/inspire',
+          icon: 'mdi-pencil-plus',
+          title: '食べた物を登録する',
+          to: '/register',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Register',
-          to: '/register',
+          icon: 'mdi-cog',
+          title: '設定',
+          to: '/inspire',
         },
       ],
       userMenus: [
@@ -136,7 +169,7 @@ export default {
       right: true,
       rightDrawer: false,
       userPullDown: false,
-      title: 'Vuetify.js',
+      title: 'ダイエットリーダー',
     }
   },
   methods: {

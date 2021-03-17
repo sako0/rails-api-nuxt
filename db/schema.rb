@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_03_200758) do
+ActiveRecord::Schema.define(version: 2021_03_16_120436) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -50,15 +50,42 @@ ActiveRecord::Schema.define(version: 2021_03_03_200758) do
     t.index ["following_id"], name: "index_follow_relations_on_following_id_and_following_id", unique: true
   end
 
+  create_table "food_eats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "product_name", null: false
+    t.string "food_code", null: false
+    t.string "par", null: false
+    t.float "calorie", null: false
+    t.float "protein", null: false
+    t.float "lipid", null: false
+    t.float "carbohydrate", null: false
+    t.float "percent", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_food_eats_on_user_id"
+  end
+
+  create_table "food_post_useds", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "food_code", null: false
+    t.bigint "food_post_id", null: false
+    t.bigint "target_user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["food_post_id"], name: "index_food_post_useds_on_food_post_id"
+    t.index ["target_user_id"], name: "index_food_post_useds_on_target_user_id"
+    t.index ["user_id"], name: "index_food_post_useds_on_user_id"
+  end
+
   create_table "food_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "food_code"
+    t.string "food_code", null: false
     t.bigint "user_id"
-    t.string "product_name"
-    t.string "par"
-    t.float "calorie"
-    t.float "protein"
-    t.float "lipid"
-    t.float "carbohydrate"
+    t.string "product_name", null: false
+    t.string "par", null: false
+    t.float "calorie", null: false
+    t.float "protein", null: false
+    t.float "lipid", null: false
+    t.float "carbohydrate", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id", "created_at"], name: "index_food_posts_on_user_id_and_created_at"
@@ -67,11 +94,13 @@ ActiveRecord::Schema.define(version: 2021_03_03_200758) do
 
   create_table "profiles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "age"
-    t.string "sex"
-    t.string "trend"
+    t.integer "age", null: false
+    t.boolean "sex", null: false
+    t.integer "height", null: false
+    t.integer "weight"
+    t.integer "target_weight", null: false
+    t.float "action_level", null: false
     t.string "notes"
-    t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["created_at", "updated_at"], name: "index_profiles_on_created_at_and_updated_at"
@@ -79,8 +108,8 @@ ActiveRecord::Schema.define(version: 2021_03_03_200758) do
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
+    t.string "name", null: false
+    t.string "email", null: false
     t.string "password_digest"
     t.string "remember_digest"
     t.string "activation_digest"
@@ -96,6 +125,10 @@ ActiveRecord::Schema.define(version: 2021_03_03_200758) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "food_eats", "users"
+  add_foreign_key "food_post_useds", "food_posts"
+  add_foreign_key "food_post_useds", "users"
+  add_foreign_key "food_post_useds", "users", column: "target_user_id"
   add_foreign_key "food_posts", "users"
   add_foreign_key "profiles", "users"
 end

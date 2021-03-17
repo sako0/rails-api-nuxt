@@ -6,12 +6,36 @@ class Api::V1::FoodsController < ApplicationController
   def show
     if @current_user.food_posts.find_by(food_code: params[:id])
       code = @current_user.food_posts.find_by(food_code: params[:id])
-      render json: code.to_json
-      # elsif FoodPost.find(FoodPostUsed.group(params[:id]).order('count(id) desc').limit(1).pluck(:food_post_id))
-      #   code = FoodPost.find(FoodPostUsed.group(params[:id]).order('count(id) desc').limit(1).pluck(:food_post_id))
-      #   render json: code.to_json
+      render json: code, serializer: FoodPostsSerializer, include: [:user], func: "my"
+      # elsif FoodPost.find(FoodPostUsed.group(params[:id]).order('count(food_post_id) desc').limit(1).pluck(:food_post_id)).present?
+      #   code = FoodPost.find(FoodPostUsed.group(params[:id]).order('count(food_post_id) desc').limit(1).pluck(:food_post_id))
+      #   render json: code, serializer: FoodPostsSerializer, include: [:user]
     else
       web_search(params[:id])
+    end
+  end
+
+  def create
+    logger.error(params)
+    if params[:food][:func] == "web" || params[:food][:func] == "my"
+      @food_post_useds_params = @current_user.food_post_useds.build(food_post_useds_params)
+      @food_post_useds_params.target_user_id = @current_user.id
+      search_food_code = FoodPostUsed.find_by(food_code: @food_post_useds_params.food_code)
+      if search_food_code
+        search_food_code.updated_at = Time.now
+        search_food_code.update(food_post_useds_params)
+        render json: "更新に成功しました"
+      else
+        if @food_post_useds_params.save
+          render json: "投稿に成功しました"
+        else
+          if @food_post_useds_params.errors.any?
+            render json: @food_post_useds_params.errors.full_messages.to_s.gsub(",", "<br>").gsub("[", "").gsub("]", "").gsub('"', "").to_json
+          else
+            render json: "不明なエラー"
+          end
+        end
+      end
     end
   end
 
@@ -34,10 +58,16 @@ class Api::V1::FoodsController < ApplicationController
       protein = capas[1].text.gsub('g', '').to_f
       lipid = capas[2].text.gsub('g', '').to_f
       carbohydrate = capas[3].text.gsub('g', '').to_f
-      json = { product_name: name[0].text, par: par[0].text, calorie: calorie, protein: protein, lipid: lipid, carbohydrate: carbohydrate }.to_json
+      json = { web_search: true, food_code: code, content: true, product_name: name[0].text, par: par[0].text, calorie: calorie, protein: protein, lipid: lipid, carbohydrate: carbohydrate }.to_json
     else
-      json = "no content"
+      json = { web_search: true, food_code: code, content: false }
     end
     render json: json
+  end
+
+  private
+
+  def food_post_useds_params
+    params.require(:food).permit(:id, :user_id, :food_code, :food_post_id, :target_user_id)
   end
 end

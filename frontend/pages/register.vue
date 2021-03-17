@@ -4,9 +4,36 @@
       <v-row>
         <v-col cols="12" class="mt-5">
           <v-card>
-            <v-card-title>aaa</v-card-title>
-            <FoodRegisterDialog ref="dlg" :number="num" />
+            <v-card-title>栄養分摂取量を登録する</v-card-title>
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              color="indigo"
+              @click="code_confirm_dialog"
+            >
+              <v-icon dark> mdi-plus </v-icon>
+            </v-btn>
             <cameraDialog ref="cameraDlg" @cancel="cancel" @code="code" />
+            <Dialog
+              ref="dialog"
+              type="foodRegister"
+              @code_exist="cameraUp"
+              @no_code="dlgUp"
+            />
+            <FoodRegisterDialog ref="dlg" :number="num" @reGet="getFoodInfo" />
+            <v-row justify="center">
+              <v-col cols="4" sm="4" md="3" lg="3" xl="3">
+                <kcalBarChart :calorie="todayCalorie" />
+              </v-col>
+              <v-col cols="7" sm="7" md="5" lg="5" xl="5">
+                <gBarChart
+                  :protein="todayProtein"
+                  :lipid="todayLipid"
+                  :carbohydrate="todayCarbohydrate"
+                />
+              </v-col>
+            </v-row>
           </v-card>
         </v-col>
       </v-row>
@@ -16,26 +43,126 @@
 <script>
 import CameraDialog from '@/components/CameraDialog'
 import FoodRegisterDialog from '@/components/FoodRegisterDialog'
+import Dialog from '@/components/Dialog'
+import KcalBarChart from '@/components/KcalBarChart'
+import GBarChart from '@/components/GBarChart'
 export default {
   components: {
     CameraDialog,
     FoodRegisterDialog,
+    Dialog,
+    KcalBarChart,
+    GBarChart,
   },
   middleware: 'auth',
+  // async asyncData({ $axios, $moment, redirect }) {
+  //   try {
+  //     const today = $moment().format('YYYY-MM-DD')
+  //     const url = '/api/v1/food_eat/' + today
+  //     const response = await $axios.get(url)
+  //     const calorieArray = response.data.data.map(
+  //       (attribute) => attribute.attributes.calorie
+  //     )
+  //     const todayCalorie = calorieArray.reduce(function (a, b) {
+  //       return a + b
+  //     })
+  //     const proteinArray = response.data.data.map(
+  //       (attribute) => attribute.attributes.protein
+  //     )
+  //     const todayProtein = proteinArray.reduce(function (a, b) {
+  //       return a + b
+  //     })
+  //     const lipidArray = response.data.data.map(
+  //       (attribute) => attribute.attributes.lipid
+  //     )
+  //     const todayLipid = lipidArray.reduce(function (a, b) {
+  //       return a + b
+  //     })
+  //     const carbohydrateArray = response.data.data.map(
+  //       (attribute) => attribute.attributes.carbohydrate
+  //     )
+  //     const todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
+  //       return a + b
+  //     })
+  //     return {
+  //       todayCalorie,
+  //       todayProtein,
+  //       todayLipid,
+  //       todayCarbohydrate,
+  //     }
+  //   } catch (err) {
+  //     return redirect('/')
+  //   }
+  // },
   data() {
     return {
       num: '',
+      todayCalorie: 0,
+      todayProtein: 0,
+      todayLipid: 0,
+      todayCarbohydrate: 0,
+      chartdata: {
+        labels: ['カロリー'],
+        datasets: [
+          {
+            label: ['摂取量'],
+            backgroundColor: '#00a0ff',
+            data: [0, 0],
+          },
+          {
+            label: ['目安量'],
+            backgroundColor: '#7e7e7e',
+            data: [2000, 0],
+          },
+        ],
+      },
     }
   },
-  mounted() {
-    this.$refs.cameraDlg.isDisplay = true
+  created() {
+    this.getFoodInfo()
   },
   methods: {
     cancel() {},
     code(code) {
-      console.log(code)
       this.num = code
       this.$refs.dlg.isDisplay = true
+    },
+    cameraUp() {
+      this.$refs.cameraDlg.isDisplay = true
+    },
+    dlgUp() {},
+    code_confirm_dialog() {
+      this.$refs.dialog.isDisplay = true
+    },
+    getFoodInfo() {
+      const today = this.$moment().format('YYYY-MM-DD')
+      const url = '/api/v1/food_eat/' + today
+      this.$axios.get(url).then((response) => {
+        const calorieArray = response.data.data.map(
+          (attribute) => attribute.attributes.calorie
+        )
+        this.todayCalorie = calorieArray.reduce(function (a, b) {
+          return a + b
+        })
+        const proteinArray = response.data.data.map(
+          (attribute) => attribute.attributes.protein
+        )
+        this.todayProtein = proteinArray.reduce(function (a, b) {
+          return a + b
+        })
+        const lipidArray = response.data.data.map(
+          (attribute) => attribute.attributes.lipid
+        )
+        this.todayLipid = lipidArray.reduce(function (a, b) {
+          return a + b
+        })
+        const carbohydrateArray = response.data.data.map(
+          (attribute) => attribute.attributes.carbohydrate
+        )
+        this.todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
+          return a + b
+        })
+      })
     },
   },
 }

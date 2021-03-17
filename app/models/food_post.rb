@@ -1,5 +1,6 @@
 class FoodPost < ApplicationRecord
   belongs_to :user
+  has_many :food_post_useds, dependent: :destroy
   has_one_attached :image
   default_scope -> { order(created_at: :desc) }
   validates :user_id, presence: true
@@ -28,7 +29,8 @@ class FoodPost < ApplicationRecord
     if self.image.attached?
       # url_forは基本modelでは使えないが以下を参考に実施した
       # https://qiita.com/ogawatti/items/f60f757cdb6a67256885
-      image_path(self.display_image.processed)
+      routes = Rails.application.routes.url_helpers
+      routes.url_for(self.display_image.processed)
     end
   end
 end

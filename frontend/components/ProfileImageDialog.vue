@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isDisplay" width="63%">
+  <v-dialog v-model="isDisplay" width="600px">
     <validation-observer ref="observer" v-slot="{ invalid }">
       <form>
         <v-card>
@@ -20,7 +20,7 @@
                 <v-col cols="11" sm="11" md="6" lg="6" xl="6">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="Name"
+                    name="名前"
                     rules="required|max:35"
                   >
                     <v-text-field
@@ -28,28 +28,18 @@
                       append-icon="mdi-account-edit"
                       :counter="35"
                       :error-messages="errors"
-                      label="Name"
+                      label="名前"
                       required
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
                 <v-col cols="11" sm="11" md="6" lg="6" xl="6">
-                  <validation-provider
-                    v-slot="{ errors }"
-                    name="age"
-                    rules="max:35"
-                  >
-                    <v-text-field
-                      v-model="age"
-                      append-icon="mdi-domain"
-                      :counter="35"
-                      disabled
-                      :error-messages="errors"
-                      label="Age"
-                    ></v-text-field>
-                  </validation-provider>
+                  <v-select
+                    v-model="sex"
+                    :items="sex_items"
+                    label="性別"
+                  ></v-select>
                 </v-col>
-
                 <v-col cols="11" sm="12" md="12" lg="12" xl="12">
                   <validation-provider
                     v-slot="{ errors }"
@@ -65,36 +55,63 @@
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
-                <v-col cols="11" sm="12" md="12" lg="12" xl="12">
+                <v-col cols="11" sm="11" md="6" lg="6" xl="6">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="url"
-                    rules="regex:https?://([\w-]+\.)+[\w-]+(/[\w- .?%&=]*)?"
+                    name="年齢"
+                    rules="required|numeric|max:3"
                   >
                     <v-text-field
-                      v-model="url"
-                      append-icon="mdi-file-find-outline"
+                      v-model.number="age"
+                      append-icon="mdi-domain"
+                      z
                       :error-messages="errors"
-                      label="URL"
+                      label="年齢"
+                      required
+                      type="number"
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
-                <v-col cols="11" sm="11" md="12" lg="12" xl="12">
+                <v-col cols="11" sm="12" md="6" lg="6" xl="6">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="trend"
-                    rules="max:100"
+                    name="身長"
+                    rules="required|numeric|max:3|min:2"
                   >
-                    <v-textarea
-                      v-model="trend"
-                      append-icon="mdi-head-dots-horizontal-outline"
-                      :counter="100"
+                    <v-text-field
+                      v-model.number="height"
+                      append-icon="mdi-file-find-outline"
                       :error-messages="errors"
-                      auto-grow
-                      rows="1"
-                      label="よく利用するお店等"
-                    ></v-textarea>
+                      label="身長"
+                      required
+                      type="number"
+                    ></v-text-field>
                   </validation-provider>
+                </v-col>
+                <v-col cols="11" sm="11" md="6" lg="6" xl="6">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="目標体重"
+                    rules="required|numeric|max:3|min:2"
+                  >
+                    <v-text-field
+                      v-model="target_weight"
+                      append-icon="mdi-head-dots-horizontal-outline"
+                      :error-messages="errors"
+                      label="目標体重"
+                      required
+                      type="number"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+                <v-col cols="11" sm="11" md="6" lg="6" xl="6">
+                  <v-select
+                    v-model="action_level"
+                    :items="action_level_items"
+                    item-text="text"
+                    item-value="value"
+                    label="活動レベル"
+                  ></v-select>
                 </v-col>
                 <v-col cols="11" sm="12" md="12" lg="12" xl="12">
                   <validation-provider
@@ -140,7 +157,15 @@
 </template>
 
 <script>
-import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
+import {
+  required,
+  digits,
+  email,
+  numeric,
+  max,
+  min,
+  regex,
+} from 'vee-validate/dist/rules'
 import {
   extend,
   ValidationObserver,
@@ -160,10 +185,19 @@ extend('required', {
   ...required,
   message: '{_field_} は必ず入力して下さい',
 })
+extend('numeric', {
+  ...numeric,
+  message: '{_field_} は数字で入力して下さい',
+})
 
 extend('max', {
   ...max,
   message: '{_field_} は {length} 文字以内で入力して下さい',
+})
+
+extend('min', {
+  ...min,
+  message: '{_field_} は {length} 文字以上で入力して下さい',
 })
 
 extend('regex', {
@@ -194,8 +228,15 @@ export default {
       uploadBackground: '',
       name: this.user.user.name,
       age: this.user.user.profile.age,
-      url: this.user.user.profile.url,
-      trend: this.user.user.profile.trend,
+      sex: this.user.user.profile.sex,
+      sex_items: [
+        { text: '男性', value: true },
+        { text: '女性', value: false },
+      ],
+      height: this.user.user.profile.height,
+      target_weight: this.user.user.profile.target_weight,
+      action_level: this.user.user.profile.action_level,
+      action_level_items: [1.25, 1.5, 1.75, 2.0],
       notes: this.user.user.profile.notes,
     }
   },
@@ -225,12 +266,24 @@ export default {
       }
       data.append('user[name]', this.name)
       data.append(
-        'user[profiles_attributes][url]',
-        this.url === null ? '' : this.url
+        'user[profiles_attributes][age]',
+        this.age === null ? '' : this.age
       )
       data.append(
-        'user[profiles_attributes][trend]',
-        this.trend === null ? '' : this.trend
+        'user[profiles_attributes][sex]',
+        this.sex === null ? '' : this.sex
+      )
+      data.append(
+        'user[profiles_attributes][height]',
+        this.height === null ? '' : this.height
+      )
+      data.append(
+        'user[profiles_attributes][target_weight]',
+        this.target_weight === null ? '' : this.target_weight
+      )
+      data.append(
+        'user[profiles_attributes][action_level]',
+        this.action_level === null ? '' : this.action_level
       )
       data.append(
         'user[profiles_attributes][notes]',

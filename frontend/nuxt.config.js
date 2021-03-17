@@ -27,6 +27,10 @@ export default {
     '@/plugins/axios',
     '@/plugins/auth',
   ],
+  build: {
+    transpile: ['vee-validate'], // 追加 https://qiita.com/TK-C/items/9cab072c65d2f9ade5d0
+    extend(config, ctx) {},
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -38,8 +42,12 @@ export default {
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
     '@nuxtjs/dotenv',
+    '@nuxtjs/moment',
   ],
-
+  moment: {
+    // ここに@nuxtjs/momentのオプションが記述できる
+    locales: ['ja'],
+  },
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/proxy',

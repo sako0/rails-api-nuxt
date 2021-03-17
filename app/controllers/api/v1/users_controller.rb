@@ -22,6 +22,6 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email,
-                                 profiles_attributes: [:id, :trend, :notes, :url])
+                                 profiles_attributes: [:age, :sex, :height, :target_weight, :action_level, :notes])
   end
 end
