@@ -78,14 +78,14 @@ ActiveRecord::Schema.define(version: 2021_03_16_120436) do
   end
 
   create_table "food_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "food_code"
+    t.string "food_code", null: false
     t.bigint "user_id"
-    t.string "product_name"
-    t.string "par"
-    t.float "calorie"
-    t.float "protein"
-    t.float "lipid"
-    t.float "carbohydrate"
+    t.string "product_name", null: false
+    t.string "par", null: false
+    t.float "calorie", null: false
+    t.float "protein", null: false
+    t.float "lipid", null: false
+    t.float "carbohydrate", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id", "created_at"], name: "index_food_posts_on_user_id_and_created_at"
@@ -94,11 +94,13 @@ ActiveRecord::Schema.define(version: 2021_03_16_120436) do
 
   create_table "profiles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "age"
-    t.string "sex"
-    t.string "trend"
+    t.integer "age", null: false
+    t.boolean "sex", null: false
+    t.integer "height", null: false
+    t.integer "weight"
+    t.integer "target_weight", null: false
+    t.float "action_level", null: false
     t.string "notes"
-    t.string "url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["created_at", "updated_at"], name: "index_profiles_on_created_at_and_updated_at"
@@ -106,8 +108,8 @@ ActiveRecord::Schema.define(version: 2021_03_16_120436) do
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
+    t.string "name", null: false
+    t.string "email", null: false
     t.string "password_digest"
     t.string "remember_digest"
     t.string "activation_digest"
