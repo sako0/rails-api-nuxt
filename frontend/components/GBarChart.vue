@@ -2,6 +2,11 @@
 import { Bar } from 'vue-chartjs'
 export default {
   extends: Bar,
+  props: {
+    protein: Number,
+    lipid: Number,
+    carbohydrate: Number,
+  },
   data() {
     return {
       chartdata: {
@@ -10,7 +15,7 @@ export default {
           {
             label: ['摂取量'],
             backgroundColor: '#00a0ff',
-            data: [70, 60, 40, 0],
+            data: [this.protein, this.lipid, this.carbohydrate, 0],
           },
           {
             label: ['目安量'],
@@ -24,6 +29,25 @@ export default {
         maintainAspectRatio: false,
       },
     }
+  },
+  watch: {
+    protein(val) {
+      this.chartdata.datasets[0].data = [val, this.lipid, this.carbohydrate, 0]
+      this.renderChart(this.chartdata, this.options)
+    },
+    lipid(val) {
+      this.chartdata.datasets[0].data = [
+        this.protein,
+        val,
+        this.carbohydrate,
+        0,
+      ]
+      this.renderChart(this.chartdata, this.options)
+    },
+    carbohydrate(val) {
+      this.chartdata.datasets[0].data = [this.protein, this.lipid, val, 0]
+      this.renderChart(this.chartdata, this.options)
+    },
   },
   mounted() {
     this.renderChart(this.chartdata, this.options)

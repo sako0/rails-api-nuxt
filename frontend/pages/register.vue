@@ -21,13 +21,17 @@
               @code_exist="cameraUp"
               @no_code="dlgUp"
             />
-            <FoodRegisterDialog ref="dlg" :number="num" />
+            <FoodRegisterDialog ref="dlg" :number="num" @reGet="getFoodInfo" />
             <v-row justify="center">
               <v-col cols="4" sm="4" md="3" lg="3" xl="3">
-                <kcalBarChart />
+                <kcalBarChart :calorie="todayCalorie" />
               </v-col>
               <v-col cols="7" sm="7" md="5" lg="5" xl="5">
-                <gBarChart />
+                <gBarChart
+                  :protein="todayProtein"
+                  :lipid="todayLipid"
+                  :carbohydrate="todayCarbohydrate"
+                />
               </v-col>
             </v-row>
           </v-card>
@@ -51,17 +55,71 @@ export default {
     GBarChart,
   },
   middleware: 'auth',
+  // async asyncData({ $axios, $moment, redirect }) {
+  //   try {
+  //     const today = $moment().format('YYYY-MM-DD')
+  //     const url = '/api/v1/food_eat/' + today
+  //     const response = await $axios.get(url)
+  //     const calorieArray = response.data.data.map(
+  //       (attribute) => attribute.attributes.calorie
+  //     )
+  //     const todayCalorie = calorieArray.reduce(function (a, b) {
+  //       return a + b
+  //     })
+  //     const proteinArray = response.data.data.map(
+  //       (attribute) => attribute.attributes.protein
+  //     )
+  //     const todayProtein = proteinArray.reduce(function (a, b) {
+  //       return a + b
+  //     })
+  //     const lipidArray = response.data.data.map(
+  //       (attribute) => attribute.attributes.lipid
+  //     )
+  //     const todayLipid = lipidArray.reduce(function (a, b) {
+  //       return a + b
+  //     })
+  //     const carbohydrateArray = response.data.data.map(
+  //       (attribute) => attribute.attributes.carbohydrate
+  //     )
+  //     const todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
+  //       return a + b
+  //     })
+  //     return {
+  //       todayCalorie,
+  //       todayProtein,
+  //       todayLipid,
+  //       todayCarbohydrate,
+  //     }
+  //   } catch (err) {
+  //     return redirect('/')
+  //   }
+  // },
   data() {
     return {
       num: '',
+      todayCalorie: 0,
+      todayProtein: 0,
+      todayLipid: 0,
+      todayCarbohydrate: 0,
+      chartdata: {
+        labels: ['カロリー'],
+        datasets: [
+          {
+            label: ['摂取量'],
+            backgroundColor: '#00a0ff',
+            data: [0, 0],
+          },
+          {
+            label: ['目安量'],
+            backgroundColor: '#7e7e7e',
+            data: [2000, 0],
+          },
+        ],
+      },
     }
   },
-  mounted() {
-    const today = this.$moment().format('YYYY-MM-DD')
-    const url = '/api/v1/food_eat/' + today
-    this.$axios.get(url).then((response) => {
-      console.log(response)
-    })
+  created() {
+    this.getFoodInfo()
   },
   methods: {
     cancel() {},
@@ -75,6 +133,36 @@ export default {
     dlgUp() {},
     code_confirm_dialog() {
       this.$refs.dialog.isDisplay = true
+    },
+    getFoodInfo() {
+      const today = this.$moment().format('YYYY-MM-DD')
+      const url = '/api/v1/food_eat/' + today
+      this.$axios.get(url).then((response) => {
+        const calorieArray = response.data.data.map(
+          (attribute) => attribute.attributes.calorie
+        )
+        this.todayCalorie = calorieArray.reduce(function (a, b) {
+          return a + b
+        })
+        const proteinArray = response.data.data.map(
+          (attribute) => attribute.attributes.protein
+        )
+        this.todayProtein = proteinArray.reduce(function (a, b) {
+          return a + b
+        })
+        const lipidArray = response.data.data.map(
+          (attribute) => attribute.attributes.lipid
+        )
+        this.todayLipid = lipidArray.reduce(function (a, b) {
+          return a + b
+        })
+        const carbohydrateArray = response.data.data.map(
+          (attribute) => attribute.attributes.carbohydrate
+        )
+        this.todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
+          return a + b
+        })
+      })
     },
   },
 }

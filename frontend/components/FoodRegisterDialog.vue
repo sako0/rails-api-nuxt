@@ -503,9 +503,11 @@ export default {
         })
         await this.food_eat()
         await this.post_used()
+        this.$emit('reGet')
       } else {
         await this.food_eat()
         await this.post_used()
+        this.$emit('reGet')
       }
       this.reset()
     },
@@ -559,7 +561,7 @@ export default {
           calorie: this.calorie_total,
           protein: this.protein_total,
           lipid: this.lipid_total,
-          carbohydrate: this.calorie_total,
+          carbohydrate: this.carbohydrate_total,
           percent: this.begin,
         }
       }

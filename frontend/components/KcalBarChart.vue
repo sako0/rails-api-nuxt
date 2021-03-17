@@ -1,7 +1,10 @@
 <script>
-import { Bar } from 'vue-chartjs'
+import { Bar, mixins } from 'vue-chartjs'
 export default {
-  extends: Bar,
+  mixins: [Bar, mixins.reactiveData],
+  props: {
+    calorie: Number,
+  },
   data() {
     return {
       chartdata: {
@@ -10,7 +13,7 @@ export default {
           {
             label: ['摂取量'],
             backgroundColor: '#00a0ff',
-            data: [3000, 0],
+            data: [this.calorie, 0],
           },
           {
             label: ['目安量'],
@@ -24,6 +27,12 @@ export default {
         maintainAspectRatio: false,
       },
     }
+  },
+  watch: {
+    calorie(val) {
+      this.chartdata.datasets[0].data = [val, 0]
+      this.renderChart(this.chartdata, this.options)
+    },
   },
   mounted() {
     this.renderChart(this.chartdata, this.options)
