@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isDisplay" width="63%">
+  <v-dialog v-model="isDisplay" width="600px">
     <validation-observer ref="observer" v-slot="{ invalid }">
       <form>
         <v-card>
