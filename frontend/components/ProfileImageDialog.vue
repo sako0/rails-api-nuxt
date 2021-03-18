@@ -55,10 +55,12 @@
                       <v-select
                         v-model="sex"
                         :items="sex_items"
+                        item-text="text"
+                        item-value="value"
                         label="性別"
                       ></v-select>
                     </v-col>
-                    <v-col cols="11" sm="12" md="12" lg="12" xl="12">
+                    <v-col cols="11" sm="11" md="12" lg="12" xl="12">
                       <validation-provider
                         v-slot="{ errors }"
                         name="email"
@@ -90,7 +92,7 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-                    <v-col cols="11" sm="12" md="6" lg="6" xl="6">
+                    <v-col cols="11" sm="11" md="6" lg="6" xl="6">
                       <validation-provider
                         v-slot="{ errors }"
                         name="身長"
@@ -131,7 +133,7 @@
                         label="活動レベル"
                       ></v-select>
                     </v-col>
-                    <v-col cols="11" sm="12" md="12" lg="12" xl="12">
+                    <v-col cols="11" sm="11" md="12" lg="12" xl="12">
                       <validation-provider
                         v-slot="{ errors }"
                         name="notes"
@@ -250,13 +252,17 @@ export default {
       age: this.user.user.profile.age,
       sex: this.user.user.profile.sex,
       sex_items: [
-        { text: '男性', value: true },
-        { text: '女性', value: false },
+        { text: '男性', value: false },
+        { text: '女性', value: true },
       ],
       height: this.user.user.profile.height,
       target_weight: this.user.user.profile.target_weight,
       action_level: this.user.user.profile.action_level,
-      action_level_items: [1.25, 1.5, 1.75, 2.0],
+      action_level_items: [
+        { text: '低い', value: 1.5 },
+        { text: '普通', value: 1.75 },
+        { text: '高い', value: 2 },
+      ],
       notes: this.user.user.profile.notes,
       tab: 0,
       items: [''],

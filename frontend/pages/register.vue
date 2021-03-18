@@ -24,13 +24,19 @@
             <FoodRegisterDialog ref="dlg" :number="num" @reGet="getFoodInfo" />
             <v-row justify="center">
               <v-col cols="4" sm="4" md="3" lg="3" xl="3">
-                <kcalBarChart :calorie="todayCalorie" />
+                <kcalBarChart
+                  :calorie="todayCalorie"
+                  :calorie-guideline="calorieGuideline"
+                />
               </v-col>
               <v-col cols="7" sm="7" md="5" lg="5" xl="5">
                 <gBarChart
                   :protein="todayProtein"
+                  :protein-guideline="proteinGuideline"
                   :lipid="todayLipid"
+                  :lipid-guideline="lipidGuideline"
                   :carbohydrate="todayCarbohydrate"
+                  :carbohydrate-guideline="carbohydrateGuideline"
                 />
               </v-col>
             </v-row>
@@ -101,25 +107,15 @@ export default {
       todayProtein: 0,
       todayLipid: 0,
       todayCarbohydrate: 0,
-      chartdata: {
-        labels: ['カロリー'],
-        datasets: [
-          {
-            label: ['摂取量'],
-            backgroundColor: '#00a0ff',
-            data: [0, 0],
-          },
-          {
-            label: ['目安量'],
-            backgroundColor: '#7e7e7e',
-            data: [2000, 0],
-          },
-        ],
-      },
+      calorieGuideline: 0,
+      proteinGuideline: 0,
+      lipidGuideline: 0,
+      carbohydrateGuideline: 0,
     }
   },
   created() {
     this.getFoodInfo()
+    this.getGuideline()
   },
   methods: {
     cancel() {},
@@ -138,6 +134,7 @@ export default {
       const today = this.$moment().format('YYYY-MM-DD')
       const url = '/api/v1/food_eat/' + today
       this.$axios.get(url).then((response) => {
+        console.log(response)
         const calorieArray = response.data.data.map(
           (attribute) => attribute.attributes.calorie
         )
@@ -162,6 +159,16 @@ export default {
         this.todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
           return a + b
         })
+      })
+    },
+    getGuideline() {
+      const url = '/api/v1/guideline'
+      this.$axios.get(url).then((response) => {
+        console.log(response)
+        this.calorieGuideline = response.data.recommended_calorie
+        this.proteinGuideline = response.data.recommended_protein
+        this.lipidGuideline = response.data.recommended_lipid
+        this.carbohydrateGuideline = response.data.recommended_carbohydrate
       })
     },
   },

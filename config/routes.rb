@@ -11,4 +11,5 @@ Rails.application.routes.draw do
       resources :food_eat
     end
   end
+  get '/api/v1/guideline' => 'api/v1/food_eat#guideline'
 end
