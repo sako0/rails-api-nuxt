@@ -10,7 +10,8 @@
           <v-card-title>{{ item }}</v-card-title>
           <v-card-text>{{ content }}</v-card-text>
           <v-row v-if="type === 'foodRegister'">
-            <v-col cols="4" class="text-center">
+            <v-col cols="1" sm="1" md="1" lg="1" xl="1"> </v-col>
+            <v-col cols="4" sm="4" md="4" lg="4" xl="4" class="text-center">
               <v-btn
                 class="text-caption"
                 dark
@@ -21,8 +22,8 @@
                 バーコードあり
               </v-btn>
             </v-col>
-            <v-col cols="2"> </v-col>
-            <v-col cols="4">
+            <v-col cols="1" sm="1" md="1" lg="1" xl="1"> </v-col>
+            <v-col cols="4" sm="4" md="4" lg="4" xl="4">
               <v-btn class="text-caption" dark color="indigo" @click="no_code">
                 <v-icon dark> mdi-barcode-off </v-icon>
                 バーコードなし

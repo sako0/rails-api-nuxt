@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  require "open-uri"
   has_many :food_posts, dependent: :destroy
   has_many :food_eats, dependent: :destroy
   has_one :profiles, dependent: :destroy, class_name: "Profile"
@@ -199,13 +200,19 @@ class User < ApplicationRecord
 
   def default_image
     if !self.image.attached?
-      self.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'user_default.png')), filename: 'user_default.png', content_type: 'image/png')
+      url = URI.parse("http://free-photo.net/photo_img/0812105448.jpg")
+      filename = File.basename(url.path)
+      image = URI.open(url)
+      self.image.attach(io: image, filename: filename)
     end
   end
 
   def default_back_ground_image
     if !self.back_ground.attached?
-      self.back_ground.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'photo4.jpg')), filename: 'photo4.jpg', content_type: 'image/jpg')
+      url = URI.parse("https://publicdomainq.net/images/201710/07s/publicdomainq-0014143ddc.jpg")
+      filename = File.basename(url.path)
+      image = URI.open(url)
+      self.back_ground.attach(io: image, filename: 'photo4.jpg')
     end
   end
 end
