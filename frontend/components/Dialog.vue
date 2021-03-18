@@ -9,7 +9,7 @@
         <v-tab-item v-for="item in items" :key="item">
           <v-card-title>{{ item }}</v-card-title>
           <v-card-text>{{ content }}</v-card-text>
-          <v-row v-if="type === 'foodRegister'" justify="left">
+          <v-row v-if="type === 'foodRegister'">
             <v-col cols="4" class="text-center">
               <v-btn
                 class="text-caption"

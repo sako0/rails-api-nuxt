@@ -417,6 +417,18 @@ export default {
     begin: 100,
   }),
   watch: {
+    calorie(val) {
+      this.calorie_total = (val * this.begin) / 100
+    },
+    protein(val) {
+      this.protein_total = (val * this.begin) / 100
+    },
+    lipid(val) {
+      this.lipid_total = (val * this.begin) / 100
+    },
+    carbohydrate(val) {
+      this.carbohydrate_total = (val * this.begin) / 100
+    },
     isDisplay(val) {
       if (val) {
         console.log(this.$props.number)
@@ -428,17 +440,12 @@ export default {
                 if (response.data.content) {
                   console.log(response.data)
                   this.productName = response.data.product_name
-                  this.food_code = response.data.food_code
+                  this.food_code = this.$props.number
                   this.par = response.data.par
                   this.calorie = response.data.calorie
                   this.protein = response.data.protein
                   this.lipid = response.data.lipid
                   this.carbohydrate = response.data.carbohydrate
-                  this.calorie_total = (this.calorie * this.begin) / 100
-                  this.protein_total = (this.protein * this.begin) / 100
-                  this.lipid_total = (this.lipid * this.begin) / 100
-                  this.carbohydrate_total =
-                    (this.carbohydrate * this.begin) / 100
                 }
                 this.func = 'web'
               } else {
@@ -449,14 +456,9 @@ export default {
                 this.protein = response.data.data.attributes.protein
                 this.lipid = response.data.data.attributes.lipid
                 this.carbohydrate = response.data.data.attributes.carbohydrate
-                this.calorie_total = (this.calorie * this.begin) / 100
-                this.protein_total = (this.protein * this.begin) / 100
-                this.lipid_total = (this.lipid * this.begin) / 100
-                this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
                 this.url = response.data.data.attributes.image
                 this.post_id = parseInt(response.data.data.id)
-                this.post_user_id = response.data.data.attributes.user_id
-                this.food_code = response.data.data.attributes.food_code
+                this.food_code = this.$props.number
                 if (response.data.data.attributes.func === 'my') {
                   this.func = 'my'
                   this.tab = 1
@@ -475,7 +477,7 @@ export default {
       this.carbohydrate_total = (this.carbohydrate * val) / 100
     },
   },
-  mounted() {
+  created() {
     this.reset()
   },
   methods: {
@@ -498,7 +500,6 @@ export default {
         }
         const headers = { 'content-type': 'multipart/form-data' }
         await this.$axios.post(url, data, { headers }).then((response) => {
-          console.log(response)
           this.post_id = response.data
         })
         await this.food_eat()
@@ -533,20 +534,18 @@ export default {
       if (this.func === 'my') {
         data = {
           func: 'my',
-          food_code: this.food_code,
+          food_code: this.$props.number,
           food_post_id: this.post_id,
         }
       }
       if (this.func === 'web') {
         data = {
           func: 'my',
-          food_code: this.food_code,
+          food_code: this.$props.number,
           food_post_id: this.post_id,
         }
       }
-      await this.$axios.post(url, data, { headers }).then((response) => {
-        console.log(response)
-      })
+      await this.$axios.post(url, data, { headers }).then((response) => {})
     },
     async food_eat() {
       const url = '/api/v1/food_eat'
@@ -554,7 +553,7 @@ export default {
       let data = ''
       if (this.func === 'my' || this.func === 'web') {
         data = {
-          food_code: this.food_code,
+          food_code: this.$props.number,
           food_post_id: this.post_id,
           product_name: this.productName,
           par: this.par,
@@ -565,9 +564,7 @@ export default {
           percent: this.begin,
         }
       }
-      await this.$axios.post(url, data, { headers }).then((response) => {
-        console.log(response)
-      })
+      await this.$axios.post(url, data, { headers }).then((response) => {})
     },
     reset() {
       Object.assign(this.$data, this.$options.data())
