@@ -58,13 +58,21 @@
                   disabled
                 ></v-text-field>
               </v-col>
+              <v-col cols="11" sm="11" md="11" lg="11" xl="11">
+                <v-text-field
+                  :value="number"
+                  append-icon="mdi-barcode"
+                  disabled
+                  label="商品コード"
+                ></v-text-field>
+              </v-col>
               <v-col
                 v-if="func === 'web' || fix"
-                cols="4"
-                sm="4"
-                md="3"
-                lg="3"
-                xl="3"
+                cols="5"
+                sm="5"
+                md="5"
+                lg="5"
+                xl="5"
               >
                 <validation-provider
                   v-slot="{ errors }"
@@ -83,11 +91,11 @@
               </v-col>
               <v-col
                 v-if="func === 'my' && fix === false"
-                cols="4"
-                sm="4"
-                md="3"
-                lg="3"
-                xl="3"
+                cols="5"
+                sm="5"
+                md="5"
+                lg="5"
+                xl="5"
               >
                 <v-text-field
                   v-model.number="calorie"
@@ -98,22 +106,13 @@
                   disabled
                 ></v-text-field>
               </v-col>
-              <v-col cols="6" sm="6" md="4" lg="4" xl="4">
-                <v-text-field
-                  :value="number"
-                  append-icon="mdi-barcode"
-                  disabled
-                  label="商品コード"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="1" sm="1" md="4" lg="4" xl="4"> </v-col>
               <v-col
                 v-if="func === 'web' || fix"
-                cols="4"
-                sm="4"
-                md="3"
-                lg="3"
-                xl="3"
+                cols="5"
+                sm="5"
+                md="5"
+                lg="5"
+                xl="5"
               >
                 <validation-provider
                   v-slot="{ errors }"
@@ -132,11 +131,11 @@
               </v-col>
               <v-col
                 v-if="func === 'my' && fix === false"
-                cols="4"
-                sm="4"
-                md="3"
-                lg="3"
-                xl="3"
+                cols="5"
+                sm="5"
+                md="5"
+                lg="5"
+                xl="5"
               >
                 <v-text-field
                   v-model.number="protein"
@@ -147,13 +146,14 @@
                   disabled
                 ></v-text-field>
               </v-col>
+              <v-col cols="1"></v-col>
               <v-col
                 v-if="func === 'web' || fix"
-                cols="3"
-                sm="3"
-                md="3"
-                lg="3"
-                xl="3"
+                cols="5"
+                sm="5"
+                md="5"
+                lg="5"
+                xl="5"
               >
                 <validation-provider
                   v-slot="{ errors }"
@@ -172,11 +172,11 @@
               </v-col>
               <v-col
                 v-if="func === 'my' && fix === false"
-                cols="3"
-                sm="3"
-                md="3"
-                lg="3"
-                xl="3"
+                cols="5"
+                sm="5"
+                md="5"
+                lg="5"
+                xl="5"
               >
                 <v-text-field
                   v-model.number="lipid"
@@ -189,11 +189,11 @@
               </v-col>
               <v-col
                 v-if="func === 'web' || fix"
-                cols="4"
-                sm="4"
-                md="3"
-                lg="3"
-                xl="3"
+                cols="5"
+                sm="5"
+                md="5"
+                lg="5"
+                xl="5"
               >
                 <validation-provider
                   v-slot="{ errors }"
@@ -212,11 +212,11 @@
               </v-col>
               <v-col
                 v-if="func === 'my' && fix === false"
-                cols="4"
-                sm="4"
-                md="3"
-                lg="3"
-                xl="3"
+                cols="5"
+                sm="5"
+                md="5"
+                lg="5"
+                xl="5"
               >
                 <v-text-field
                   v-model.number="carbohydrate"
@@ -227,8 +227,8 @@
                   disabled
                 ></v-text-field>
               </v-col>
-              <v-col cols="0" sm="0" md="2" lg="2" xl="2"> </v-col>
-              <v-col v-if="func === 'web' || fix" cols="4">
+              <v-col cols="1"> </v-col>
+              <v-col v-if="func === 'web' || fix" cols="10">
                 <v-file-input
                   v-model="image"
                   accept="image/jpeg,image/png,image/bmp"
@@ -237,7 +237,7 @@
                 >
                 </v-file-input>
               </v-col>
-              <v-col cols="7">
+              <v-col cols="11">
                 <v-img v-if="url" :src="url"></v-img>
               </v-col>
             </v-row>
@@ -272,7 +272,15 @@
                   disabled
                 ></v-text-field>
               </v-col>
-              <v-col cols="4" sm="4" md="3" lg="3" xl="3">
+              <v-col cols="11" sm="11" md="11" lg="11" xl="11">
+                <v-text-field
+                  :value="number"
+                  append-icon="mdi-barcode"
+                  disabled
+                  label="商品コード"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="5" sm="5" md="5" lg="5" xl="5">
                 <v-text-field
                   v-model.number="calorie_total"
                   suffix="kcal"
@@ -282,16 +290,7 @@
                   disabled
                 ></v-text-field>
               </v-col>
-              <v-col cols="6" sm="6" md="4" lg="4" xl="4">
-                <v-text-field
-                  :value="number"
-                  append-icon="mdi-barcode"
-                  disabled
-                  label="商品コード"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="1" sm="1" md="4" lg="4" xl="4"> </v-col>
-              <v-col cols="4" sm="4" md="3" lg="3" xl="3">
+              <v-col cols="5" sm="5" md="5" lg="5" xl="5">
                 <v-text-field
                   v-model.number="protein_total"
                   suffix="g"
@@ -301,7 +300,8 @@
                   disabled
                 ></v-text-field>
               </v-col>
-              <v-col cols="3" sm="3" md="3" lg="3" xl="3">
+              <v-col cols="1"> </v-col>
+              <v-col cols="5" sm="5" md="5" lg="5" xl="5">
                 <v-text-field
                   v-model.number="lipid_total"
                   suffix="g"
@@ -311,7 +311,7 @@
                   disabled
                 ></v-text-field>
               </v-col>
-              <v-col cols="4" sm="4" md="3" lg="3" xl="3">
+              <v-col cols="5" sm="5" md="5" lg="5" xl="5">
                 <v-text-field
                   v-model.number="carbohydrate_total"
                   suffix="g"
@@ -321,7 +321,7 @@
                   disabled
                 ></v-text-field>
               </v-col>
-              <v-col cols="0" sm="0" md="2" lg="2" xl="2"> </v-col>
+              <v-col cols="1"> </v-col>
             </v-row>
 
             <v-card-actions>

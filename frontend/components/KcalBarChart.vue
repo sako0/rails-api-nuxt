@@ -26,6 +26,39 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        title: {
+          // 見出し
+          display: true,
+        },
+        legend: {
+          // 凡例
+          display: false,
+        },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                autoSkip: false,
+                callback: (value, index, values) => {
+                  return value / 100
+                },
+              },
+              scaleLabel: {
+                // 表示されるy軸の名称について
+                display: false, // 表示するか否か
+              },
+            },
+          ],
+          xAxes: [
+            // x軸
+            {
+              scaleLabel: {
+                // 表示されるx軸の名称について
+                display: false,
+              },
+            },
+          ],
+        },
       },
     }
   },

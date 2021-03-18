@@ -29,7 +29,7 @@
                   :calorie-guideline="calorieGuideline"
                 />
               </v-col>
-              <v-col cols="7" sm="7" md="5" lg="5" xl="5">
+              <v-col cols="8" sm="8" md="5" lg="5" xl="5">
                 <gBarChart
                   :protein="todayProtein"
                   :protein-guideline="proteinGuideline"

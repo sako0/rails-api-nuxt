@@ -40,6 +40,39 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        title: {
+          // 見出し
+          display: true,
+        },
+        legend: {
+          // 凡例
+          display: false,
+        },
+        scales: {
+          yAxes: [
+            {
+              scaleLabel: {
+                // 表示されるy軸の名称について
+                display: false, // 表示するか否か
+              },
+            },
+          ],
+          xAxes: [
+            // x軸
+            {
+              ticks: {
+                autoSkip: false,
+                callback: (value, index, values) => {
+                  return value
+                },
+              },
+              scaleLabel: {
+                // 表示されるx軸の名称について
+                display: false,
+              },
+            },
+          ],
+        },
       },
     }
   },
