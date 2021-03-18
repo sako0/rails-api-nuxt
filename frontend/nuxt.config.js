@@ -6,8 +6,8 @@ const BASEURL = process.env.NUXT_ENV_RAILS_URL
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - frontend',
-    title: 'frontend',
+    titleTemplate: '%s - diet-reader',
+    title: 'diet-reader',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

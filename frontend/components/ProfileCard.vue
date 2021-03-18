@@ -59,16 +59,16 @@
         <div>{{ userComputed.user.profile.notes }}</div>
       </v-card-text>
     </div>
-    <v-card-actions>
-      <v-row class="text-center">
-        <v-col cols="6">
-          <v-btn color="orange" text> フォロー</v-btn>
-        </v-col>
-        <v-col col="6">
-          <v-btn color="orange" text> DM</v-btn>
-        </v-col>
-      </v-row>
-    </v-card-actions>
+    <!--    <v-card-actions>-->
+    <!--      <v-row class="text-center">-->
+    <!--        <v-col cols="6">-->
+    <!--          <v-btn color="orange" text> フォロー</v-btn>-->
+    <!--        </v-col>-->
+    <!--        <v-col col="6">-->
+    <!--          <v-btn color="orange" text> DM</v-btn>-->
+    <!--        </v-col>-->
+    <!--      </v-row>-->
+    <!--    </v-card-actions>-->
   </v-card>
 </template>
 <script>
