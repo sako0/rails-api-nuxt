@@ -326,10 +326,10 @@
 
             <v-card-actions>
               <v-row justify="center">
-                <v-col cols="4">
+                <v-col cols="4" class="text-left">
                   <v-btn @click="isDisplay = false">Close</v-btn>
                 </v-col>
-                <v-col cols="5">
+                <v-col cols="4" class="text-left">
                   <v-select
                     v-model="begin"
                     :items="percent"
@@ -341,7 +341,7 @@
                     single-line
                   ></v-select>
                 </v-col>
-                <v-col cols="2" class="text-right">
+                <v-col cols="3" class="text-right">
                   <v-btn color="red" @click="submit">OK</v-btn>
                 </v-col>
               </v-row>
