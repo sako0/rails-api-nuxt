@@ -5,15 +5,23 @@
         <v-col cols="12" class="mt-5">
           <v-card>
             <v-card-title>栄養分摂取量を登録する</v-card-title>
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              color="indigo"
-              @click="code_confirm_dialog"
-            >
-              <v-icon dark> mdi-plus </v-icon>
-            </v-btn>
+            <v-row>
+              <v-col cols="2">
+                <v-btn
+                  class="mx-2"
+                  fab
+                  dark
+                  color="indigo"
+                  @click="code_confirm_dialog"
+                >
+                  <v-icon dark> mdi-plus </v-icon>
+                </v-btn>
+              </v-col>
+              <v-col cols="9" class="text-right">
+                <v-card-text>{{ today }}</v-card-text>
+              </v-col>
+            </v-row>
+
             <cameraDialog ref="cameraDlg" @cancel="cancel" @code="code" />
             <Dialog
               ref="dialog"
@@ -111,6 +119,7 @@ export default {
       proteinGuideline: 0,
       lipidGuideline: 0,
       carbohydrateGuideline: 0,
+      today: null,
     }
   },
   created() {
@@ -121,6 +130,8 @@ export default {
     cancel() {},
     code(code) {
       this.num = code
+      this.$refs.dlg.reset()
+      this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
       this.$refs.dlg.isDisplay = true
     },
     cameraUp() {
@@ -132,6 +143,7 @@ export default {
     },
     getFoodInfo() {
       const today = this.$moment().format('YYYY-MM-DD')
+      this.today = today
       const url = '/api/v1/food_eat/' + today
       this.$axios.get(url).then((response) => {
         console.log(response)

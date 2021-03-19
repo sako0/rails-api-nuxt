@@ -10,6 +10,7 @@ class CreateFoodEats < ActiveRecord::Migration[6.1]
       t.float :lipid, null: false
       t.float :carbohydrate, null: false
       t.float :percent, null: false
+      t.date :date, null:false
       t.timestamps
     end
   end

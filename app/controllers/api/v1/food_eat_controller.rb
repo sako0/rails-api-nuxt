@@ -15,7 +15,7 @@ class Api::V1::FoodEatController < ApplicationController
 
   def show
     date = Date.strptime(params[:id], "%Y-%m-%d")
-    food_eat_at_day = FoodEat.where("created_at >= ?", date)
+    food_eat_at_day = FoodEat.where("date >= ?", date)
     render json: food_eat_at_day, each_serializer: FoodEatSerializer
   end
 
@@ -103,7 +103,7 @@ class Api::V1::FoodEatController < ApplicationController
   private
 
   def food_eat_params
-    params.require(:food_eat).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :percent)
+    params.require(:food_eat).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :date, :percent)
   end
 
 end
