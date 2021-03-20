@@ -1,6 +1,7 @@
 class Api::V1::FoodEatController < ApplicationController
   include JwtAuthenticator
   before_action :jwt_authenticate
+  before_action :destroy_id_get, only: [:destroy]
 
   def create
     logger.error(params)
@@ -10,6 +11,26 @@ class Api::V1::FoodEatController < ApplicationController
       if food_eat.save
         render json: "投稿に成功しました"
       end
+    end
+  end
+
+  def update
+    if params[:food_eat].present?
+      foodEat = @current_user.food_eats.find_by(id: params[:food_eat][:id])
+      foodEat.updated_at = Time.now
+      if foodEat.update(food_eat_params)
+        render json: "更新に成功しました"
+      else
+        render json: "更新に失敗しました"
+      end
+    end
+  end
+
+  def destroy
+    if @food_eat.destroy
+      render json: "削除完了しました"
+    else
+      render json: "削除に失敗しました"
     end
   end
 
@@ -104,6 +125,13 @@ class Api::V1::FoodEatController < ApplicationController
 
   def food_eat_params
     params.require(:food_eat).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :date, :percent)
+  end
+
+  def destroy_id_get
+    @food_eat = @current_user.food_eats.find_by(id: params[:id])
+    if @food_eat.nil?
+      render json: "投稿が存在しません"
+    end
   end
 
 end

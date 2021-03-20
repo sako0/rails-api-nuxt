@@ -134,7 +134,9 @@
                       ></v-select>
                     </v-col>
                     <v-col cols="3" class="text-right">
-                      <v-btn color="red" :disabled="invalid"> OK </v-btn>
+                      <v-btn color="red" :disabled="invalid" @click="submit">
+                        OK
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-card-actions>
@@ -240,25 +242,27 @@ export default {
     },
   },
   methods: {
-    food_eat() {
-      const url = '/api/v1/food_eat'
+    submit() {
+      const url = '/api/v1/food_eat/' + this.$props.foodInfo.id
       const headers = { 'content-type': 'application/json' }
-      let data = ''
-      if (this.func === 'my' || this.func === 'web') {
-        data = {
-          food_code: this.$props.number,
-          food_post_id: this.post_id,
-          product_name: this.productName,
-          par: this.par,
-          calorie: this.calorie_total,
-          protein: this.protein_total,
-          lipid: this.lipid_total,
-          carbohydrate: this.carbohydrate_total,
-          percent: this.begin,
-          date: this.calendarDate,
-        }
+      const data = {
+        id: this.$props.foodInfo.id,
+        food_code: this.number,
+        food_post_id: this.post_id,
+        product_name: this.productName,
+        par: this.par,
+        calorie: this.calorie_total,
+        protein: this.protein_total,
+        lipid: this.lipid_total,
+        carbohydrate: this.carbohydrate_total,
+        percent: this.begin,
+        date: this.calendarDate,
       }
-      this.$axios.post(url, data, { headers }).then((response) => {})
+      this.$axios.put(url, data, { headers }).then((response) => {
+        console.log(response)
+      })
+      this.isDisplay = false
+      this.reset()
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

@@ -4,9 +4,10 @@
       <cameraDialog ref="cameraDlg" @cancel="cancel" @code="code" />
       <Dialog
         ref="dialog"
-        type="foodRegister"
+        :type="type"
         @code_exist="cameraUp"
         @no_code="dlgUp"
+        @eatDelete="eatDelete($event)"
       />
       <FoodRegisterDialog ref="dlg" :number="num" @reGet="getFoodInfo" />
       <FoodEditDialog ref="editDlg" :food-info="editData" />
@@ -99,7 +100,12 @@
                             </v-icon>
                           </v-btn>
                           <v-btn icon>
-                            <v-icon color="red darken-3"> mdi-delete </v-icon>
+                            <v-icon
+                              color="red darken-3"
+                              @click="deleteDlgView(index)"
+                            >
+                              mdi-delete
+                            </v-icon>
                           </v-btn>
                         </v-list-item-icon>
                       </v-list-item-action>
@@ -136,47 +142,9 @@ export default {
     FoodEditDialog,
   },
   middleware: 'auth',
-  // async asyncData({ $axios, $moment, redirect }) {
-  //   try {
-  //     const today = $moment().format('YYYY-MM-DD')
-  //     const url = '/api/v1/food_eat/' + today
-  //     const response = await $axios.get(url)
-  //     const calorieArray = response.data.data.map(
-  //       (attribute) => attribute.attributes.calorie
-  //     )
-  //     const todayCalorie = calorieArray.reduce(function (a, b) {
-  //       return a + b
-  //     })
-  //     const proteinArray = response.data.data.map(
-  //       (attribute) => attribute.attributes.protein
-  //     )
-  //     const todayProtein = proteinArray.reduce(function (a, b) {
-  //       return a + b
-  //     })
-  //     const lipidArray = response.data.data.map(
-  //       (attribute) => attribute.attributes.lipid
-  //     )
-  //     const todayLipid = lipidArray.reduce(function (a, b) {
-  //       return a + b
-  //     })
-  //     const carbohydrateArray = response.data.data.map(
-  //       (attribute) => attribute.attributes.carbohydrate
-  //     )
-  //     const todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
-  //       return a + b
-  //     })
-  //     return {
-  //       todayCalorie,
-  //       todayProtein,
-  //       todayLipid,
-  //       todayCarbohydrate,
-  //     }
-  //   } catch (err) {
-  //     return redirect('/')
-  //   }
-  // },
   data() {
     return {
+      type: null,
       num: '',
       todayCalorie: 0,
       todayProtein: 0,
@@ -195,6 +163,11 @@ export default {
       editData: null,
     }
   },
+  watch: {
+    data(ref) {
+      console.log(ref)
+    },
+  },
   created() {
     this.getFoodInfo()
     this.getGuideline()
@@ -212,6 +185,7 @@ export default {
     },
     dlgUp() {},
     code_confirm_dialog() {
+      this.type = 'foodRegister'
       this.$refs.dialog.isDisplay = true
     },
     getFoodInfo() {
@@ -220,31 +194,37 @@ export default {
       const url = '/api/v1/food_eat/' + today
       this.$axios.get(url).then((response) => {
         console.log(response)
-        const calorieArray = response.data.data.map(
-          (attribute) => attribute.attributes.calorie
-        )
-        this.todayCalorie = calorieArray.reduce(function (a, b) {
-          return a + b
-        })
-        const proteinArray = response.data.data.map(
-          (attribute) => attribute.attributes.protein
-        )
-        this.todayProtein = proteinArray.reduce(function (a, b) {
-          return a + b
-        })
-        const lipidArray = response.data.data.map(
-          (attribute) => attribute.attributes.lipid
-        )
-        this.todayLipid = lipidArray.reduce(function (a, b) {
-          return a + b
-        })
-        const carbohydrateArray = response.data.data.map(
-          (attribute) => attribute.attributes.carbohydrate
-        )
-        this.todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
-          return a + b
-        })
-        this.data = response.data.data.slice().reverse()
+        if (response.data.data.length) {
+          const calorieArray = response.data.data.map(
+            (attribute) => attribute.attributes.calorie
+          )
+          this.todayCalorie = calorieArray.reduce(function (a, b) {
+            return a + b
+          })
+          const proteinArray = response.data.data.map(
+            (attribute) => attribute.attributes.protein
+          )
+          this.todayProtein = proteinArray.reduce(function (a, b) {
+            return a + b
+          })
+          const lipidArray = response.data.data.map(
+            (attribute) => attribute.attributes.lipid
+          )
+          this.todayLipid = lipidArray.reduce(function (a, b) {
+            return a + b
+          })
+          const carbohydrateArray = response.data.data.map(
+            (attribute) => attribute.attributes.carbohydrate
+          )
+          this.todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
+            return a + b
+          })
+          this.data = response.data.data.slice().reverse()
+        } else {
+          this.reset()
+          this.today = today
+          this.getGuideline()
+        }
       })
     },
     getGuideline() {
@@ -261,7 +241,23 @@ export default {
       this.editData = item
       this.$refs.editDlg.isDisplay = true
     },
-    // deleteDlgView() {},
+    deleteDlgView(index) {
+      this.type = 'eatDelete'
+      this.$refs.dialog.id = index
+      this.$refs.dialog.isDisplay = true
+    },
+    eatDelete(id) {
+      const eatData = this.data[id]
+      console.log(eatData.id)
+      const url = '/api/v1/food_eat/' + eatData.id
+      this.$axios.delete(url).then((response) => {
+        console.log(response)
+        this.getFoodInfo()
+      })
+    },
+    reset() {
+      Object.assign(this.$data, this.$options.data())
+    },
   },
 }
 </script>

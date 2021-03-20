@@ -39,6 +39,12 @@
                 <v-btn v-if="type === 'postDelete'" color="red" @click="submit"
                   >OK</v-btn
                 >
+                <v-btn
+                  v-if="type === 'eatDelete'"
+                  color="red"
+                  @click="eatSubmit"
+                  >OK</v-btn
+                >
               </v-col>
             </v-row>
           </v-card-actions>
@@ -59,6 +65,7 @@ export default {
     title: '',
     tab: 0,
     items: [''],
+    id: null,
   }),
   mounted() {
     if (this.type === 'postDelete') {
@@ -66,6 +73,9 @@ export default {
     }
     if (this.type === 'foodRegister') {
       this.items = ['バーコードはありますか？']
+    }
+    if (this.type === 'eatDelete') {
+      this.items = ['削除しますか？']
     }
   },
   methods: {
@@ -86,6 +96,10 @@ export default {
     no_code() {
       this.isDisplay = false
       this.$emit('no_code')
+    },
+    eatSubmit() {
+      this.isDisplay = false
+      this.$emit('eatDelete', this.id)
     },
   },
 }
