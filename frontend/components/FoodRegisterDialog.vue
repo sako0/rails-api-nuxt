@@ -603,6 +603,7 @@ export default {
           lipid: this.lipid_total,
           carbohydrate: this.carbohydrate_total,
           percent: this.begin,
+          date: this.calendarDate,
         }
       }
       await this.$axios.post(url, data, { headers }).then((response) => {})
