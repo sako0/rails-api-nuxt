@@ -59,13 +59,13 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-row v-if="index === 1">
+          <v-row v-else>
             <v-col cols="12" class="mt-5">
               <v-card>
                 <v-card-title>今日食べた物一覧</v-card-title>
                 <v-list two-line>
                   <template v-for="(item, index) in data">
-                    <v-list-item :key="item.attributes.product_name">
+                    <v-list-item :key="index">
                       <v-list-item-content>
                         <v-list-item-title
                           class="blue--text"
@@ -106,8 +106,8 @@
                     </v-list-item>
 
                     <v-divider
-                      v-if="index < todayItems.length - 1"
-                      :key="index"
+                      v-if="index < data.length - 1"
+                      :key="`second-${index}`"
                     ></v-divider>
                   </template>
                 </v-list>
@@ -189,41 +189,8 @@ export default {
       today: null,
       tab: 0,
       items: ['登録', 'リスト'],
-      selected: [2],
-      todayItems: [
-        {
-          action: '15 min',
-          headline: 'Brunch this weekend?',
-          subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-          title: 'Ali Connors',
-        },
-        {
-          action: '2 hr',
-          headline: 'Summer BBQ',
-          subtitle: `Wish I could come, but I'm out of town this weekend.`,
-          title: 'me, Scrott, Jennifer',
-        },
-        {
-          action: '6 hr',
-          headline: 'Oui oui',
-          subtitle: 'Do you have Paris recommendations? Have you ever been?',
-          title: 'Sandra Adams',
-        },
-        {
-          action: '12 hr',
-          headline: 'Birthday gift',
-          subtitle:
-            'Have any ideas about what we should get Heidi for her birthday?',
-          title: 'Trevor Hansen',
-        },
-        {
-          action: '18hr',
-          headline: 'Recipe to try',
-          subtitle:
-            'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
-          title: 'Britta Holt',
-        },
-      ],
+      selected: [],
+      todayItems: [],
       data: null,
       editData: null,
     }
@@ -277,7 +244,7 @@ export default {
         this.todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
           return a + b
         })
-        this.data = response.data.data
+        this.data = response.data.data.slice().reverse()
       })
     },
     getGuideline() {
