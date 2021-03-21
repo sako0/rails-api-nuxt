@@ -212,7 +212,7 @@ class User < ApplicationRecord
       url = URI.parse("https://publicdomainq.net/images/201710/07s/publicdomainq-0014143ddc.jpg")
       filename = File.basename(url.path)
       image = URI.open(url)
-      self.back_ground.attach(io: image, filename: 'photo4.jpg')
+      self.back_ground.attach(io: image, filename: filename)
     end
   end
 end
