@@ -41,12 +41,18 @@
                 <v-btn @click="isDisplay = false">Close</v-btn>
               </v-col>
               <v-col cols="6" class="text-right">
-                <v-btn v-if="type === 'postDelete'" color="red" @click="submit"
+                <v-btn
+                  v-if="type === 'postDelete'"
+                  dark
+                  color="red"
+                  @click="submit"
                   >OK</v-btn
                 >
                 <v-btn
                   v-if="type === 'eatDelete'"
+                  dark
                   color="red"
+                  elevation="6"
                   @click="eatSubmit"
                   >OK</v-btn
                 >

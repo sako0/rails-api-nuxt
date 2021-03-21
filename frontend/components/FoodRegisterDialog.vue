@@ -257,7 +257,9 @@
                       <v-btn @click="closeDisplay">Close</v-btn>
                     </v-col>
                     <v-col cols="6" class="text-right">
-                      <v-btn color="blue" dark @click="nextTab">次へ</v-btn>
+                      <v-btn color="blue" dark elevation="6" @click="nextTab"
+                        >次へ</v-btn
+                      >
                     </v-col>
                   </v-row>
                 </v-card-actions>
@@ -384,6 +386,7 @@
                         color="green darken-1"
                         dark
                         :disabled="invalid"
+                        elevation="6"
                         @click="submit"
                       >
                         OK

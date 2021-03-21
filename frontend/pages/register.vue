@@ -109,6 +109,7 @@
                           <v-btn icon>
                             <v-icon
                               color="red darken-3"
+                              elevation="5"
                               @click="deleteDlgView(index)"
                             >
                               mdi-delete
@@ -261,6 +262,7 @@ export default {
         console.log(response)
         this.reset()
         this.getFoodInfo()
+        this.getGuideline()
       })
     },
     reset() {

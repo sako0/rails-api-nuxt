@@ -42,7 +42,14 @@
         </v-row>
       </template>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app dark color="green darken-1">
+    <v-app-bar
+      :clipped-left="clipped"
+      fixed
+      app
+      dark
+      color="green darken-1"
+      elevation="6"
+    >
       <v-btn
         icon
         class="d-none d-lg-block"
@@ -50,43 +57,9 @@
       >
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <!--      <v-btn icon @click.stop="clipped = !clipped">-->
-      <!--        <v-icon>mdi-application</v-icon>-->
-      <!--      </v-btn>-->
-      <!--      <v-btn icon @click.stop="fixed = !fixed">-->
-      <!--        <v-icon>mdi-minus</v-icon>-->
-      <!--      </v-btn>-->
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
-      <!--      <div class="text-center">-->
-      <!--        <v-menu offset-y>-->
-      <!--          <template #activator="{ on, attrs }">-->
-      <!--            <v-btn class="mx-2" fab dark color="gray" v-bind="attrs" v-on="on">-->
-      <!--              <v-icon dark>mdi-format-list-bulleted-square</v-icon>-->
-      <!--            </v-btn>-->
-      <!--          </template>-->
-      <!--          <v-list>-->
-      <!--            <v-list-item-->
-      <!--              v-for="(item, index) in userMenus"-->
-      <!--              :key="index"-->
-      <!--              @click="logout()"-->
-      <!--            >-->
-      <!--              <v-list-item-title>{{ item.title }}</v-list-item-title>-->
-      <!--            </v-list-item>-->
-      <!--          </v-list>-->
-      <!--        </v-menu>-->
-      <!--      </div>-->
-
-      <!--      <v-btn-->
-      <!--        class="mx-2"-->
-      <!--        fab-->
-      <!--        dark-->
-      <!--        color="gray"-->
-      <!--        @click.stop="rightDrawer = !rightDrawer"-->
-      <!--      >-->
-      <!--        <v-icon dark color="teal accent-2">mdi-account-check</v-icon>-->
-      <!--      </v-btn>-->
     </v-app-bar>
     <v-main>
       <v-container>
@@ -100,7 +73,7 @@
     <!--        </v-list-item>-->
     <!--      </v-list>-->
     <!--    </v-navigation-drawer>-->
-    <v-footer :absolute="!fixed" app color="green darken-1" dark>
+    <v-footer :absolute="!fixed" app color="green darken-1" dark elevation="20">
       <v-row justify="center" class="d-lg-none">
         <v-col cols="3">
           <v-btn text to="/register"><v-icon>mdi-pencil-plus</v-icon></v-btn>
