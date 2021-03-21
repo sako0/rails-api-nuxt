@@ -57,7 +57,8 @@
       >
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-toolbar-title v-text="title" />
+      <v-icon dark>mdi-bee-flower</v-icon>
+      <v-toolbar-title class="font-weight-black" v-text="title" />
       <v-spacer />
       <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
     </v-app-bar>
@@ -153,5 +154,6 @@ export default {
 <style scoped>
 .v-application {
   background-color: cornsilk;
+  font-family: 'Hachi Maru Pop', cursive;
 }
 </style>
