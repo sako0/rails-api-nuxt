@@ -37,7 +37,7 @@
         <v-col class="pa-1">
           <v-list-item color="rgba(0, 0, 0, .4)" dark>
             <v-list-item-content>
-              <v-list-item-title class="title">
+              <v-list-item-title class="font-weight-bold">
                 {{ userComputed.user.name }}
               </v-list-item-title>
               <v-list-item-subtitle

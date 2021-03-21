@@ -2,74 +2,37 @@
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
       <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
+        <v-card-title class="font-weight-bold">
+          ダイエットリーダへようこそ！
         </v-card-title>
+        <v-card-text> 日々の食事のカロリー等を記録するアプリです </v-card-text>
         <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
+          ダイエットをしよう！と決意したら必須になってくるのが、日々の食事の記録。私自身もこれまで何度か摂取カロリーを記録するアプリなどを試してきたのですが、毎回何かを食べるたびにカロリーや栄養素など記録するというのが結構手間で、長く続きませんでした・・・
         </v-card-text>
+        <v-card-text>
+          でもダイエットは成功させたいし・・・というわけでなるべくカロリー入力の手間をなくすというコンセプトで開発したのがこのアプリです！
+        </v-card-text>
+        <v-card-text> 使い方はこんな感じです↓ </v-card-text>
+        <v-card-text>
+          １.食品に記載されているバーコードをスマホのカメラで読み取る
+        </v-card-text>
+        <v-card-text> ２.カロリーなどの情報を入力して保存 </v-card-text>
+        <v-card-text>
+          一度入力したバーコードの情報は自分だけではなく全てのユーザが使えるようになります！
+          誰かが同じ商品を登録していたら、
+          <p class="font-weight-bold">
+            カロリー等を入力しなくても、バーコード読み取り→保存だけで自動で栄養素等を登録できるようになります！
+          </p>
+        </v-card-text>
+        <v-card-text>
+          どんどん時短して浮いた時間でドーナツでも食べましょう！
+        </v-card-text>
+
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
+          <v-btn dark color="green lighten-1" nuxt to="/register">
+            始める！
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>

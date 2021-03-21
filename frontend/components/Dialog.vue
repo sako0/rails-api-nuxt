@@ -13,7 +13,7 @@
             <v-col cols="1" sm="1" md="1" lg="1" xl="1"> </v-col>
             <v-col cols="4" sm="4" md="4" lg="4" xl="4" class="text-center">
               <v-btn
-                class="text-caption"
+                class="font-weight-light"
                 dark
                 color="green darken-1"
                 @click="code_exist"
@@ -25,7 +25,7 @@
             <v-col cols="1" sm="1" md="1" lg="1" xl="1"> </v-col>
             <v-col cols="4" sm="4" md="4" lg="4" xl="4">
               <v-btn
-                class="text-caption"
+                class="font-weight-light"
                 dark
                 color="green darken-1"
                 @click="no_code"
