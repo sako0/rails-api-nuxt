@@ -67,23 +67,29 @@ export default {
     items: [''],
     id: null,
   }),
-  mounted() {
-    if (this.type === 'postDelete') {
-      this.items = ['投稿を削除しますか？']
-    }
-    if (this.type === 'foodRegister') {
-      this.items = ['バーコードはありますか？']
-    }
-    if (this.type === 'eatDelete') {
-      this.items = ['削除しますか？']
-    }
+  watch: {
+    type(val) {
+      switch (val) {
+        case 'postDelete':
+          this.items = ['投稿を削除しますか？']
+          break
+        case 'foodRegister':
+          this.items = ['バーコードはありますか？']
+          break
+        case 'eatDelete':
+          this.items = ['削除しますか？']
+          break
+      }
+    },
   },
   methods: {
     submit() {
       this.isDisplay = false
+      this.reset()
       this.$emit('method')
     },
     closeDisplay() {
+      this.reset()
       this.isDisplay = false
     },
     code_exist() {
@@ -92,14 +98,20 @@ export default {
       setTimeout(() => {
         this.$emit('code_exist')
       }, 200)
+      this.reset()
     },
     no_code() {
       this.isDisplay = false
       this.$emit('no_code')
+      this.reset()
     },
     eatSubmit() {
       this.isDisplay = false
       this.$emit('eatDelete', this.id)
+      this.reset()
+    },
+    reset() {
+      Object.assign(this.$data, this.$options.data())
     },
   },
 }

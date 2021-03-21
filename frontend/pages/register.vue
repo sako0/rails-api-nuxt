@@ -10,7 +10,7 @@
         @eatDelete="eatDelete($event)"
       />
       <FoodRegisterDialog ref="dlg" :number="num" @reGet="getFoodInfo" />
-      <FoodEditDialog ref="editDlg" :food-info="editData" />
+      <FoodEditDialog ref="editDlg" :food-info="editData" @eatEdit="eatEdit" />
       <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
         <v-tabs-slider color="light-blue darken-1"></v-tabs-slider>
         <v-tab v-for="item in items" :key="item">
@@ -163,11 +163,6 @@ export default {
       editData: null,
     }
   },
-  watch: {
-    data(ref) {
-      console.log(ref)
-    },
-  },
   created() {
     this.getFoodInfo()
     this.getGuideline()
@@ -241,6 +236,11 @@ export default {
       this.editData = item
       this.$refs.editDlg.isDisplay = true
     },
+    eatEdit() {
+      this.reset()
+      this.getFoodInfo()
+      this.getGuideline()
+    },
     deleteDlgView(index) {
       this.type = 'eatDelete'
       this.$refs.dialog.id = index
@@ -252,6 +252,7 @@ export default {
       const url = '/api/v1/food_eat/' + eatData.id
       this.$axios.delete(url).then((response) => {
         console.log(response)
+        this.reset()
         this.getFoodInfo()
       })
     },

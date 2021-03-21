@@ -260,9 +260,10 @@ export default {
       }
       this.$axios.put(url, data, { headers }).then((response) => {
         console.log(response)
+        this.isDisplay = false
+        this.$emit('eatEdit')
+        this.reset()
       })
-      this.isDisplay = false
-      this.reset()
     },
     reset() {
       Object.assign(this.$data, this.$options.data())
