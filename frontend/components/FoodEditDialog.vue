@@ -9,7 +9,7 @@
             color="basil"
             grow
           >
-            <v-tabs-slider color="light-blue darken-1"></v-tabs-slider>
+            <v-tabs-slider color="transparent"></v-tabs-slider>
             <v-tab v-for="item in items" :key="item">
               {{ item }}
             </v-tab>
@@ -134,7 +134,12 @@
                       ></v-select>
                     </v-col>
                     <v-col cols="3" class="text-right">
-                      <v-btn color="red" :disabled="invalid" @click="submit">
+                      <v-btn
+                        color="green darken-1"
+                        dark
+                        :disabled="invalid"
+                        @click="submit"
+                      >
                         OK
                       </v-btn>
                     </v-col>

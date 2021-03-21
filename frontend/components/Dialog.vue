@@ -15,7 +15,7 @@
               <v-btn
                 class="text-caption"
                 dark
-                color="indigo"
+                color="green darken-1"
                 @click="code_exist"
               >
                 <v-icon dark> mdi-barcode-scan </v-icon>
@@ -24,7 +24,12 @@
             </v-col>
             <v-col cols="1" sm="1" md="1" lg="1" xl="1"> </v-col>
             <v-col cols="4" sm="4" md="4" lg="4" xl="4">
-              <v-btn class="text-caption" dark color="indigo" @click="no_code">
+              <v-btn
+                class="text-caption"
+                dark
+                color="green darken-1"
+                @click="no_code"
+              >
                 <v-icon dark> mdi-barcode-off </v-icon>
                 バーコードなし
               </v-btn>

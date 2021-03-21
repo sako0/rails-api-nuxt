@@ -4,10 +4,8 @@
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
-      color="blue-grey darken-4"
       fixed
       app
-      bottom
     >
       <v-list>
         <v-list-item
@@ -44,7 +42,7 @@
         </v-row>
       </template>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar :clipped-left="clipped" fixed app dark color="green darken-1">
       <v-btn
         icon
         class="d-none d-lg-block"
@@ -102,25 +100,21 @@
     <!--        </v-list-item>-->
     <!--      </v-list>-->
     <!--    </v-navigation-drawer>-->
-    <v-footer :absolute="!fixed" app>
+    <v-footer :absolute="!fixed" app color="green darken-1" dark>
       <v-row justify="center" class="d-lg-none">
         <v-col cols="3">
-          <v-btn text to="/register"
-            ><v-icon dark>mdi-pencil-plus</v-icon></v-btn
-          >
+          <v-btn text to="/register"><v-icon>mdi-pencil-plus</v-icon></v-btn>
         </v-col>
         <v-col cols="3">
           <v-btn text to="/inspire"
-            ><v-icon dark>mdi-notebook-multiple</v-icon></v-btn
+            ><v-icon>mdi-notebook-multiple</v-icon></v-btn
           >
         </v-col>
         <v-col cols="3">
-          <v-btn text to="/"
-            ><v-icon dark>mdi-information-outline</v-icon></v-btn
-          >
+          <v-btn text to="/"><v-icon>mdi-information-outline</v-icon></v-btn>
         </v-col>
         <v-col cols="3">
-          <v-btn text to="/inspire"><v-icon dark>mdi-cog</v-icon></v-btn>
+          <v-btn text to="/inspire"><v-icon>mdi-cog</v-icon></v-btn>
         </v-col>
       </v-row>
       <span class="d-none d-lg-block"
@@ -172,6 +166,9 @@ export default {
       title: 'ダイエットリーダー',
     }
   },
+  mounted() {
+    this.$vuetify.theme.dark = false
+  },
   methods: {
     async logout() {
       await this.$auth.logout() // ログアウト
@@ -180,3 +177,8 @@ export default {
   },
 }
 </script>
+<style scoped>
+.v-application {
+  background-color: cornsilk;
+}
+</style>

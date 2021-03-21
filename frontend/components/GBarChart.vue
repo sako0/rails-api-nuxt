@@ -17,7 +17,7 @@ export default {
         datasets: [
           {
             label: ['摂取量'],
-            backgroundColor: '#00a0ff',
+            backgroundColor: '#45B868',
             data: [
               Math.round(this.protein),
               Math.round(this.lipid),

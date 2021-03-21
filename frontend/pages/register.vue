@@ -11,10 +11,17 @@
       />
       <FoodRegisterDialog ref="dlg" :number="num" @reGet="getFoodInfo" />
       <FoodEditDialog ref="editDlg" :food-info="editData" @eatEdit="eatEdit" />
-      <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
-        <v-tabs-slider color="light-blue darken-1"></v-tabs-slider>
+      <v-tabs
+        v-model="tab"
+        fixed-tabs
+        background-color="green darken-1"
+        dark
+        icons-and-text
+      >
+        <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
         <v-tab v-for="item in items" :key="item">
           {{ item }}
+          <v-icon>mdi-pencil-plus</v-icon>
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
@@ -29,7 +36,7 @@
                       class="mx-2"
                       fab
                       dark
-                      color="indigo"
+                      color="green darken-1"
                       @click="code_confirm_dialog"
                     >
                       <v-icon dark> mdi-plus </v-icon>
@@ -69,7 +76,7 @@
                     <v-list-item :key="index">
                       <v-list-item-content>
                         <v-list-item-title
-                          class="blue--text"
+                          class="green--text"
                           v-text="item.attributes.product_name"
                         ></v-list-item-title>
 
@@ -95,7 +102,7 @@
                         ></v-list-item-action-text>
                         <v-list-item-icon>
                           <v-btn icon @click="editDlgView(item)">
-                            <v-icon color="yellow darken-3">
+                            <v-icon color="green darken-1">
                               mdi-tooltip-edit
                             </v-icon>
                           </v-btn>

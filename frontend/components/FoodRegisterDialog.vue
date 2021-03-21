@@ -5,13 +5,15 @@
         <v-card>
           <v-tabs
             v-model="tab"
-            background-color="transparent"
-            color="basil"
-            grow
+            fixed-tabs
+            background-color="green darken-1"
+            dark
+            icons-and-text
           >
-            <v-tabs-slider color="light-blue darken-1"></v-tabs-slider>
+            <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
             <v-tab v-for="item in items" :key="item">
               {{ item }}
+              <v-icon>mdi-pencil-plus</v-icon>
             </v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
@@ -255,7 +257,7 @@
                       <v-btn @click="closeDisplay">Close</v-btn>
                     </v-col>
                     <v-col cols="6" class="text-right">
-                      <v-btn color="blue" @click="nextTab">次へ</v-btn>
+                      <v-btn color="blue" dark @click="nextTab">次へ</v-btn>
                     </v-col>
                   </v-row>
                 </v-card-actions>
@@ -378,7 +380,12 @@
                       ></v-select>
                     </v-col>
                     <v-col cols="3" class="text-right">
-                      <v-btn color="red" :disabled="invalid" @click="submit">
+                      <v-btn
+                        color="green darken-1"
+                        dark
+                        :disabled="invalid"
+                        @click="submit"
+                      >
                         OK
                       </v-btn>
                     </v-col>

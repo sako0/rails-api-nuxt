@@ -1,9 +1,9 @@
 <template>
   <v-card class="mx-auto" max-width="500" elevation="24">
     <Dialog ref="dlg" type="postDelete" @method="deletePost" />
-    <v-system-bar color="indigo darken-2" dark> </v-system-bar>
+    <v-system-bar color="green darken-2" dark> </v-system-bar>
 
-    <v-toolbar color="indigo" dark>
+    <v-toolbar color="green darken-1" dark>
       <v-btn icon>
         <v-icon>mdi-pencil-plus</v-icon>
       </v-btn>

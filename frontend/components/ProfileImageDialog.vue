@@ -162,7 +162,8 @@
                     <v-btn
                       class="mr-4"
                       :disabled="invalid"
-                      color="orange darken-3"
+                      dark
+                      color="green darken-1"
                       @click="submit"
                     >
                       更新

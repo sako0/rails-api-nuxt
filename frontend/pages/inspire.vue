@@ -1,15 +1,6 @@
 <template>
   <v-row>
     <v-col class="center">
-      <!--      <img src="/v.png" alt="Vuetify.js" class="mb-5" />-->
-      <v-parallax
-        height="100"
-        src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg"
-      >
-        <blockquote class="blockquote text-left">
-          Welcome. {{ currentUser.user.name }}.
-        </blockquote>
-      </v-parallax>
       <v-row>
         <v-col cols="12" sm="12" md="4" lg="4" xl="4">
           <v-row class="mt-5">
