@@ -213,6 +213,7 @@ export default {
       { text: 1000 },
     ],
     begin: null,
+    percent_base: null,
     calendarDate: null,
     dateMenu: false,
   }),
@@ -226,19 +227,21 @@ export default {
         this.protein = this.$props.foodInfo.attributes.protein
         this.lipid = this.$props.foodInfo.attributes.lipid
         this.carbohydrate = this.$props.foodInfo.attributes.carbohydrate
+        this.percent_base = this.$props.foodInfo.attributes.percent
         this.begin = this.$props.foodInfo.attributes.percent
         this.calendarDate = this.$props.foodInfo.attributes.date
-        this.calorie_total = (this.calorie * this.begin) / 100
-        this.protein_total = (this.protein * this.begin) / 100
-        this.lipid_total = (this.lipid * this.begin) / 100
-        this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
+        this.calorie_total = (this.calorie * this.begin) / this.percent_base
+        this.protein_total = (this.protein * this.begin) / this.percent_base
+        this.lipid_total = (this.lipid * this.begin) / this.percent_base
+        this.carbohydrate_total =
+          (this.carbohydrate * this.begin) / this.percent_base
       }
     },
     begin(val) {
-      this.calorie_total = (this.calorie * val) / 100
-      this.protein_total = (this.protein * val) / 100
-      this.lipid_total = (this.lipid * val) / 100
-      this.carbohydrate_total = (this.carbohydrate * val) / 100
+      this.calorie_total = (this.calorie * val) / this.percent_base
+      this.protein_total = (this.protein * val) / this.percent_base
+      this.lipid_total = (this.lipid * val) / this.percent_base
+      this.carbohydrate_total = (this.carbohydrate * val) / this.percent_base
     },
   },
   methods: {
