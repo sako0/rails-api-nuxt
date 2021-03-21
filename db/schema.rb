@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_120436) do
     t.float "lipid", null: false
     t.float "carbohydrate", null: false
     t.float "percent", null: false
+    t.date "date", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_food_eats_on_user_id"
