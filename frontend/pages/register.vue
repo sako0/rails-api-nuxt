@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col class="center">
-      <cameraDialog ref="cameraDlg" @cancel="cancel" @code="code" />
+      <cameraDialog ref="cameraDlg" @code="code" />
       <Dialog
         ref="dialog"
         @code_exist="cameraUp"
@@ -174,7 +174,6 @@ export default {
     this.getGuideline()
   },
   methods: {
-    cancel() {},
     code(code) {
       this.$refs.dlg.reset()
       this.num = code
