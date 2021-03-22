@@ -4,7 +4,6 @@
       <cameraDialog ref="cameraDlg" @cancel="cancel" @code="code" />
       <Dialog
         ref="dialog"
-        :type="type"
         @code_exist="cameraUp"
         @no_code="dlgUp"
         @eatDelete="eatDelete($event)"
@@ -20,7 +19,7 @@
       >
         <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
         <v-tab v-for="item in items" :key="item">
-          {{ item }}
+          <div v-text="item"></div>
           <v-icon>mdi-pencil-plus</v-icon>
         </v-tab>
       </v-tabs>
@@ -152,7 +151,6 @@ export default {
   middleware: 'auth',
   data() {
     return {
-      type: null,
       num: '',
       todayCalorie: 0,
       todayProtein: 0,
@@ -188,7 +186,7 @@ export default {
     },
     dlgUp() {},
     code_confirm_dialog() {
-      this.type = 'foodRegister'
+      this.$refs.dialog.type = 'foodRegister'
       this.$refs.dialog.isDisplay = true
     },
     getFoodInfo() {
@@ -250,7 +248,7 @@ export default {
       this.getGuideline()
     },
     deleteDlgView(index) {
-      this.type = 'eatDelete'
+      this.$refs.dialog.type = 'eatDelete'
       this.$refs.dialog.id = index
       this.$refs.dialog.isDisplay = true
     },

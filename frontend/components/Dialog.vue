@@ -19,7 +19,7 @@
                 @click="code_exist"
               >
                 <v-icon dark> mdi-barcode-scan </v-icon>
-                バーコードあり
+                あり！
               </v-btn>
             </v-col>
             <v-col cols="1" sm="1" md="1" lg="1" xl="1"> </v-col>
@@ -31,9 +31,10 @@
                 @click="no_code"
               >
                 <v-icon dark> mdi-barcode-off </v-icon>
-                バーコードなし
+                なし！
               </v-btn>
             </v-col>
+            <v-col cols="12"> </v-col>
           </v-row>
           <v-card-actions>
             <v-row justify="center">
@@ -68,7 +69,6 @@
 <script>
 export default {
   props: {
-    type: String,
     content: String,
   },
   data: () => ({
@@ -77,6 +77,7 @@ export default {
     tab: 0,
     items: [''],
     id: null,
+    type: null,
   }),
   watch: {
     type(val) {
