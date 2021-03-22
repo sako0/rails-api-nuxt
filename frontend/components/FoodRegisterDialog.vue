@@ -11,16 +11,36 @@
             icons-and-text
           >
             <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
-            <v-tab v-for="item in items" :key="item">
-              {{ item }}
-              <v-icon>mdi-pencil-plus</v-icon>
+            <v-tab v-for="(item, index) in items" :key="`first-` + index">
+              {{ item.title }}
+              <v-icon>{{ item.icon }}</v-icon>
             </v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
-            <v-tab-item v-for="(item, index) in items" :key="item">
+            <v-tab-item v-for="(item, index) in items" :key="`second-` + index">
               <v-card v-if="index === 0" color="basil" flat>
-                <v-card-title>{{ item }}</v-card-title>
+                <v-card-title>{{ item.title }}</v-card-title>
                 <v-row justify="center">
+                  <v-col cols="5" class="text-center">
+                    <v-btn
+                      v-if="func !== 'web' && fix === false"
+                      dark
+                      color="green darken-1"
+                      @click="manualFix"
+                    >
+                      手動入力
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="6" class="text-center">
+                    <v-btn
+                      v-if="func !== 'web'"
+                      dark
+                      color="green darken-1"
+                      @click="codeSearch"
+                    >
+                      バーコード検索
+                    </v-btn>
+                  </v-col>
                   <v-col v-if="func === 'web' || fix" cols="11">
                     <validation-provider
                       v-slot="{ errors }"
@@ -36,7 +56,7 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col v-if="func === 'my' && fix === false" cols="11">
+                  <v-col v-if="func !== 'web' && fix === false" cols="11">
                     <v-text-field
                       v-model="productName"
                       append-icon="mdi-briefcase"
@@ -59,7 +79,7 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col v-if="func === 'my' && fix === false" cols="11">
+                  <v-col v-if="func !== 'web' && fix === false" cols="11">
                     <v-text-field
                       v-model="par"
                       append-icon="mdi-beaker"
@@ -99,7 +119,7 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="func === 'my' && fix === false"
+                    v-if="func !== 'web' && fix === false"
                     cols="5"
                     sm="5"
                     md="5"
@@ -139,7 +159,7 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="func === 'my' && fix === false"
+                    v-if="func !== 'web' && fix === false"
                     cols="5"
                     sm="5"
                     md="5"
@@ -180,7 +200,7 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="func === 'my' && fix === false"
+                    v-if="func !== 'web' && fix === false"
                     cols="5"
                     sm="5"
                     md="5"
@@ -220,7 +240,7 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="func === 'my' && fix === false"
+                    v-if="func !== 'web' && fix === false"
                     cols="5"
                     sm="5"
                     md="5"
@@ -237,18 +257,6 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="1"> </v-col>
-                  <v-col v-if="func === 'web' || fix" cols="10">
-                    <v-file-input
-                      v-model="image"
-                      accept="image/jpeg,image/png,image/bmp"
-                      placeholder="画像を選択して下さい"
-                      @change="Preview_image"
-                    >
-                    </v-file-input>
-                  </v-col>
-                  <v-col cols="11">
-                    <v-img v-if="url" :src="url"></v-img>
-                  </v-col>
                 </v-row>
 
                 <v-card-actions>
@@ -265,7 +273,7 @@
                 </v-card-actions>
               </v-card>
               <v-card v-if="index === 1" color="basil" flat>
-                <v-card-title>{{ item }}</v-card-title>
+                <v-card-title>{{ item.title }}</v-card-title>
                 <v-row justify="center">
                   <v-col cols="11" sm="11" md="11" lg="11" xl="11">
                     <v-text-field
@@ -444,10 +452,10 @@ export default {
     carbohydrate_total: null,
     func: null,
     tab: 0,
-    items: ['商品情報', '登録'],
-    url: null,
-    image: null,
-    image_file: null,
+    items: [
+      { title: '商品情報', icon: 'mdi-briefcase-search' },
+      { title: '登録', icon: 'mdi-pencil-plus' },
+    ],
     fix: false,
     post_id: null,
     food_code: null,
@@ -470,7 +478,23 @@ export default {
     calendarDate: null,
     dateMenu: false,
   }),
+  created() {
+    this.begin = 100
+    this.calorie_total = (this.calorie * this.begin) / 100
+    this.protein_total = (this.protein * this.begin) / 100
+    this.lipid_total = (this.lipid * this.begin) / 100
+    this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
+  },
   watch: {
+    isDisplay(val) {
+      if (val) {
+        this.begin = 100
+        this.calorie_total = (this.calorie * this.begin) / 100
+        this.protein_total = (this.protein * this.begin) / 100
+        this.lipid_total = (this.lipid * this.begin) / 100
+        this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
+      }
+    },
     calorie(val) {
       this.calorie_total = (val * this.begin) / 100
     },
@@ -482,47 +506,6 @@ export default {
     },
     carbohydrate(val) {
       this.carbohydrate_total = (val * this.begin) / 100
-    },
-    isDisplay(val) {
-      if (val) {
-        console.log(this.$props.number)
-        this.$axios
-          .get('/api/v1/foods/' + this.$props.number)
-          .then((response) => {
-            if (response.data) {
-              if (response.data.web_search) {
-                if (response.data.content) {
-                  console.log(response.data)
-                  this.productName = response.data.product_name
-                  this.food_code = this.$props.number
-                  this.par = response.data.par
-                  this.calorie = response.data.calorie
-                  this.protein = response.data.protein
-                  this.lipid = response.data.lipid
-                  this.carbohydrate = response.data.carbohydrate
-                }
-                this.func = 'web'
-              } else {
-                console.log(response.data)
-                this.productName = response.data.data.attributes.product_name
-                this.par = response.data.data.attributes.par
-                this.calorie = response.data.data.attributes.calorie
-                this.protein = response.data.data.attributes.protein
-                this.lipid = response.data.data.attributes.lipid
-                this.carbohydrate = response.data.data.attributes.carbohydrate
-                this.url = response.data.data.attributes.image
-                this.post_id = parseInt(response.data.data.id)
-                this.food_code = this.$props.number
-                if (response.data.data.attributes.func === 'my') {
-                  this.func = 'my'
-                  this.tab = 1
-                }
-              }
-            } else {
-              console.log(response)
-            }
-          })
-      }
     },
     begin(val) {
       this.calorie_total = (this.calorie * val) / 100
@@ -546,9 +529,6 @@ export default {
         data.append('food_posts[protein]', this.protein)
         data.append('food_posts[lipid]', this.lipid)
         data.append('food_posts[carbohydrate]', this.carbohydrate)
-        if (this.image_file) {
-          data.append('food_posts[image]', this.image_file)
-        }
         const headers = { 'content-type': 'multipart/form-data' }
         await this.$axios.post(url, data, { headers }).then((response) => {
           this.post_id = response.data
@@ -570,28 +550,19 @@ export default {
       this.isDisplay = false
       this.reset()
     },
-    Preview_image(e) {
-      if (e !== null) {
-        this.image_file = e
-        this.url = URL.createObjectURL(this.image)
-      } else {
-        this.url = ''
-      }
-    },
     async post_used() {
       const url = '/api/v1/foods'
       const headers = { 'content-type': 'application/json' }
       let data = ''
-      if (this.func === 'my') {
+      if (this.func === 'my' || this.func === 'web') {
         data = {
           func: 'my',
           food_code: this.$props.number,
           food_post_id: this.post_id,
         }
-      }
-      if (this.func === 'web') {
+      } else if (this.func === 'used') {
         data = {
-          func: 'my',
+          func: 'used',
           food_code: this.$props.number,
           food_post_id: this.post_id,
         }
@@ -601,22 +572,26 @@ export default {
     async food_eat() {
       const url = '/api/v1/food_eat'
       const headers = { 'content-type': 'application/json' }
-      let data = ''
-      if (this.func === 'my' || this.func === 'web') {
-        data = {
-          food_code: this.$props.number,
-          food_post_id: this.post_id,
-          product_name: this.productName,
-          par: this.par,
-          calorie: this.calorie_total,
-          protein: this.protein_total,
-          lipid: this.lipid_total,
-          carbohydrate: this.carbohydrate_total,
-          percent: this.begin,
-          date: this.calendarDate,
-        }
+      const data = {
+        food_code: this.$props.number,
+        product_name: this.productName,
+        par: this.par,
+        calorie: this.calorie_total,
+        protein: this.protein_total,
+        lipid: this.lipid_total,
+        carbohydrate: this.carbohydrate_total,
+        percent: this.begin,
+        date: this.calendarDate,
       }
       await this.$axios.post(url, data, { headers }).then((response) => {})
+    },
+    codeSearch() {
+      this.isDisplay = false
+      this.$emit('codeSearch', this.$props.number)
+    },
+    manualFix() {
+      this.fix = true
+      this.func = 'my'
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

@@ -30,7 +30,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn dark color="green lighten-1" nuxt to="/register">
+          <v-btn dark color="green darken-1" nuxt to="/register">
             始める！
           </v-btn>
         </v-card-actions>

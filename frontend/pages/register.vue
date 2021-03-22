@@ -1,16 +1,25 @@
 <template>
   <v-row>
     <v-col class="center">
-      <cameraDialog ref="cameraDlg" @cancel="cancel" @code="code" />
+      <cameraDialog ref="cameraDlg" @code="code" />
       <Dialog
         ref="dialog"
-        :type="type"
         @code_exist="cameraUp"
         @no_code="dlgUp"
         @eatDelete="eatDelete($event)"
       />
-      <FoodRegisterDialog ref="dlg" :number="num" @reGet="getFoodInfo" />
+      <FoodRegisterDialog
+        ref="dlg"
+        :number="num"
+        @reGet="getFoodInfo"
+        @codeSearch="codeSearch($event)"
+      />
       <FoodEditDialog ref="editDlg" :food-info="editData" @eatEdit="eatEdit" />
+      <FoodRegisterListDialog
+        ref="listDlg"
+        :lists="lists"
+        @selectedItem="selectedItem($event)"
+      />
       <v-tabs
         v-model="tab"
         fixed-tabs
@@ -19,13 +28,13 @@
         icons-and-text
       >
         <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
-        <v-tab v-for="item in items" :key="item">
-          {{ item }}
-          <v-icon>mdi-pencil-plus</v-icon>
+        <v-tab v-for="(item, index) in items" :key="`first-` + index">
+          <div v-text="item.title"></div>
+          <v-icon>{{ item.icon }}</v-icon>
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
-        <v-tab-item v-for="(item, index) in items" :key="item">
+        <v-tab-item v-for="(item, index) in items" :key="`second-` + index">
           <v-row v-if="index === 0">
             <v-col cols="12" class="mt-5">
               <v-card>
@@ -121,7 +130,7 @@
 
                     <v-divider
                       v-if="index < data.length - 1"
-                      :key="`second-${index}`"
+                      :key="`third-` + index"
                     ></v-divider>
                   </template>
                 </v-list>
@@ -140,6 +149,7 @@ import Dialog from '@/components/Dialog'
 import KcalBarChart from '@/components/KcalBarChart'
 import GBarChart from '@/components/GBarChart'
 import FoodEditDialog from '@/components/FoodEditDialog'
+import FoodRegisterListDialog from '@/components/FoodRegisterListDialog'
 export default {
   components: {
     CameraDialog,
@@ -148,12 +158,12 @@ export default {
     KcalBarChart,
     GBarChart,
     FoodEditDialog,
+    FoodRegisterListDialog,
   },
   middleware: 'auth',
   data() {
     return {
-      type: null,
-      num: '',
+      num: null,
       todayCalorie: 0,
       todayProtein: 0,
       todayLipid: 0,
@@ -164,11 +174,15 @@ export default {
       carbohydrateGuideline: 0,
       today: null,
       tab: 0,
-      items: ['登録', 'リスト'],
+      items: [
+        { title: '登録', icon: 'mdi-pencil-plus' },
+        { title: 'リスト', icon: 'mdi-file-document' },
+      ],
       selected: [],
       todayItems: [],
       data: null,
       editData: null,
+      lists: null,
     }
   },
   created() {
@@ -176,19 +190,63 @@ export default {
     this.getGuideline()
   },
   methods: {
-    cancel() {},
     code(code) {
-      this.num = code
       this.$refs.dlg.reset()
-      this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
-      this.$refs.dlg.isDisplay = true
+      this.num = code
+      this.$axios.get('/api/v1/foods/' + this.num).then((response) => {
+        this.dlgUp(response)
+      })
     },
     cameraUp() {
       this.$refs.cameraDlg.isDisplay = true
     },
-    dlgUp() {},
+    dlgUp(response) {
+      console.log(response)
+      if (response.data) {
+        if (response.data.web_search) {
+          if (response.data.content) {
+            this.$refs.dlg.productName = response.data.product_name
+            this.$refs.dlg.par = response.data.par
+            this.$refs.dlg.calorie = response.data.calorie
+            this.$refs.dlg.protein = response.data.protein
+            this.$refs.dlg.lipid = response.data.lipid
+            this.$refs.dlg.carbohydrate = response.data.carbohydrate
+          }
+          this.$refs.dlg.func = 'web'
+          this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
+          this.$refs.dlg.isDisplay = true
+        } else if (response.data.data.length > 0) {
+          console.log(response)
+          this.lists = response.data.data
+          this.$refs.listDlg.isDisplay = true
+        } else {
+          this.$refs.dlg.productName =
+            response.data.data.attributes.product_name
+          this.$refs.dlg.par = response.data.data.attributes.par
+          this.$refs.dlg.calorie = response.data.data.attributes.calorie
+          this.$refs.dlg.protein = response.data.data.attributes.protein
+          this.$refs.dlg.lipid = response.data.data.attributes.lipid
+          this.$refs.dlg.carbohydrate =
+            response.data.data.attributes.carbohydrate
+          this.$refs.dlg.url = response.data.data.attributes.image
+          this.$refs.dlg.post_id = parseInt(response.data.data.id)
+          if (response.data.data.attributes.func === 'my') {
+            this.$refs.dlg.func = 'my'
+            this.$refs.dlg.tab = 1
+          }
+          if (response.data.data.attributes.func === 'used') {
+            this.$refs.dlg.func = 'used'
+            this.$refs.dlg.tab = 1
+          }
+          this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
+          this.$refs.dlg.isDisplay = true
+        }
+      } else {
+        console.log(response)
+      }
+    },
     code_confirm_dialog() {
-      this.type = 'foodRegister'
+      this.$refs.dialog.type = 'foodRegister'
       this.$refs.dialog.isDisplay = true
     },
     getFoodInfo() {
@@ -250,7 +308,7 @@ export default {
       this.getGuideline()
     },
     deleteDlgView(index) {
-      this.type = 'eatDelete'
+      this.$refs.dialog.type = 'eatDelete'
       this.$refs.dialog.id = index
       this.$refs.dialog.isDisplay = true
     },
@@ -263,6 +321,32 @@ export default {
         this.reset()
         this.getFoodInfo()
         this.getGuideline()
+      })
+    },
+    selectedItem(item) {
+      console.log(item)
+      this.$refs.dlg.reset()
+      this.$refs.dlg.func = 'used'
+      this.num = item.attributes.food_code
+      this.$refs.dlg.begin = 100
+      this.$refs.dlg.productName = item.attributes.product_name
+      this.$refs.dlg.par = item.attributes.par
+      this.$refs.dlg.calorie = item.attributes.calorie
+      this.$refs.dlg.protein = item.attributes.protein
+      this.$refs.dlg.lipid = item.attributes.lipid
+      this.$refs.dlg.carbohydrate = item.attributes.carbohydrate
+      this.$refs.dlg.post_id = parseInt(item.id)
+      this.$refs.dlg.tab = 1
+      this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
+      this.$refs.dlg.isDisplay = true
+    },
+    codeSearch(code) {
+      this.$refs.listDlg.reset()
+      this.num = code
+      const url = '/api/v1/get_list_by_code/' + code
+      this.$axios.get(url).then((response) => {
+        this.lists = response.data.data
+        this.$refs.listDlg.isDisplay = true
       })
     },
     reset() {

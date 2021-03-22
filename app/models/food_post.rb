@@ -1,6 +1,6 @@
 class FoodPost < ApplicationRecord
   belongs_to :user
-  has_many :food_post_useds, dependent: :destroy
+  has_many :food_post_useds, foreign_key: "food_post_id", dependent: :destroy
   has_one_attached :image
   default_scope -> { order(created_at: :desc) }
   validates :user_id, presence: true

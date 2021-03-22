@@ -25,6 +25,7 @@ export default {
   data() {
     return {
       isDisplay: false,
+      code: false,
     }
   },
   watch: {
@@ -36,9 +37,18 @@ export default {
         } else {
           // モーダル非表示時、Quaggaを停止
           this.Quagga.stop()
+          if (this.code) {
+            console.log(this.code)
+            this.$emit('code', this.code)
+          }
+          this.reset()
         }
       })
     },
+  },
+  destroyed() {
+    if (this.Quagga) this.Quagga.stop()
+    this.reset()
   },
   methods: {
     initQuagga() {
@@ -117,15 +127,16 @@ export default {
     },
     onClickCancel() {
       this.isDisplay = false
-      this.$emit('cancel', 'cameraCancel')
     },
     onSuccess(code) {
-      console.log(code)
+      this.code = code
       this.isDisplay = false
-      this.$emit('code', code)
     },
     closeDisplay() {
       this.isDisplay = false
+    },
+    reset() {
+      Object.assign(this.$data, this.$options.data())
     },
   },
 }

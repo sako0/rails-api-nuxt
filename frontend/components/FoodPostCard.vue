@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto" max-width="500" elevation="24">
-    <Dialog ref="dlg" type="postDelete" @method="deletePost" />
-    <v-system-bar color="green darken-2" dark> </v-system-bar>
+    <Dialog ref="dlg" @method="deletePost" />
+    <v-system-bar color="green darken-1" dark> </v-system-bar>
 
     <v-toolbar color="green darken-1" dark>
       <v-btn icon>
@@ -24,7 +24,7 @@
           :key="food.title"
           :cols="index === 0 ? 12 : 6"
         >
-          <v-card color="grey darken-2">
+          <v-card color="grey darken-1" dark>
             <v-img
               :src="
                 food.attributes.image
@@ -45,9 +45,7 @@
                   <v-menu offset-y>
                     <template #activator="{ on, attrs }">
                       <v-btn text class="float-right" v-bind="attrs" v-on="on">
-                        <v-icon class="font-weight-regular">
-                          mdi-dots-horizontal
-                        </v-icon>
+                        <v-icon dark> mdi-dots-horizontal </v-icon>
                       </v-btn>
                     </template>
                     <v-list>
@@ -105,26 +103,11 @@ export default {
     foods: Object,
   },
   data: () => ({
-    cards: [
-      {
-        title: 'Pre-fab homes',
-        src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-        flex: 12,
-      },
-      {
-        title: 'Favorite road trips',
-        src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg',
-        flex: 6,
-      },
-      {
-        title: 'Best airlines',
-        src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg',
-        flex: 6,
-      },
-    ],
+    cards: [],
   }),
   methods: {
     openDisplay() {
+      this.$refs.dlg.type = 'postDelete'
       this.$refs.dlg.isDisplay = true
     },
     deletePost() {

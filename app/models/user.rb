@@ -4,13 +4,8 @@ class User < ApplicationRecord
   has_many :food_eats, dependent: :destroy
   has_one :profiles, dependent: :destroy, class_name: "Profile"
   accepts_nested_attributes_for :profiles
-  # active_relation(follower_id)を持つユーザは、それを通して、さらにfollowing_idを持っている。
-  has_many :active_relation, class_name: "FollowRelation", foreign_key: :follower_id, dependent: :destroy
-  has_many :following, through: :active_relation, source: :following
-  # passive_relation(following_id)を持つユーザは、それを通して、さらにfollower_idを持っている。
-  has_many :passive_relation, class_name: "FollowRelation", foreign_key: :following_id, dependent: :destroy
-  has_many :follower, through: :passive_relation, source: :follower
-  has_many :food_post_useds, dependent: :destroy
+  has_many :food_post_useds, class_name: 'FoodPostUsed', foreign_key: "user_id", dependent: :destroy
+  has_many :food_post_used_target, class_name: 'FoodPostUsed', foreign_key: "target_user_id"
   # 画像のアタッチ
   has_one_attached :image
   has_one_attached :back_ground
