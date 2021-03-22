@@ -22,8 +22,8 @@ class FoodPostsSerializer < ActiveModel::Serializer
 
   # コントローラから値を受け取る
   def func
-    if instance_options[:func] == "my"
-      func = "my"
+    if instance_options[:func]
+      func =  instance_options[:func]
     end
   end
 end

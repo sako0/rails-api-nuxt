@@ -10,6 +10,7 @@ class Api::V1::FoodsController < ApplicationController
     elsif @current_user.food_post_useds.find_by(food_code: params[:id])
       used = @current_user.food_post_useds.find_by(food_code: params[:id])
       code = used.food_post
+      logger.error(code)
       render json: code, serializer: FoodPostsSerializer, include: [:user], func: "used"
     elsif FoodPost.find_by(food_code: params[:id])
       list = FoodPost.where(food_code: params[:id])
@@ -20,7 +21,6 @@ class Api::V1::FoodsController < ApplicationController
   end
 
   def get_list_by_code
-    logger.error("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     if FoodPost.find_by(food_code: params[:id])
       list = FoodPost.where(food_code: params[:id])
       render json: list, each_serializer: FoodPostsSerializer, func: "list"
@@ -35,19 +35,30 @@ class Api::V1::FoodsController < ApplicationController
     if params[:food][:func] == "web" || params[:food][:func] == "my"
       @food_post_useds_params = @current_user.food_post_useds.build(food_post_useds_params)
       @food_post_useds_params.target_user_id = @current_user.id
-    elsif params[:food][:func] == "users"
+    elsif params[:food][:func] == "used"
       @food_post_useds_params = @current_user.food_post_useds.build(food_post_useds_params)
       @food_post_useds_params.target_user_id = FoodPost.find(params[:food][:food_post_id]).user_id
     else
       render json: "投稿に失敗しました"
     end
-
-    search_food_code = @current_user.food_post_useds.find_by(food_code: @food_post_useds_params.food_code)
-    if search_food_code
-      search_food_code.updated_at = Time.now
-      search_food_code.update(food_post_useds_params)
-      render json: "更新に成功しました"
-    else
+    if @food_post_useds_params
+      if @food_post_useds_params.target_user_id == @current_user.id
+        # 同じバーコードに対して自分の投稿がふたつ以上ある場合は古いものを削除する
+        if @current_user.food_post_useds.find_by(food_code: @food_post_useds_params.food_code)
+          search_used_code = @current_user.food_post_useds.find_by(food_code: @food_post_useds_params.food_code)
+          search_used_code.destroy
+          if @current_user.food_posts.where(food_code: @food_post_useds_params.food_code).count > 1
+            old_post = @current_user.food_posts.where(food_code: @food_post_useds_params.food_code).order(created_at: "ASK").first
+            old_post.destroy
+          end
+        end
+      else
+        # 自分が使用しているバーコード情報を使わなかった場合はそのPOSTを削除する
+        if @current_user.food_posts.find_by(food_code: @food_post_useds_params.food_code).present?
+          my_old_post = @current_user.food_posts.find_by(food_code: @food_post_useds_params.food_code)
+          my_old_post.delete
+        end
+      end
       if @food_post_useds_params.save
         render json: "投稿に成功しました"
       else
@@ -57,6 +68,8 @@ class Api::V1::FoodsController < ApplicationController
           render json: "不明なエラー"
         end
       end
+    else
+      render json: "投稿に失敗しました"
     end
   end
 
@@ -89,6 +102,6 @@ class Api::V1::FoodsController < ApplicationController
   private
 
   def food_post_useds_params
-    params.require(:food).permit(:id, :user_id, :food_code, :food_post_id)
+    params.require(:food).permit(:id, :food_code, :food_post_id)
   end
 end

@@ -201,11 +201,11 @@ export default {
       this.$refs.cameraDlg.isDisplay = true
     },
     dlgUp(response) {
+      console.log(response)
       if (response.data) {
         if (response.data.web_search) {
           if (response.data.content) {
             this.$refs.dlg.productName = response.data.product_name
-            this.$refs.dlg.food_code = this.num
             this.$refs.dlg.par = response.data.par
             this.$refs.dlg.calorie = response.data.calorie
             this.$refs.dlg.protein = response.data.protein
@@ -218,7 +218,6 @@ export default {
         } else if (response.data.data.length > 0) {
           console.log(response)
           this.lists = response.data.data
-          this.$refs.dlg.food_code = this.num
           this.$refs.listDlg.isDisplay = true
         } else {
           this.$refs.dlg.productName =
@@ -231,7 +230,6 @@ export default {
             response.data.data.attributes.carbohydrate
           this.$refs.dlg.url = response.data.data.attributes.image
           this.$refs.dlg.post_id = parseInt(response.data.data.id)
-          this.$refs.dlg.food_code = this.num
           if (response.data.data.attributes.func === 'my') {
             this.$refs.dlg.func = 'my'
             this.$refs.dlg.tab = 1
@@ -326,7 +324,11 @@ export default {
       })
     },
     selectedItem(item) {
+      console.log(item)
       this.$refs.dlg.reset()
+      this.$refs.dlg.func = 'used'
+      this.num = item.attributes.food_code
+      this.$refs.dlg.begin = 100
       this.$refs.dlg.productName = item.attributes.product_name
       this.$refs.dlg.par = item.attributes.par
       this.$refs.dlg.calorie = item.attributes.calorie
@@ -334,17 +336,15 @@ export default {
       this.$refs.dlg.lipid = item.attributes.lipid
       this.$refs.dlg.carbohydrate = item.attributes.carbohydrate
       this.$refs.dlg.post_id = parseInt(item.id)
-      this.num = item.attributes.food_code
-      this.$refs.dlg.func = 'users'
       this.$refs.dlg.tab = 1
       this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
       this.$refs.dlg.isDisplay = true
     },
     codeSearch(code) {
       this.$refs.listDlg.reset()
+      this.num = code
       const url = '/api/v1/get_list_by_code/' + code
       this.$axios.get(url).then((response) => {
-        this.num = code
         this.lists = response.data.data
         this.$refs.listDlg.isDisplay = true
       })

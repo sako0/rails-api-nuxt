@@ -26,7 +26,7 @@
                       v-if="func !== 'web' && fix === false"
                       dark
                       color="green darken-1"
-                      @click="fix = true"
+                      @click="manualFix"
                     >
                       手動入力
                     </v-btn>
@@ -478,7 +478,23 @@ export default {
     calendarDate: null,
     dateMenu: false,
   }),
+  created() {
+    this.begin = 100
+    this.calorie_total = (this.calorie * this.begin) / 100
+    this.protein_total = (this.protein * this.begin) / 100
+    this.lipid_total = (this.lipid * this.begin) / 100
+    this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
+  },
   watch: {
+    isDisplay(val) {
+      if (val) {
+        this.begin = 100
+        this.calorie_total = (this.calorie * this.begin) / 100
+        this.protein_total = (this.protein * this.begin) / 100
+        this.lipid_total = (this.lipid * this.begin) / 100
+        this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
+      }
+    },
     calorie(val) {
       this.calorie_total = (val * this.begin) / 100
     },
@@ -544,9 +560,9 @@ export default {
           food_code: this.$props.number,
           food_post_id: this.post_id,
         }
-      } else if (this.func === 'users') {
+      } else if (this.func === 'used') {
         data = {
-          func: 'users',
+          func: 'used',
           food_code: this.$props.number,
           food_post_id: this.post_id,
         }
@@ -572,6 +588,10 @@ export default {
     codeSearch() {
       this.isDisplay = false
       this.$emit('codeSearch', this.$props.number)
+    },
+    manualFix() {
+      this.fix = true
+      this.func = 'my'
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

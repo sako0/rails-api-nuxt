@@ -13,16 +13,13 @@ class Api::V1::FoodPostsController < ApplicationController
   def create
     logger.error(params)
     if params[:food_posts].present?
-      # @food_posts = @current_user.food_posts.build(food_posts_params)
-      # @food_posts.image.attach(params[:image]) if params[:image]
-      search_food_code = FoodPost.find_by(food_code: params[:food_posts][:food_code])
-      if search_food_code
+
+      if @current_user.food_posts.find_by(food_code: params[:food_posts][:food_code])
+        search_food_code = @current_user.food_posts.find_by(food_code: params[:food_posts][:food_code])
         search_food_code.updated_at = Time.now
         search_food_code.update(food_posts_params)
-        render json: "更新に成功しました"
       else
         food_post = @current_user.food_posts.create(food_posts_params)
-        food_post.image.attach(params[:image]) if params[:image]
         if food_post
           render json: food_post.id
         else
@@ -47,7 +44,7 @@ class Api::V1::FoodPostsController < ApplicationController
   private
 
   def food_posts_params
-    params.require(:food_posts).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :image)
+    params.require(:food_posts).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate)
   end
 
   def destroy_id_get
