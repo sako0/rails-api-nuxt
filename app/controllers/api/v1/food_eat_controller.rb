@@ -36,7 +36,7 @@ class Api::V1::FoodEatController < ApplicationController
 
   def show
     date = Date.strptime(params[:id], "%Y-%m-%d")
-    food_eat_at_day = FoodEat.where("date >= ?", date)
+    food_eat_at_day = @current_user.food_eats.where("date >= ?", date)
     render json: food_eat_at_day, each_serializer: FoodEatSerializer
   end
 

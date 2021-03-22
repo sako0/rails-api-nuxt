@@ -151,7 +151,7 @@ export default {
   middleware: 'auth',
   data() {
     return {
-      num: '',
+      num: null,
       todayCalorie: 0,
       todayProtein: 0,
       todayLipid: 0,
@@ -176,10 +176,52 @@ export default {
   methods: {
     cancel() {},
     code(code) {
-      this.num = code
       this.$refs.dlg.reset()
-      this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
-      this.$refs.dlg.isDisplay = true
+      this.num = code
+      this.$axios.get('/api/v1/foods/' + this.num).then((response) => {
+        if (response.data) {
+          if (response.data.web_search) {
+            if (response.data.content) {
+              this.$refs.dlg.productName = response.data.product_name
+              this.$refs.dlg.food_code = this.num
+              this.$refs.dlg.par = response.data.par
+              this.$refs.dlg.calorie = response.data.calorie
+              this.$refs.dlg.protein = response.data.protein
+              this.$refs.dlg.lipid = response.data.lipid
+              this.$refs.dlg.carbohydrate = response.data.carbohydrate
+            }
+            this.$refs.dlg.func = 'web'
+            this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
+            this.$refs.dlg.isDisplay = true
+          } else if (response.data.data.length > 0) {
+            console.log(response)
+          } else {
+            this.$refs.dlg.productName =
+              response.data.data.attributes.product_name
+            this.$refs.dlg.par = response.data.data.attributes.par
+            this.$refs.dlg.calorie = response.data.data.attributes.calorie
+            this.$refs.dlg.protein = response.data.data.attributes.protein
+            this.$refs.dlg.lipid = response.data.data.attributes.lipid
+            this.$refs.dlg.carbohydrate =
+              response.data.data.attributes.carbohydrate
+            this.$refs.dlg.url = response.data.data.attributes.image
+            this.$refs.dlg.post_id = parseInt(response.data.data.id)
+            this.$refs.dlg.food_code = this.num
+            if (response.data.data.attributes.func === 'my') {
+              this.$refs.dlg.func = 'my'
+              this.$refs.dlg.tab = 1
+            }
+            if (response.data.data.attributes.func === 'used') {
+              this.$refs.dlg.func = 'used'
+              this.$refs.dlg.tab = 1
+            }
+            this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
+            this.$refs.dlg.isDisplay = true
+          }
+        } else {
+          console.log(response)
+        }
+      })
     },
     cameraUp() {
       this.$refs.cameraDlg.isDisplay = true

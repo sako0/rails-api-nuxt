@@ -7,9 +7,13 @@ class Api::V1::FoodsController < ApplicationController
     if @current_user.food_posts.find_by(food_code: params[:id])
       code = @current_user.food_posts.find_by(food_code: params[:id])
       render json: code, serializer: FoodPostsSerializer, include: [:user], func: "my"
-      # elsif FoodPost.find(FoodPostUsed.group(params[:id]).order('count(food_post_id) desc').limit(1).pluck(:food_post_id)).present?
-      #   code = FoodPost.find(FoodPostUsed.group(params[:id]).order('count(food_post_id) desc').limit(1).pluck(:food_post_id))
-      #   render json: code, serializer: FoodPostsSerializer, include: [:user]
+    elsif @current_user.food_post_useds.find_by(food_code: params[:id])
+      used = @current_user.food_post_useds.find_by(food_code: params[:id])
+      code = used.food_post
+      render json: code, serializer: FoodPostsSerializer, include: [:user], func: "used"
+    elsif FoodPost.find_by(food_code: params[:id])
+      list = FoodPost.where(food_code: params[:id])
+      render json: list, each_serializer: FoodPostsSerializer, func: "list"
     else
       web_search(params[:id])
     end

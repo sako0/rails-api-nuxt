@@ -483,47 +483,6 @@ export default {
     carbohydrate(val) {
       this.carbohydrate_total = (val * this.begin) / 100
     },
-    isDisplay(val) {
-      if (val) {
-        console.log(this.$props.number)
-        this.$axios
-          .get('/api/v1/foods/' + this.$props.number)
-          .then((response) => {
-            if (response.data) {
-              if (response.data.web_search) {
-                if (response.data.content) {
-                  console.log(response.data)
-                  this.productName = response.data.product_name
-                  this.food_code = this.$props.number
-                  this.par = response.data.par
-                  this.calorie = response.data.calorie
-                  this.protein = response.data.protein
-                  this.lipid = response.data.lipid
-                  this.carbohydrate = response.data.carbohydrate
-                }
-                this.func = 'web'
-              } else {
-                console.log(response.data)
-                this.productName = response.data.data.attributes.product_name
-                this.par = response.data.data.attributes.par
-                this.calorie = response.data.data.attributes.calorie
-                this.protein = response.data.data.attributes.protein
-                this.lipid = response.data.data.attributes.lipid
-                this.carbohydrate = response.data.data.attributes.carbohydrate
-                this.url = response.data.data.attributes.image
-                this.post_id = parseInt(response.data.data.id)
-                this.food_code = this.$props.number
-                if (response.data.data.attributes.func === 'my') {
-                  this.func = 'my'
-                  this.tab = 1
-                }
-              }
-            } else {
-              console.log(response)
-            }
-          })
-      }
-    },
     begin(val) {
       this.calorie_total = (this.calorie * val) / 100
       this.protein_total = (this.protein * val) / 100
@@ -582,14 +541,7 @@ export default {
       const url = '/api/v1/foods'
       const headers = { 'content-type': 'application/json' }
       let data = ''
-      if (this.func === 'my') {
-        data = {
-          func: 'my',
-          food_code: this.$props.number,
-          food_post_id: this.post_id,
-        }
-      }
-      if (this.func === 'web') {
+      if (this.func === 'my' || this.func === 'web') {
         data = {
           func: 'my',
           food_code: this.$props.number,
@@ -601,20 +553,16 @@ export default {
     async food_eat() {
       const url = '/api/v1/food_eat'
       const headers = { 'content-type': 'application/json' }
-      let data = ''
-      if (this.func === 'my' || this.func === 'web') {
-        data = {
-          food_code: this.$props.number,
-          food_post_id: this.post_id,
-          product_name: this.productName,
-          par: this.par,
-          calorie: this.calorie_total,
-          protein: this.protein_total,
-          lipid: this.lipid_total,
-          carbohydrate: this.carbohydrate_total,
-          percent: this.begin,
-          date: this.calendarDate,
-        }
+      const data = {
+        food_code: this.$props.number,
+        product_name: this.productName,
+        par: this.par,
+        calorie: this.calorie_total,
+        protein: this.protein_total,
+        lipid: this.lipid_total,
+        carbohydrate: this.carbohydrate_total,
+        percent: this.begin,
+        date: this.calendarDate,
       }
       await this.$axios.post(url, data, { headers }).then((response) => {})
     },
