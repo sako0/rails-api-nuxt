@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto" max-width="500" elevation="24">
     <Dialog ref="dlg" @method="deletePost" />
-    <v-system-bar color="green darken-2" dark> </v-system-bar>
+    <v-system-bar color="green darken-1" dark> </v-system-bar>
 
     <v-toolbar color="green darken-1" dark>
       <v-btn icon>
@@ -24,7 +24,7 @@
           :key="food.title"
           :cols="index === 0 ? 12 : 6"
         >
-          <v-card color="grey darken-2" dark>
+          <v-card color="grey darken-1" dark>
             <v-img
               :src="
                 food.attributes.image

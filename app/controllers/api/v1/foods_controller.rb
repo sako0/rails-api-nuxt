@@ -19,25 +19,42 @@ class Api::V1::FoodsController < ApplicationController
     end
   end
 
+  def get_list_by_code
+    logger.error("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    if FoodPost.find_by(food_code: params[:id])
+      list = FoodPost.where(food_code: params[:id])
+      render json: list, each_serializer: FoodPostsSerializer, func: "list"
+    else
+      render json: "取得に失敗しました"
+    end
+  end
+
   def create
     logger.error(params)
+    @food_post_useds_params = nil
     if params[:food][:func] == "web" || params[:food][:func] == "my"
       @food_post_useds_params = @current_user.food_post_useds.build(food_post_useds_params)
       @food_post_useds_params.target_user_id = @current_user.id
-      search_food_code = FoodPostUsed.find_by(food_code: @food_post_useds_params.food_code)
-      if search_food_code
-        search_food_code.updated_at = Time.now
-        search_food_code.update(food_post_useds_params)
-        render json: "更新に成功しました"
+    elsif params[:food][:func] == "users"
+      @food_post_useds_params = @current_user.food_post_useds.build(food_post_useds_params)
+      @food_post_useds_params.target_user_id = FoodPost.find(params[:food][:food_post_id]).user_id
+    else
+      render json: "投稿に失敗しました"
+    end
+
+    search_food_code = @current_user.food_post_useds.find_by(food_code: @food_post_useds_params.food_code)
+    if search_food_code
+      search_food_code.updated_at = Time.now
+      search_food_code.update(food_post_useds_params)
+      render json: "更新に成功しました"
+    else
+      if @food_post_useds_params.save
+        render json: "投稿に成功しました"
       else
-        if @food_post_useds_params.save
-          render json: "投稿に成功しました"
+        if @food_post_useds_params.errors.any?
+          render json: @food_post_useds_params.errors.full_messages.to_s.gsub(",", "<br>").gsub("[", "").gsub("]", "").gsub('"', "").to_json
         else
-          if @food_post_useds_params.errors.any?
-            render json: @food_post_useds_params.errors.full_messages.to_s.gsub(",", "<br>").gsub("[", "").gsub("]", "").gsub('"', "").to_json
-          else
-            render json: "不明なエラー"
-          end
+          render json: "不明なエラー"
         end
       end
     end
@@ -72,6 +89,6 @@ class Api::V1::FoodsController < ApplicationController
   private
 
   def food_post_useds_params
-    params.require(:food).permit(:id, :user_id, :food_code, :food_post_id, :target_user_id)
+    params.require(:food).permit(:id, :user_id, :food_code, :food_post_id)
   end
 end

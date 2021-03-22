@@ -11,16 +11,36 @@
             icons-and-text
           >
             <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
-            <v-tab v-for="item in items" :key="item">
-              {{ item }}
-              <v-icon>mdi-pencil-plus</v-icon>
+            <v-tab v-for="(item, index) in items" :key="`first-` + index">
+              {{ item.title }}
+              <v-icon>{{ item.icon }}</v-icon>
             </v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
-            <v-tab-item v-for="(item, index) in items" :key="item">
+            <v-tab-item v-for="(item, index) in items" :key="`second-` + index">
               <v-card v-if="index === 0" color="basil" flat>
-                <v-card-title>{{ item }}</v-card-title>
+                <v-card-title>{{ item.title }}</v-card-title>
                 <v-row justify="center">
+                  <v-col cols="5" class="text-center">
+                    <v-btn
+                      v-if="func !== 'web' && fix === false"
+                      dark
+                      color="green darken-1"
+                      @click="fix = true"
+                    >
+                      手動入力
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="6" class="text-center">
+                    <v-btn
+                      v-if="func !== 'web'"
+                      dark
+                      color="green darken-1"
+                      @click="codeSearch"
+                    >
+                      バーコード検索
+                    </v-btn>
+                  </v-col>
                   <v-col v-if="func === 'web' || fix" cols="11">
                     <validation-provider
                       v-slot="{ errors }"
@@ -36,13 +56,7 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col
-                    v-if="
-                      (func === 'my' && fix === false) ||
-                      (func === 'users' && fix === false)
-                    "
-                    cols="11"
-                  >
+                  <v-col v-if="func !== 'web' && fix === false" cols="11">
                     <v-text-field
                       v-model="productName"
                       append-icon="mdi-briefcase"
@@ -65,13 +79,7 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col
-                    v-if="
-                      (func === 'my' && fix === false) ||
-                      (func === 'users' && fix === false)
-                    "
-                    cols="11"
-                  >
+                  <v-col v-if="func !== 'web' && fix === false" cols="11">
                     <v-text-field
                       v-model="par"
                       append-icon="mdi-beaker"
@@ -111,10 +119,7 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="
-                      (func === 'my' && fix === false) ||
-                      (func === 'users' && fix === false)
-                    "
+                    v-if="func !== 'web' && fix === false"
                     cols="5"
                     sm="5"
                     md="5"
@@ -154,10 +159,7 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="
-                      (func === 'my' && fix === false) ||
-                      (func === 'users' && fix === false)
-                    "
+                    v-if="func !== 'web' && fix === false"
                     cols="5"
                     sm="5"
                     md="5"
@@ -198,10 +200,7 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="
-                      (func === 'my' && fix === false) ||
-                      (func === 'users' && fix === false)
-                    "
+                    v-if="func !== 'web' && fix === false"
                     cols="5"
                     sm="5"
                     md="5"
@@ -241,10 +240,7 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="
-                      (func === 'my' && fix === false) ||
-                      (func === 'users' && fix === false)
-                    "
+                    v-if="func !== 'web' && fix === false"
                     cols="5"
                     sm="5"
                     md="5"
@@ -261,18 +257,6 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="1"> </v-col>
-                  <v-col v-if="func === 'web' || fix" cols="10">
-                    <v-file-input
-                      v-model="image"
-                      accept="image/jpeg,image/png,image/bmp"
-                      placeholder="画像を選択して下さい"
-                      @change="Preview_image"
-                    >
-                    </v-file-input>
-                  </v-col>
-                  <v-col cols="11">
-                    <v-img v-if="url" :src="url"></v-img>
-                  </v-col>
                 </v-row>
 
                 <v-card-actions>
@@ -289,7 +273,7 @@
                 </v-card-actions>
               </v-card>
               <v-card v-if="index === 1" color="basil" flat>
-                <v-card-title>{{ item }}</v-card-title>
+                <v-card-title>{{ item.title }}</v-card-title>
                 <v-row justify="center">
                   <v-col cols="11" sm="11" md="11" lg="11" xl="11">
                     <v-text-field
@@ -468,10 +452,10 @@ export default {
     carbohydrate_total: null,
     func: null,
     tab: 0,
-    items: ['商品情報', '登録'],
-    url: null,
-    image: null,
-    image_file: null,
+    items: [
+      { title: '商品情報', icon: 'mdi-briefcase-search' },
+      { title: '登録', icon: 'mdi-pencil-plus' },
+    ],
     fix: false,
     post_id: null,
     food_code: null,
@@ -529,9 +513,6 @@ export default {
         data.append('food_posts[protein]', this.protein)
         data.append('food_posts[lipid]', this.lipid)
         data.append('food_posts[carbohydrate]', this.carbohydrate)
-        if (this.image_file) {
-          data.append('food_posts[image]', this.image_file)
-        }
         const headers = { 'content-type': 'multipart/form-data' }
         await this.$axios.post(url, data, { headers }).then((response) => {
           this.post_id = response.data
@@ -553,14 +534,6 @@ export default {
       this.isDisplay = false
       this.reset()
     },
-    Preview_image(e) {
-      if (e !== null) {
-        this.image_file = e
-        this.url = URL.createObjectURL(this.image)
-      } else {
-        this.url = ''
-      }
-    },
     async post_used() {
       const url = '/api/v1/foods'
       const headers = { 'content-type': 'application/json' }
@@ -568,6 +541,12 @@ export default {
       if (this.func === 'my' || this.func === 'web') {
         data = {
           func: 'my',
+          food_code: this.$props.number,
+          food_post_id: this.post_id,
+        }
+      } else if (this.func === 'users') {
+        data = {
+          func: 'users',
           food_code: this.$props.number,
           food_post_id: this.post_id,
         }
@@ -589,6 +568,10 @@ export default {
         date: this.calendarDate,
       }
       await this.$axios.post(url, data, { headers }).then((response) => {})
+    },
+    codeSearch() {
+      this.isDisplay = false
+      this.$emit('codeSearch', this.$props.number)
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

@@ -8,7 +8,12 @@
         @no_code="dlgUp"
         @eatDelete="eatDelete($event)"
       />
-      <FoodRegisterDialog ref="dlg" :number="num" @reGet="getFoodInfo" />
+      <FoodRegisterDialog
+        ref="dlg"
+        :number="num"
+        @reGet="getFoodInfo"
+        @codeSearch="codeSearch($event)"
+      />
       <FoodEditDialog ref="editDlg" :food-info="editData" @eatEdit="eatEdit" />
       <FoodRegisterListDialog
         ref="listDlg"
@@ -23,13 +28,13 @@
         icons-and-text
       >
         <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
-        <v-tab v-for="item in items" :key="item">
-          <div v-text="item"></div>
-          <v-icon>mdi-pencil-plus</v-icon>
+        <v-tab v-for="(item, index) in items" :key="`first-` + index">
+          <div v-text="item.title"></div>
+          <v-icon>{{ item.icon }}</v-icon>
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
-        <v-tab-item v-for="(item, index) in items" :key="item">
+        <v-tab-item v-for="(item, index) in items" :key="`second-` + index">
           <v-row v-if="index === 0">
             <v-col cols="12" class="mt-5">
               <v-card>
@@ -125,7 +130,7 @@
 
                     <v-divider
                       v-if="index < data.length - 1"
-                      :key="`second-${index}`"
+                      :key="`third-` + index"
                     ></v-divider>
                   </template>
                 </v-list>
@@ -169,7 +174,10 @@ export default {
       carbohydrateGuideline: 0,
       today: null,
       tab: 0,
-      items: ['登録', 'リスト'],
+      items: [
+        { title: '登録', icon: 'mdi-pencil-plus' },
+        { title: 'リスト', icon: 'mdi-file-document' },
+      ],
       selected: [],
       todayItems: [],
       data: null,
@@ -186,56 +194,59 @@ export default {
       this.$refs.dlg.reset()
       this.num = code
       this.$axios.get('/api/v1/foods/' + this.num).then((response) => {
-        if (response.data) {
-          if (response.data.web_search) {
-            if (response.data.content) {
-              this.$refs.dlg.productName = response.data.product_name
-              this.$refs.dlg.food_code = this.num
-              this.$refs.dlg.par = response.data.par
-              this.$refs.dlg.calorie = response.data.calorie
-              this.$refs.dlg.protein = response.data.protein
-              this.$refs.dlg.lipid = response.data.lipid
-              this.$refs.dlg.carbohydrate = response.data.carbohydrate
-            }
-            this.$refs.dlg.func = 'web'
-            this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
-            this.$refs.dlg.isDisplay = true
-          } else if (response.data.data.length > 0) {
-            console.log(response)
-            this.lists = response.data.data
-            this.$refs.listDlg.isDisplay = true
-          } else {
-            this.$refs.dlg.productName =
-              response.data.data.attributes.product_name
-            this.$refs.dlg.par = response.data.data.attributes.par
-            this.$refs.dlg.calorie = response.data.data.attributes.calorie
-            this.$refs.dlg.protein = response.data.data.attributes.protein
-            this.$refs.dlg.lipid = response.data.data.attributes.lipid
-            this.$refs.dlg.carbohydrate =
-              response.data.data.attributes.carbohydrate
-            this.$refs.dlg.url = response.data.data.attributes.image
-            this.$refs.dlg.post_id = parseInt(response.data.data.id)
-            this.$refs.dlg.food_code = this.num
-            if (response.data.data.attributes.func === 'my') {
-              this.$refs.dlg.func = 'my'
-              this.$refs.dlg.tab = 1
-            }
-            if (response.data.data.attributes.func === 'used') {
-              this.$refs.dlg.func = 'used'
-              this.$refs.dlg.tab = 1
-            }
-            this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
-            this.$refs.dlg.isDisplay = true
-          }
-        } else {
-          console.log(response)
-        }
+        this.dlgUp(response)
       })
     },
     cameraUp() {
       this.$refs.cameraDlg.isDisplay = true
     },
-    dlgUp() {},
+    dlgUp(response) {
+      if (response.data) {
+        if (response.data.web_search) {
+          if (response.data.content) {
+            this.$refs.dlg.productName = response.data.product_name
+            this.$refs.dlg.food_code = this.num
+            this.$refs.dlg.par = response.data.par
+            this.$refs.dlg.calorie = response.data.calorie
+            this.$refs.dlg.protein = response.data.protein
+            this.$refs.dlg.lipid = response.data.lipid
+            this.$refs.dlg.carbohydrate = response.data.carbohydrate
+          }
+          this.$refs.dlg.func = 'web'
+          this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
+          this.$refs.dlg.isDisplay = true
+        } else if (response.data.data.length > 0) {
+          console.log(response)
+          this.lists = response.data.data
+          this.$refs.dlg.food_code = this.num
+          this.$refs.listDlg.isDisplay = true
+        } else {
+          this.$refs.dlg.productName =
+            response.data.data.attributes.product_name
+          this.$refs.dlg.par = response.data.data.attributes.par
+          this.$refs.dlg.calorie = response.data.data.attributes.calorie
+          this.$refs.dlg.protein = response.data.data.attributes.protein
+          this.$refs.dlg.lipid = response.data.data.attributes.lipid
+          this.$refs.dlg.carbohydrate =
+            response.data.data.attributes.carbohydrate
+          this.$refs.dlg.url = response.data.data.attributes.image
+          this.$refs.dlg.post_id = parseInt(response.data.data.id)
+          this.$refs.dlg.food_code = this.num
+          if (response.data.data.attributes.func === 'my') {
+            this.$refs.dlg.func = 'my'
+            this.$refs.dlg.tab = 1
+          }
+          if (response.data.data.attributes.func === 'used') {
+            this.$refs.dlg.func = 'used'
+            this.$refs.dlg.tab = 1
+          }
+          this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
+          this.$refs.dlg.isDisplay = true
+        }
+      } else {
+        console.log(response)
+      }
+    },
     code_confirm_dialog() {
       this.$refs.dialog.type = 'foodRegister'
       this.$refs.dialog.isDisplay = true
@@ -315,19 +326,28 @@ export default {
       })
     },
     selectedItem(item) {
+      this.$refs.dlg.reset()
       this.$refs.dlg.productName = item.attributes.product_name
       this.$refs.dlg.par = item.attributes.par
       this.$refs.dlg.calorie = item.attributes.calorie
       this.$refs.dlg.protein = item.attributes.protein
       this.$refs.dlg.lipid = item.attributes.lipid
       this.$refs.dlg.carbohydrate = item.attributes.carbohydrate
-      this.$refs.dlg.url = item.attributes.image
       this.$refs.dlg.post_id = parseInt(item.id)
-      this.$refs.dlg.food_code = this.num
+      this.num = item.attributes.food_code
       this.$refs.dlg.func = 'users'
       this.$refs.dlg.tab = 1
       this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
       this.$refs.dlg.isDisplay = true
+    },
+    codeSearch(code) {
+      this.$refs.listDlg.reset()
+      const url = '/api/v1/get_list_by_code/' + code
+      this.$axios.get(url).then((response) => {
+        this.num = code
+        this.lists = response.data.data
+        this.$refs.listDlg.isDisplay = true
+      })
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

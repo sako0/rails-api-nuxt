@@ -57,7 +57,14 @@ export default {
   methods: {
     selectItem(item) {
       this.isDisplay = false
-      this.$emit('selectedItem', item)
+      // 即座にdomを削除するとtransitionする前に消えてしまうので、200ms待つ
+      setTimeout(() => {
+        this.$emit('selectedItem', item)
+      }, 200)
+      this.reset()
+    },
+    reset() {
+      Object.assign(this.$data, this.$options.data())
     },
   },
 }
