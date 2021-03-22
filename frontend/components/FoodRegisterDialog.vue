@@ -36,7 +36,13 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col v-if="func === 'my' && fix === false" cols="11">
+                  <v-col
+                    v-if="
+                      (func === 'my' && fix === false) ||
+                      (func === 'users' && fix === false)
+                    "
+                    cols="11"
+                  >
                     <v-text-field
                       v-model="productName"
                       append-icon="mdi-briefcase"
@@ -59,7 +65,13 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col v-if="func === 'my' && fix === false" cols="11">
+                  <v-col
+                    v-if="
+                      (func === 'my' && fix === false) ||
+                      (func === 'users' && fix === false)
+                    "
+                    cols="11"
+                  >
                     <v-text-field
                       v-model="par"
                       append-icon="mdi-beaker"
@@ -99,7 +111,10 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="func === 'my' && fix === false"
+                    v-if="
+                      (func === 'my' && fix === false) ||
+                      (func === 'users' && fix === false)
+                    "
                     cols="5"
                     sm="5"
                     md="5"
@@ -139,7 +154,10 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="func === 'my' && fix === false"
+                    v-if="
+                      (func === 'my' && fix === false) ||
+                      (func === 'users' && fix === false)
+                    "
                     cols="5"
                     sm="5"
                     md="5"
@@ -180,7 +198,10 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="func === 'my' && fix === false"
+                    v-if="
+                      (func === 'my' && fix === false) ||
+                      (func === 'users' && fix === false)
+                    "
                     cols="5"
                     sm="5"
                     md="5"
@@ -220,7 +241,10 @@
                     </validation-provider>
                   </v-col>
                   <v-col
-                    v-if="func === 'my' && fix === false"
+                    v-if="
+                      (func === 'my' && fix === false) ||
+                      (func === 'users' && fix === false)
+                    "
                     cols="5"
                     sm="5"
                     md="5"

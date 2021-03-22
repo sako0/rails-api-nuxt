@@ -10,6 +10,11 @@
       />
       <FoodRegisterDialog ref="dlg" :number="num" @reGet="getFoodInfo" />
       <FoodEditDialog ref="editDlg" :food-info="editData" @eatEdit="eatEdit" />
+      <FoodRegisterListDialog
+        ref="listDlg"
+        :lists="lists"
+        @selectedItem="selectedItem($event)"
+      />
       <v-tabs
         v-model="tab"
         fixed-tabs
@@ -139,6 +144,7 @@ import Dialog from '@/components/Dialog'
 import KcalBarChart from '@/components/KcalBarChart'
 import GBarChart from '@/components/GBarChart'
 import FoodEditDialog from '@/components/FoodEditDialog'
+import FoodRegisterListDialog from '@/components/FoodRegisterListDialog'
 export default {
   components: {
     CameraDialog,
@@ -147,6 +153,7 @@ export default {
     KcalBarChart,
     GBarChart,
     FoodEditDialog,
+    FoodRegisterListDialog,
   },
   middleware: 'auth',
   data() {
@@ -167,6 +174,7 @@ export default {
       todayItems: [],
       data: null,
       editData: null,
+      lists: null,
     }
   },
   created() {
@@ -194,6 +202,8 @@ export default {
             this.$refs.dlg.isDisplay = true
           } else if (response.data.data.length > 0) {
             console.log(response)
+            this.lists = response.data.data
+            this.$refs.listDlg.isDisplay = true
           } else {
             this.$refs.dlg.productName =
               response.data.data.attributes.product_name
@@ -303,6 +313,21 @@ export default {
         this.getFoodInfo()
         this.getGuideline()
       })
+    },
+    selectedItem(item) {
+      this.$refs.dlg.productName = item.attributes.product_name
+      this.$refs.dlg.par = item.attributes.par
+      this.$refs.dlg.calorie = item.attributes.calorie
+      this.$refs.dlg.protein = item.attributes.protein
+      this.$refs.dlg.lipid = item.attributes.lipid
+      this.$refs.dlg.carbohydrate = item.attributes.carbohydrate
+      this.$refs.dlg.url = item.attributes.image
+      this.$refs.dlg.post_id = parseInt(item.id)
+      this.$refs.dlg.food_code = this.num
+      this.$refs.dlg.func = 'users'
+      this.$refs.dlg.tab = 1
+      this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
+      this.$refs.dlg.isDisplay = true
     },
     reset() {
       Object.assign(this.$data, this.$options.data())
