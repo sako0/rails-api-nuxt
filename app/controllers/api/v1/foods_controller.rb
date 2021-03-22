@@ -49,6 +49,7 @@ class Api::V1::FoodsController < ApplicationController
           search_used_code.destroy
           if @current_user.food_posts.where(food_code: @food_post_useds_params.food_code).count > 1
             old_post = @current_user.food_posts.where(food_code: @food_post_useds_params.food_code).order(created_at: "ASK").first
+            old_post.food_post_useds.destroy_all
             old_post.destroy
           end
         end
@@ -56,6 +57,7 @@ class Api::V1::FoodsController < ApplicationController
         # 自分が使用しているバーコード情報を使わなかった場合はそのPOSTを削除する
         if @current_user.food_posts.find_by(food_code: @food_post_useds_params.food_code).present?
           my_old_post = @current_user.food_posts.find_by(food_code: @food_post_useds_params.food_code)
+          my_old_post.food_post_useds.destroy_all
           my_old_post.delete
         end
       end
