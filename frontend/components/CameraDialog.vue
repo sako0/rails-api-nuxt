@@ -1,22 +1,37 @@
 <template>
   <div>
     <!-- カメラの映像を表示させるDIV -->
-    <v-dialog
-      v-model="isDisplay"
-      v-click-outside="closeDisplay"
-      max-width="300px"
-    >
-      <div id="camera-area" class="camera-area">
-        <!-- 青い四角のDIV -->
-        <div class="detect-area"></div>
-      </div>
-
-      <!-- 右上の閉じるボタン -->
-      <button
-        class="modal-close is-large"
-        aria-label="close"
-        @click.prevent.stop="onClickCancel"
-      ></button>
+    <v-dialog v-model="isDisplay" v-click-outside="closeDisplay" width="400px">
+      <v-card>
+        <v-card-title>バーコードを読みとる</v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row justify="center">
+              <v-col cols="auto">
+                <div id="camera-area" class="camera-area">
+                  <!-- 青い四角のDIV -->
+                  <div class="detect-area"></div>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <!-- 右上の閉じるボタン -->
+        <v-card-actions>
+          <v-container>
+            <v-row>
+              <v-col cols="auto">
+                <v-btn
+                  class="text-left"
+                  aria-label="close"
+                  @click="onClickCancel"
+                  >Close</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
   </div>
 </template>
@@ -93,7 +108,7 @@ export default {
       }
 
       // エラーがない場合は、読み取りを開始
-      console.info('Initialization finished. Ready to start')
+      console.info('読み取り開始')
       this.Quagga.start()
     },
 
@@ -118,13 +133,19 @@ export default {
       // 認識したバーコードを緑の枠で囲む
       if (data.boxes) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-
         const hasNotRead = (box) => box !== data.box
         data.boxes.filter(hasNotRead).forEach((box) => {
           this.Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, ctx, {
             color: 'green',
-            lineWidth: 2,
+            lineWidth: 4,
           })
+        })
+      }
+      // 読み取ったバーコードに線を引く
+      if (data.codeResult && data.codeResult.code) {
+        this.Quagga.ImageDebug.drawPath(data.line, { x: 'x', y: 'y' }, ctx, {
+          color: 'red',
+          lineWidth: 9,
         })
       }
     },
@@ -147,29 +168,32 @@ export default {
 <style lang="scss">
 .camera-area {
   overflow: hidden;
-  height: 300px;
+  height: 247px;
   width: 300px;
 
   /**
    * 指定したDIV配下にvideoとcanvasが追加される
    * 4:3になるため、margin-topで調整
    */
-  video,
-  canvas {
-    margin-top: -140px;
+  video {
+    margin-top: -110px;
     width: 300px;
-    height: 400px;
+    height: 247px;
   }
-  /* 検出範囲のサイズに合わせ枠線を引く */
-  .detect-area {
-    position: relative;
-    width: 200px;
-    top: 100px;
-    bottom: 120px;
-    left: 50px;
-    right: 50px;
-    height: 90px;
-    border: 2px solid #0000ff;
+  canvas {
+    margin-top: -400px;
+    width: 300px;
+    height: 300px;
   }
+}
+/* 検出範囲のサイズに合わせ枠線を引く */
+.detect-area {
+  position: relative;
+  width: 200px;
+  top: 60px;
+  left: 50px;
+  right: 50px;
+  height: 100px;
+  border: 3px solid #0000ff;
 }
 </style>
