@@ -3,39 +3,32 @@
     <validation-observer ref="observer" v-slot="{ invalid }">
       <form>
         <v-card>
-          <v-tabs
-            v-model="tab"
-            background-color="transparent"
-            color="basil"
-            grow
-          >
-            <v-tabs-slider color="transparent"></v-tabs-slider>
-            <v-tab v-for="item in items" :key="item"> </v-tab>
-          </v-tabs>
-          <v-tabs-items v-model="tab">
-            <v-tab-item v-for="item in items" :key="item">
-              <v-card-title>{{ title }}</v-card-title>
+          <v-card-title>{{ title }}</v-card-title>
+          <v-card-text>
+            <v-container>
               <v-row>
                 <v-col
                   cols="12"
                   sm="12"
-                  md="5"
-                  lg="5"
-                  xl="5"
+                  md="7"
+                  lg="7"
+                  xl="7"
                   class="text-center"
                 >
                   <v-card-text>
-                    <profilePreview
-                      :user="user"
-                      :preview-flg="true"
-                      @backgroundFileGet="backgroundFileGet"
-                      @imageFileGet="imageFileGet"
-                    />
+                    <v-container>
+                      <profilePreview
+                        :user="user"
+                        :preview-flg="true"
+                        @backgroundFileGet="backgroundFileGet"
+                        @imageFileGet="imageFileGet"
+                      />
+                    </v-container>
                   </v-card-text>
                 </v-col>
-                <v-col cols="12" sm="12" md="6" lg="6" xl="6">
+                <v-col cols="12" sm="12" md="5" lg="5" xl="5">
                   <v-row justify="center">
-                    <v-col cols="11" sm="11" md="6" lg="6" xl="6">
+                    <v-col cols="12" sm="12" md="12" lg="12" xl="12">
                       <validation-provider
                         v-slot="{ errors }"
                         name="名前"
@@ -51,7 +44,7 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-                    <v-col cols="11" sm="11" md="6" lg="6" xl="6">
+                    <v-col cols="6" sm="6" md="12" lg="12" xl="12">
                       <v-select
                         v-model="sex"
                         :items="sex_items"
@@ -60,22 +53,7 @@
                         label="性別"
                       ></v-select>
                     </v-col>
-                    <v-col cols="11" sm="11" md="12" lg="12" xl="12">
-                      <validation-provider
-                        v-slot="{ errors }"
-                        name="email"
-                        rules="email"
-                      >
-                        <v-text-field
-                          :value="user.user.email"
-                          append-icon="mdi-at"
-                          disabled
-                          :error-messages="errors"
-                          label="E-mail"
-                        ></v-text-field>
-                      </validation-provider>
-                    </v-col>
-                    <v-col cols="11" sm="11" md="6" lg="6" xl="6">
+                    <v-col cols="6" sm="6" md="6" lg="6" xl="6">
                       <validation-provider
                         v-slot="{ errors }"
                         name="年齢"
@@ -92,7 +70,7 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-                    <v-col cols="11" sm="11" md="6" lg="6" xl="6">
+                    <v-col cols="6" sm="6" md="6" lg="6" xl="6">
                       <validation-provider
                         v-slot="{ errors }"
                         name="身長"
@@ -108,7 +86,7 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-                    <v-col cols="11" sm="11" md="6" lg="6" xl="6">
+                    <v-col cols="6" sm="6" md="6" lg="6" xl="6">
                       <validation-provider
                         v-slot="{ errors }"
                         name="目標体重"
@@ -124,7 +102,7 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-                    <v-col cols="11" sm="11" md="6" lg="6" xl="6">
+                    <v-col cols="12" sm="12" md="6" lg="6" xl="6">
                       <v-select
                         v-model="action_level"
                         :items="action_level_items"
@@ -133,7 +111,7 @@
                         label="活動レベル"
                       ></v-select>
                     </v-col>
-                    <v-col cols="11" sm="11" md="12" lg="12" xl="12">
+                    <v-col cols="12" sm="12" md="12" lg="12" xl="12">
                       <validation-provider
                         v-slot="{ errors }"
                         name="notes"
@@ -153,26 +131,28 @@
                   </v-row>
                 </v-col>
               </v-row>
-              <v-card-actions>
-                <v-row justify="center">
-                  <v-col cols="6">
-                    <v-btn @click="isDisplay = false">Close</v-btn>
-                  </v-col>
-                  <v-col cols="6" class="text-right">
-                    <v-btn
-                      class="mr-4"
-                      :disabled="invalid"
-                      dark
-                      color="green darken-1"
-                      @click="submit"
-                    >
-                      更新
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-actions>
-            </v-tab-item>
-          </v-tabs-items>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-container>
+              <v-row justify="center">
+                <v-col cols="6">
+                  <v-btn @click="isDisplay = false">Close</v-btn>
+                </v-col>
+                <v-col cols="6" class="text-right">
+                  <v-btn
+                    class="mr-4"
+                    :disabled="invalid"
+                    dark
+                    color="green darken-1"
+                    @click="submit"
+                  >
+                    更新
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-actions>
         </v-card>
       </form>
     </validation-observer>
@@ -265,8 +245,6 @@ export default {
         { text: '高い', value: 2 },
       ],
       notes: this.user.user.profile.notes,
-      tab: 0,
-      items: [''],
     }
   },
   computed: {
