@@ -33,14 +33,6 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <template #append>
-        <v-row>
-          <v-col cols="8"> </v-col>
-          <v-col cols="2" class="pb-5">
-            <v-btn block><v-icon>mdi-tune</v-icon></v-btn>
-          </v-col>
-        </v-row>
-      </template>
     </v-navigation-drawer>
     <v-app-bar
       :clipped-left="clipped"
@@ -57,7 +49,7 @@
       >
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-icon dark>mdi-bee-flower</v-icon>
+      <v-icon dark large>mdi-cat</v-icon>
       <v-toolbar-title class="font-weight-black" v-text="title" />
       <v-spacer />
       <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
