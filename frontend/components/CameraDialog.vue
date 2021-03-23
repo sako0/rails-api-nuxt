@@ -155,7 +155,6 @@ export default {
     },
     onSuccess(code) {
       if (this.verify.code === code) {
-        console.log(this.verify.count)
         if (this.verify.count > 50) {
           this.isDisplay = false
           this.code = code
