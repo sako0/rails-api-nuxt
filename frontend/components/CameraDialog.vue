@@ -104,7 +104,10 @@ export default {
       // ISBNは'success.codeResult.code'から取得
       const isbn = success.codeResult.code
       // ISBNをEmitで返却する
-      this.onSuccess(isbn)
+      const checkStr = isbn.toString()
+      if (checkStr.startsWith('4') || checkStr.startsWith('2')) {
+        this.onSuccess(isbn)
+      }
     },
     onProcessed(data) {
       const ctx = this.Quagga.canvas.ctx.overlay

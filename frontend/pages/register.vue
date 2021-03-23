@@ -13,6 +13,7 @@
         :number="num"
         @reGet="getFoodInfo"
         @codeSearch="codeSearch($event)"
+        @reScan="cameraUp"
       />
       <FoodEditDialog ref="editDlg" :food-info="editData" @eatEdit="eatEdit" />
       <FoodRegisterListDialog
@@ -48,7 +49,7 @@
                       color="green darken-1"
                       @click="code_confirm_dialog"
                     >
-                      <v-icon dark> mdi-plus </v-icon>
+                      <v-icon dark> mdi-plus</v-icon>
                     </v-btn>
                   </v-col>
                   <v-col cols="9" class="text-right">
@@ -107,7 +108,7 @@
 
                       <v-list-item-action>
                         <v-list-item-action-text
-                          v-text="item.attributes.percent"
+                          v-text="dateTime(item.attributes.created_at)"
                         ></v-list-item-action-text>
                         <v-list-item-icon>
                           <v-btn icon @click="editDlgView(item)">
@@ -150,6 +151,7 @@ import KcalBarChart from '@/components/KcalBarChart'
 import GBarChart from '@/components/GBarChart'
 import FoodEditDialog from '@/components/FoodEditDialog'
 import FoodRegisterListDialog from '@/components/FoodRegisterListDialog'
+
 export default {
   components: {
     CameraDialog,
@@ -348,6 +350,23 @@ export default {
         this.lists = response.data.data
         this.$refs.listDlg.isDisplay = true
       })
+    },
+    dateTime(datetime) {
+      const now = this.$moment()
+      const target = this.$moment(datetime)
+      const difference = now.diff(target, 'minutes')
+      console.log(difference)
+      if (difference < 60) {
+        if (difference < 2) {
+          const seconds = now.diff(target, 'seconds').toString()
+          return seconds + '秒前'
+        } else {
+          const minutes = difference.toString()
+          return minutes + '分前'
+        }
+      } else {
+        return target.format('hh:mm')
+      }
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

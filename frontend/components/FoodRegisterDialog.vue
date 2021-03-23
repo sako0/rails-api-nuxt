@@ -12,7 +12,7 @@
           >
             <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
             <v-tab v-for="(item, index) in items" :key="`first-` + index">
-              {{ item.title }}
+              <div v-text="item.title"></div>
               <v-icon>{{ item.icon }}</v-icon>
             </v-tab>
           </v-tabs>
@@ -21,24 +21,32 @@
               <v-card v-if="index === 0" color="basil" flat>
                 <v-card-title>{{ item.title }}</v-card-title>
                 <v-row justify="center">
-                  <v-col cols="5" class="text-center">
+                  <v-col cols="4" class="text-center">
                     <v-btn
                       v-if="func !== 'web' && fix === false"
                       dark
                       color="green darken-1"
                       @click="manualFix"
                     >
+                      <v-icon>mdi-pencil</v-icon>
                       手動入力
                     </v-btn>
                   </v-col>
-                  <v-col cols="6" class="text-center">
+                  <v-col cols="4" class="text-center">
+                    <v-btn dark color="green darken-1" @click="reScan">
+                      <v-icon>mdi-barcode-scan</v-icon>
+                      バーコード再読込
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="4" class="text-center">
                     <v-btn
                       v-if="func !== 'web'"
                       dark
                       color="green darken-1"
                       @click="codeSearch"
                     >
-                      バーコード検索
+                      <v-icon>mdi-magnify</v-icon>
+                      検索
                     </v-btn>
                   </v-col>
                   <v-col v-if="func === 'web' || fix" cols="11">
@@ -478,13 +486,6 @@ export default {
     calendarDate: null,
     dateMenu: false,
   }),
-  created() {
-    this.begin = 100
-    this.calorie_total = (this.calorie * this.begin) / 100
-    this.protein_total = (this.protein * this.begin) / 100
-    this.lipid_total = (this.lipid * this.begin) / 100
-    this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
-  },
   watch: {
     isDisplay(val) {
       if (val) {
@@ -513,6 +514,13 @@ export default {
       this.lipid_total = (this.lipid * val) / 100
       this.carbohydrate_total = (this.carbohydrate * val) / 100
     },
+  },
+  created() {
+    this.begin = 100
+    this.calorie_total = (this.calorie * this.begin) / 100
+    this.protein_total = (this.protein * this.begin) / 100
+    this.lipid_total = (this.lipid * this.begin) / 100
+    this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
   },
   methods: {
     async submit() {
@@ -592,6 +600,13 @@ export default {
     manualFix() {
       this.fix = true
       this.func = 'my'
+    },
+    reScan() {
+      this.isDisplay = false
+      this.reset()
+      setTimeout(() => {
+        this.$emit('reScan')
+      }, 200)
     },
     reset() {
       Object.assign(this.$data, this.$options.data())
