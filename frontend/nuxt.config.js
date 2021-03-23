@@ -5,6 +5,7 @@ const BASEURL = process.env.NUXT_ENV_RAILS_URL
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  mode: 'spa',
   head: {
     titleTemplate: '%s - diet-reader',
     title: 'diet-reader',
@@ -30,6 +31,7 @@ export default {
   build: {
     transpile: ['vee-validate'], // 追加 https://qiita.com/TK-C/items/9cab072c65d2f9ade5d0
     extend(config, ctx) {},
+    quiet: true,
   },
 
   // Auto import components: https://go.nuxtjs.dev/config-components

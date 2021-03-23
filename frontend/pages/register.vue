@@ -205,7 +205,6 @@ export default {
       this.$refs.cameraDlg.isDisplay = true
     },
     dlgUp(response) {
-      console.log(response)
       if (response.data) {
         if (response.data.web_search) {
           if (response.data.content) {
@@ -220,7 +219,6 @@ export default {
           this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
           this.$refs.dlg.isDisplay = true
         } else if (response.data.data.length > 0) {
-          console.log(response)
           this.lists = response.data.data
           this.$refs.listDlg.isDisplay = true
         } else {
@@ -245,8 +243,6 @@ export default {
           this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
           this.$refs.dlg.isDisplay = true
         }
-      } else {
-        console.log(response)
       }
     },
     code_confirm_dialog() {
@@ -258,7 +254,6 @@ export default {
       this.today = today
       const url = '/api/v1/food_eat/' + today
       this.$axios.get(url).then((response) => {
-        console.log(response)
         if (response.data.data.length) {
           const calorieArray = response.data.data.map(
             (attribute) => attribute.attributes.calorie
@@ -295,7 +290,6 @@ export default {
     getGuideline() {
       const url = '/api/v1/guideline'
       this.$axios.get(url).then((response) => {
-        console.log(response)
         this.calorieGuideline = response.data.recommended_calorie
         this.proteinGuideline = response.data.recommended_protein
         this.lipidGuideline = response.data.recommended_lipid
@@ -318,17 +312,14 @@ export default {
     },
     eatDelete(id) {
       const eatData = this.data[id]
-      console.log(eatData.id)
       const url = '/api/v1/food_eat/' + eatData.id
       this.$axios.delete(url).then((response) => {
-        console.log(response)
         this.reset()
         this.getFoodInfo()
         this.getGuideline()
       })
     },
     selectedItem(item) {
-      console.log(item)
       this.$refs.dlg.reset()
       this.$refs.dlg.func = 'used'
       this.num = item.attributes.food_code

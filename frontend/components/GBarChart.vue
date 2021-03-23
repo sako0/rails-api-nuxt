@@ -93,7 +93,6 @@ export default {
     },
     lipid(val) {
       const int = Math.round(val)
-      console.log(int)
       this.chartdata.datasets[0].data = [
         this.protein,
         int,

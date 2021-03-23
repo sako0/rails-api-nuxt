@@ -77,7 +77,6 @@ export default {
       const currentUser = await $axios.get('api/v1/sessions')
       const foodPosts = await $axios.get('api/v1/food_posts')
       // 配列で返ってくるのでJSONにして返却
-      console.log(foodPosts.data)
       return { currentUser: currentUser.data, foodPosts: foodPosts.data }
     } catch (err) {
       return redirect('/')
@@ -92,7 +91,6 @@ export default {
   methods: {
     getUser() {
       this.$axios.get('api/v1/sessions').then((response) => {
-        console.log(response.data)
         this.currentUser = response.data
       })
     },
