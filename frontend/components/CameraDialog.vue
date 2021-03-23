@@ -41,6 +41,7 @@ export default {
     return {
       isDisplay: false,
       code: false,
+      verify: { count: 0, code: null },
     }
   },
   watch: {
@@ -153,8 +154,19 @@ export default {
       this.isDisplay = false
     },
     onSuccess(code) {
-      this.code = code
-      this.isDisplay = false
+      if (this.verify.code === code) {
+        console.log(this.verify.count)
+        if (this.verify.count > 50) {
+          this.isDisplay = false
+          this.code = code
+          this.verify.count = 0
+        } else {
+          this.verify.count += 1
+        }
+      } else {
+        this.verify.count = 0
+        this.verify.code = code
+      }
     },
     closeDisplay() {
       this.isDisplay = false

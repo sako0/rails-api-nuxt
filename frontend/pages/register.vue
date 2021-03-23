@@ -357,7 +357,6 @@ export default {
       const now = this.$moment()
       const target = this.$moment(datetime)
       const difference = now.diff(target, 'minutes')
-      console.log(difference)
       if (difference < 60) {
         if (difference < 2) {
           const seconds = now.diff(target, 'seconds').toString()
