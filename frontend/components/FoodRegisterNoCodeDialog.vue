@@ -303,43 +303,6 @@
                   </v-col>
                   <v-col cols="5" sm="5" md="5" lg="5" xl="5">
                     <v-text-field
-                      :value="number"
-                      append-icon="mdi-barcode"
-                      disabled
-                      label="商品コード"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6" lg="6" xl="6">
-                    <v-menu
-                      v-model="dateMenu"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template #activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="calendarDate"
-                          label="日付"
-                          prepend-icon="mdi-calendar"
-                          required
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="calendarDate"
-                        locale="jp-ja"
-                        :day-format="(date) => new Date(date).getDate()"
-                        color="light-blue darken-1"
-                        @input="dateMenu = false"
-                      ></v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                    <v-text-field
                       v-model.number="calorie_total"
                       suffix="kcal"
                       append-icon="mdi-food-fork-drink"
@@ -380,6 +343,35 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="1"> </v-col>
+                  <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+                    <v-menu
+                      v-model="dateMenu"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template #activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="calendarDate"
+                          label="日付"
+                          prepend-icon="mdi-calendar"
+                          required
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="calendarDate"
+                        locale="jp-ja"
+                        :day-format="(date) => new Date(date).getDate()"
+                        color="light-blue darken-1"
+                        @input="dateMenu = false"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
                 </v-row>
 
                 <v-card-actions>
@@ -402,9 +394,9 @@
                     <v-col cols="3" class="text-right">
                       <v-btn
                         color="green darken-1"
-                        dark
                         :disabled="invalid"
                         elevation="6"
+                        :dark="!invalid"
                       >
                         OK
                       </v-btn>

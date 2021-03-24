@@ -400,7 +400,7 @@
                     <v-col cols="3" class="text-right">
                       <v-btn
                         color="green darken-1"
-                        dark
+                        :dark="!invalid"
                         :disabled="invalid"
                         elevation="6"
                         @click="submit"
