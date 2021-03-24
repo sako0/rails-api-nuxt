@@ -1,15 +1,11 @@
 <template>
-  <v-card class="mx-auto" max-width="320" tile>
+  <v-card v-if="currentUser !== null" class="mx-auto" max-width="320" tile>
     <ProfileImageDialog
       ref="imageDlg"
-      :user="user"
+      :user="currentUser"
       @getUser="getUser"
     ></ProfileImageDialog>
-    <v-img
-      max-height="200px"
-      height="100%"
-      :src="userComputed.user.background_image"
-    >
+    <v-img max-height="200px" height="100%" :src="currentUser.background_image">
       <v-row>
         <v-col cols="2">
           <v-btn
@@ -29,7 +25,7 @@
       <v-row justify="center" class="text-center">
         <v-col class="pa-0" cols="12">
           <v-avatar class="profile" color="grey" size="100">
-            <v-img :src="userComputed.user.image"></v-img>
+            <v-img :src="currentUser.image"></v-img>
           </v-avatar>
         </v-col>
       </v-row>
@@ -38,10 +34,10 @@
           <v-list-item color="rgba(0, 0, 0, .4)" dark>
             <v-list-item-content>
               <v-list-item-title class="font-weight-bold">
-                {{ userComputed.user.name }}
+                {{ currentUser.name }}
               </v-list-item-title>
               <v-list-item-subtitle
-                >{{ userComputed.user.profile.url }}
+                >{{ currentUser.profile.age }}歳
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -50,31 +46,35 @@
     </v-img>
     <div class="text-left">
       <v-card-subtitle class="pb-0"
-        >{{ userComputed.user.profile.url }}
+        >身長：{{ currentUser.profile.height }}cm
       </v-card-subtitle>
 
       <v-card-text class="text--primary">
-        <div>{{ userComputed.user.profile.trend }}</div>
+        <div>目標体重：{{ currentUser.profile.target_weight }}kg</div>
 
-        <div>{{ userComputed.user.profile.notes }}</div>
+        <div>一言：{{ currentUser.profile.notes }}</div>
       </v-card-text>
     </div>
   </v-card>
 </template>
 <script>
+import ProfileImageDialog from '@/components/ProfileImageDialog'
 export default {
+  components: {
+    ProfileImageDialog,
+  },
   props: {
     // Object形に変換
     user: Object,
   },
-  computed: {
-    userComputed: {
-      get() {
-        return this.$props.user
-      },
-      set(value) {
-        this.$emit('change', value)
-      },
+  data() {
+    return {
+      currentUser: null,
+    }
+  },
+  watch: {
+    user(val) {
+      this.currentUser = val
     },
   },
   methods: {

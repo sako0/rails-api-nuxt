@@ -6,30 +6,50 @@ class Api::V1::FoodPostsController < ApplicationController
   def index
     # 参考
     # https://qiita.com/eggc/items/29a3c9a41d77227fb10a
-    @food_posts = @current_user.food_posts.all
+    @food_posts = @current_user.food_posts.where(food_code: nil)
     render json: @food_posts, each_serializer: FoodPostsSerializer, include: [:user]
   end
 
   def create
     logger.error(params)
-    if params[:food_posts].present?
-
-      if @current_user.food_posts.find_by(food_code: params[:food_posts][:food_code])
-        search_food_code = @current_user.food_posts.find_by(food_code: params[:food_posts][:food_code])
-        search_food_code.updated_at = Time.now
-        search_food_code.update(food_posts_params)
-      else
-        food_post = @current_user.food_posts.create(food_posts_params)
-        if food_post
-          render json: food_post.id
+    if params[:food_post].present?
+      if params[:food_post][:food_code].present?
+        if @current_user.food_posts.find_by(food_code: params[:food_post][:food_code])
+          search_food_code = @current_user.food_posts.find_by(food_code: params[:food_post][:food_code])
+          search_food_code.updated_at = Time.now
+          search_food_code.update(food_posts_params)
         else
-          if @food_posts.errors.any?
-            render json: @food_posts.errors.full_messages.to_s.gsub(",", "<br>").gsub("[", "").gsub("]", "").gsub('"', "").to_json
+          food_post = @current_user.food_posts.create(food_posts_params)
+          if food_post
+            render json: food_post.id
           else
-            render json: "不明なエラー"
+            if @food_posts.errors.any?
+              render json: @food_posts.errors.full_messages.to_s.gsub(",", "<br>").gsub("[", "").gsub("]", "").gsub('"', "").to_json
+            else
+              render json: "不明なエラー"
+            end
+          end
+        end
+      else
+        if params[:food_post][:id]
+          search_food_post = @current_user.food_posts.find(params[:food_post][:id])
+          search_food_post.updated_at = Time.now
+          search_food_post.update(food_posts_params)
+          render json: search_food_post.id
+        else
+          food_post = @current_user.food_posts.create(food_posts_params)
+          if food_post
+            render json: food_post.id
+          else
+            if food_post.errors.any?
+              render json: food_post.errors.full_messages.to_s.gsub(",", "<br>").gsub("[", "").gsub("]", "").gsub('"', "").to_json
+            else
+              render json: "不明なエラー"
+            end
           end
         end
       end
+
     end
   end
 
@@ -44,7 +64,7 @@ class Api::V1::FoodPostsController < ApplicationController
   private
 
   def food_posts_params
-    params.require(:food_posts).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate)
+    params.require(:food_post).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate)
   end
 
   def destroy_id_get

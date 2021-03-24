@@ -1,17 +1,15 @@
 <template>
   <v-dialog v-model="isDisplay" width="400px">
     <v-card>
-      <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
-        <v-tabs-slider color="transparent"></v-tabs-slider>
-        <v-tab v-for="item in items" :key="item"> </v-tab>
-      </v-tabs>
-      <v-tabs-items v-model="tab">
-        <v-tab-item v-for="item in items" :key="item">
-          <v-card-title>{{ item }}</v-card-title>
-          <v-card-text>{{ content }}</v-card-text>
-          <v-row v-if="type === 'foodRegister'">
-            <v-col cols="1" sm="1" md="1" lg="1" xl="1"> </v-col>
-            <v-col cols="4" sm="4" md="4" lg="4" xl="4" class="text-center">
+      <v-card-title>{{ title }}</v-card-title>
+      <v-card-text v-if="type === 'postDelete'">
+        「{{ this.id }}」をデータベースから削除しますか？
+      </v-card-text>
+      <v-card-text v-if="type === 'foodRegister'">
+        <v-container>
+          {{ content }}
+          <v-row justify="center">
+            <v-col cols="6" sm="6" md="6" lg="6" xl="6" class="text-center">
               <v-btn
                 class="font-weight-light"
                 dark
@@ -22,8 +20,7 @@
                 あり！
               </v-btn>
             </v-col>
-            <v-col cols="1" sm="1" md="1" lg="1" xl="1"> </v-col>
-            <v-col cols="4" sm="4" md="4" lg="4" xl="4">
+            <v-col cols="6" sm="6" md="6" lg="6" xl="6" class="text-center">
               <v-btn
                 class="font-weight-light"
                 dark
@@ -34,34 +31,35 @@
                 なし！
               </v-btn>
             </v-col>
-            <v-col cols="12"> </v-col>
           </v-row>
-          <v-card-actions>
-            <v-row justify="center">
-              <v-col cols="6">
-                <v-btn @click="isDisplay = false">Close</v-btn>
-              </v-col>
-              <v-col cols="6" class="text-right">
-                <v-btn
-                  v-if="type === 'postDelete'"
-                  dark
-                  color="red"
-                  @click="submit"
-                  >OK</v-btn
-                >
-                <v-btn
-                  v-if="type === 'eatDelete'"
-                  dark
-                  color="red"
-                  elevation="6"
-                  @click="eatSubmit"
-                  >OK</v-btn
-                >
-              </v-col>
-            </v-row>
-          </v-card-actions>
-        </v-tab-item>
-      </v-tabs-items>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-container>
+          <v-row justify="center">
+            <v-col cols="6">
+              <v-btn @click="isDisplay = false">Close</v-btn>
+            </v-col>
+            <v-col cols="6" class="text-right">
+              <v-btn
+                v-if="type === 'postDelete'"
+                dark
+                color="red"
+                @click="submit"
+                >OK</v-btn
+              >
+              <v-btn
+                v-if="type === 'eatDelete'"
+                dark
+                color="red"
+                elevation="6"
+                @click="eatSubmit"
+                >OK</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -74,22 +72,21 @@ export default {
   data: () => ({
     isDisplay: false,
     title: '',
-    tab: 0,
-    items: [''],
     id: null,
+    post_id: null,
     type: null,
   }),
   watch: {
     type(val) {
       switch (val) {
         case 'postDelete':
-          this.items = ['投稿を削除しますか？']
+          this.title = '削除'
           break
         case 'foodRegister':
-          this.items = ['バーコードはありますか？']
+          this.title = 'バーコードはありますか？'
           break
         case 'eatDelete':
-          this.items = ['削除しますか？']
+          this.title = '削除しますか？'
           break
       }
     },
@@ -97,8 +94,9 @@ export default {
   methods: {
     submit() {
       this.isDisplay = false
+      console.log(this.post_id)
+      this.$emit('method', this.post_id)
       this.reset()
-      this.$emit('method')
     },
     closeDisplay() {
       this.reset()
@@ -114,7 +112,10 @@ export default {
     },
     no_code() {
       this.isDisplay = false
-      this.$emit('no_code')
+      // 即座にdomを削除するとtransitionする前に消えてしまうので、200ms待つ
+      setTimeout(() => {
+        this.$emit('no_code')
+      }, 200)
       this.reset()
     },
     eatSubmit() {

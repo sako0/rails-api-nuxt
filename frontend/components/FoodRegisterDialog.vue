@@ -12,7 +12,7 @@
           >
             <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
             <v-tab v-for="(item, index) in items" :key="`first-` + index">
-              {{ item.title }}
+              <div v-text="item.title"></div>
               <v-icon>{{ item.icon }}</v-icon>
             </v-tab>
           </v-tabs>
@@ -21,24 +21,41 @@
               <v-card v-if="index === 0" color="basil" flat>
                 <v-card-title>{{ item.title }}</v-card-title>
                 <v-row justify="center">
-                  <v-col cols="5" class="text-center">
+                  <v-col cols="4" class="text-center">
                     <v-btn
                       v-if="func !== 'web' && fix === false"
                       dark
                       color="green darken-1"
                       @click="manualFix"
                     >
-                      手動入力
+                      <v-icon>mdi-pencil</v-icon>
+                      編集
+                    </v-btn>
+                    <v-btn
+                      v-if="func !== 'web' && fix"
+                      dark
+                      color="green darken-1"
+                      @click="editCancel"
+                    >
+                      <v-icon>mdi-cancel</v-icon>
+                      編集取消
                     </v-btn>
                   </v-col>
-                  <v-col cols="6" class="text-center">
+                  <v-col cols="4" class="text-center">
+                    <v-btn dark color="green darken-1" @click="reScan">
+                      <v-icon>mdi-barcode-scan</v-icon>
+                      バーコード再読込
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="4" class="text-center">
                     <v-btn
                       v-if="func !== 'web'"
                       dark
                       color="green darken-1"
                       @click="codeSearch"
                     >
-                      バーコード検索
+                      <v-icon>mdi-magnify</v-icon>
+                      検索
                     </v-btn>
                   </v-col>
                   <v-col v-if="func === 'web' || fix" cols="11">
@@ -392,7 +409,7 @@
                     <v-col cols="3" class="text-right">
                       <v-btn
                         color="green darken-1"
-                        dark
+                        :dark="!invalid"
                         :disabled="invalid"
                         elevation="6"
                         @click="submit"
@@ -440,6 +457,7 @@ export default {
   },
   data: () => ({
     isDisplay: false,
+    productData: null,
     productName: '',
     par: '',
     calorie: null,
@@ -478,13 +496,6 @@ export default {
     calendarDate: null,
     dateMenu: false,
   }),
-  created() {
-    this.begin = 100
-    this.calorie_total = (this.calorie * this.begin) / 100
-    this.protein_total = (this.protein * this.begin) / 100
-    this.lipid_total = (this.lipid * this.begin) / 100
-    this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
-  },
   watch: {
     isDisplay(val) {
       if (val) {
@@ -514,6 +525,13 @@ export default {
       this.carbohydrate_total = (this.carbohydrate * val) / 100
     },
   },
+  created() {
+    this.begin = 100
+    this.calorie_total = (this.calorie * this.begin) / 100
+    this.protein_total = (this.protein * this.begin) / 100
+    this.lipid_total = (this.lipid * this.begin) / 100
+    this.carbohydrate_total = (this.carbohydrate * this.begin) / 100
+  },
   methods: {
     async submit() {
       this.isDisplay = false
@@ -522,13 +540,13 @@ export default {
       if (this.func === 'web' || this.fix) {
         const url = '/api/v1/food_posts'
         const data = new FormData()
-        data.append('food_posts[food_code]', this.$props.number)
-        data.append('food_posts[product_name]', this.productName)
-        data.append('food_posts[par]', this.par)
-        data.append('food_posts[calorie]', this.calorie)
-        data.append('food_posts[protein]', this.protein)
-        data.append('food_posts[lipid]', this.lipid)
-        data.append('food_posts[carbohydrate]', this.carbohydrate)
+        data.append('food_post[food_code]', this.$props.number)
+        data.append('food_post[product_name]', this.productName)
+        data.append('food_post[par]', this.par)
+        data.append('food_post[calorie]', this.calorie)
+        data.append('food_post[protein]', this.protein)
+        data.append('food_post[lipid]', this.lipid)
+        data.append('food_post[carbohydrate]', this.carbohydrate)
         const headers = { 'content-type': 'multipart/form-data' }
         await this.$axios.post(url, data, { headers }).then((response) => {
           this.post_id = response.data
@@ -592,6 +610,23 @@ export default {
     manualFix() {
       this.fix = true
       this.func = 'my'
+    },
+    reScan() {
+      this.isDisplay = false
+      this.reset()
+      setTimeout(() => {
+        this.$emit('reScan')
+      }, 200)
+      this.reset()
+    },
+    editCancel() {
+      this.productName = this.productData.product_name
+      this.par = this.productData.par
+      this.calorie = this.productData.calorie
+      this.protein = this.productData.protein
+      this.lipid = this.productData.lipid
+      this.carbohydrate = this.productData.carbohydrate
+      this.fix = false
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

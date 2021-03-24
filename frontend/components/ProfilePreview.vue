@@ -92,7 +92,7 @@
                     {{ user.name }}
                   </v-list-item-title>
                   <v-list-item-subtitle
-                    >{{ user.user.profile.job }}
+                    >{{ user.profile.age }}歳
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -115,13 +115,13 @@
     </v-hover>
     <div class="text-left">
       <v-card-subtitle class="pb-0"
-        >{{ user.user.profile.url }}
+        >身長：{{ user.profile.height }}cm
       </v-card-subtitle>
 
       <v-card-text class="text--primary">
-        <div>{{ user.user.profile.skills }}</div>
+        <div>目標体重：{{ user.profile.target_weight }}kg</div>
 
-        <div>{{ user.user.profile.notes }}</div>
+        <div>一言：{{ user.profile.notes }}</div>
       </v-card-text>
     </div>
     <!--    <v-card-actions>-->
@@ -145,8 +145,8 @@ export default {
   data() {
     return {
       overlay: true,
-      pImageUrl: this.user.user.image,
-      pBackgroundUrl: this.user.user.background_image,
+      pImageUrl: this.user.image,
+      pBackgroundUrl: this.user.background_image,
       pImageUrlLoading: false,
       pBackgraundLoading: false,
       imageFile: '',
@@ -176,7 +176,7 @@ export default {
           })
           .catch((error) => console.log(error))
       } else {
-        this.pImageUrl = this.user.user.image
+        this.pImageUrl = this.user.image
         e.currentTarget.value = ''
         this.imageFile = ''
         this.$emit('imageFileGet', false)
@@ -201,7 +201,7 @@ export default {
           })
           .catch((error) => console.log(error))
       } else {
-        this.pBackgroundUrl = this.user.user.background_image
+        this.pBackgroundUrl = this.user.background_image
         e.currentTarget.value = ''
         this.backgroundFile = ''
         this.$emit('backgroundFileGet', false)

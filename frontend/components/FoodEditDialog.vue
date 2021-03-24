@@ -1,156 +1,143 @@
 <template>
   <v-dialog v-model="isDisplay" width="600px">
-    <validation-observer ref="observer" v-slot="{ invalid }">
-      <form>
-        <v-card>
-          <v-tabs
-            v-model="tab"
-            background-color="transparent"
-            color="basil"
-            grow
-          >
-            <v-tabs-slider color="transparent"></v-tabs-slider>
-            <v-tab v-for="item in items" :key="item">
-              {{ item }}
-            </v-tab>
-          </v-tabs>
-          <v-tabs-items v-model="tab">
-            <v-tab-item v-for="item in items" :key="item">
-              <v-card color="basil" flat>
-                <v-card-title>{{ item }}</v-card-title>
-                <v-row justify="center">
-                  <v-col cols="11" sm="11" md="11" lg="11" xl="11">
-                    <v-text-field
-                      v-model="productName"
-                      append-icon="mdi-briefcase"
-                      label="商品名"
-                      disabled
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="11" sm="11" md="11" lg="11" xl="11">
-                    <v-text-field
-                      v-model="par"
-                      append-icon="mdi-beaker"
-                      label="個数・単位"
-                      disabled
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                    <v-text-field
-                      :value="number"
-                      append-icon="mdi-barcode"
-                      disabled
-                      label="商品コード"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6" lg="6" xl="6">
-                    <v-menu
-                      v-model="dateMenu"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template #activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="calendarDate"
-                          label="日付"
-                          prepend-icon="mdi-calendar"
-                          required
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
+    <v-card>
+      <v-card-title>編集</v-card-title>
+      <validation-observer ref="observer" v-slot="{ invalid }">
+        <form>
+          <v-card-text>
+            <v-container>
+              <v-row justify="center">
+                <v-col cols="11" sm="11" md="11" lg="11" xl="11">
+                  <v-text-field
+                    v-model="productName"
+                    append-icon="mdi-briefcase"
+                    label="商品名"
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="11" sm="11" md="11" lg="11" xl="11">
+                  <v-text-field
+                    v-model="par"
+                    append-icon="mdi-beaker"
+                    label="個数・単位"
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col v-if="number" cols="6" sm="6" md="6" lg="6" xl="6">
+                  <v-text-field
+                    :value="number"
+                    append-icon="mdi-barcode"
+                    disabled
+                    label="商品コード"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                  <v-text-field
+                    v-model.number="calorie_total"
+                    suffix="kcal"
+                    append-icon="mdi-food-fork-drink"
+                    type="number"
+                    label="カロリー"
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+                  <v-text-field
+                    v-model.number="protein_total"
+                    suffix="g"
+                    append-icon="mdi-food-drumstick"
+                    type="number"
+                    label="たんぱく質"
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                  <v-text-field
+                    v-model.number="lipid_total"
+                    suffix="g"
+                    append-icon="mdi-food-steak"
+                    type="number"
+                    label="脂質"
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+                  <v-text-field
+                    v-model.number="carbohydrate_total"
+                    suffix="g"
+                    append-icon="mdi-rice"
+                    type="number"
+                    label="炭水化物"
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                  <v-menu
+                    v-model="dateMenu"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                  >
+                    <template #activator="{ on, attrs }">
+                      <v-text-field
                         v-model="calendarDate"
-                        locale="jp-ja"
-                        :day-format="(date) => new Date(date).getDate()"
-                        color="light-blue darken-1"
-                        @input="dateMenu = false"
-                      ></v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                    <v-text-field
-                      v-model.number="calorie_total"
-                      suffix="kcal"
-                      append-icon="mdi-food-fork-drink"
-                      type="number"
-                      label="カロリー"
-                      disabled
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                    <v-text-field
-                      v-model.number="protein_total"
-                      suffix="g"
-                      append-icon="mdi-food-drumstick"
-                      type="number"
-                      label="たんぱく質"
-                      disabled
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="1"> </v-col>
-                  <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                    <v-text-field
-                      v-model.number="lipid_total"
-                      suffix="g"
-                      append-icon="mdi-food-steak"
-                      type="number"
-                      label="脂質"
-                      disabled
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                    <v-text-field
-                      v-model.number="carbohydrate_total"
-                      suffix="g"
-                      append-icon="mdi-rice"
-                      type="number"
-                      label="炭水化物"
-                      disabled
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="1"> </v-col>
-                </v-row>
+                        label="日付"
+                        prepend-icon="mdi-calendar"
+                        required
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="calendarDate"
+                      locale="jp-ja"
+                      :day-format="(date) => new Date(date).getDate()"
+                      color="light-blue darken-1"
+                      @input="dateMenu = false"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
 
-                <v-card-actions>
-                  <v-row justify="center">
-                    <v-col cols="4" class="text-left">
-                      <v-btn @click="isDisplay = false">Close</v-btn>
-                    </v-col>
-                    <v-col cols="4" class="text-left">
-                      <v-select
-                        v-model="begin"
-                        :items="percent"
-                        menu-props="auto"
-                        label="Select"
-                        hide-details
-                        suffix="％"
-                        append-icon="mdi-format-list-bulleted-triangle"
-                        single-line
-                      ></v-select>
-                    </v-col>
-                    <v-col cols="3" class="text-right">
-                      <v-btn
-                        color="green darken-1"
-                        dark
-                        :disabled="invalid"
-                        @click="submit"
-                      >
-                        OK
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-card-actions>
-              </v-card>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-card>
-      </form>
-    </validation-observer>
+          <v-card-actions>
+            <v-container>
+              <v-row justify="center">
+                <v-col cols="4" class="text-left">
+                  <v-btn @click="isDisplay = false">Close</v-btn>
+                </v-col>
+                <v-col cols="4" class="text-left">
+                  <v-select
+                    v-model="begin"
+                    :items="percent"
+                    menu-props="auto"
+                    label="Select"
+                    hide-details
+                    suffix="％"
+                    append-icon="mdi-format-list-bulleted-triangle"
+                    single-line
+                  ></v-select>
+                </v-col>
+                <v-col cols="3" class="text-right">
+                  <v-btn
+                    color="green darken-1"
+                    :dark="!invalid"
+                    :disabled="invalid"
+                    @click="submit"
+                  >
+                    OK
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-actions>
+        </form>
+      </validation-observer>
+    </v-card>
   </v-dialog>
 </template>
 
@@ -194,8 +181,6 @@ export default {
     carbohydrate: null,
     carbohydrate_total: null,
     func: null,
-    tab: 0,
-    items: [''],
     url: null,
     image: null,
     image_file: null,
@@ -269,7 +254,9 @@ export default {
       this.$axios.put(url, data, { headers }).then((response) => {
         console.log(response)
         this.isDisplay = false
-        this.$emit('eatEdit')
+        setTimeout(() => {
+          this.$emit('eatEdit')
+        }, 200)
         this.reset()
       })
     },
