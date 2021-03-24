@@ -22,13 +22,7 @@
                 <v-card-title>
                   <v-container>
                     <v-row justify="center">
-                      <v-col cols="9" class="text-left"> 商品検索 </v-col>
-                      <v-col cols="3" class="text-right">
-                        <v-btn v-if="model && !fix" dark color="red darken-1">
-                          <v-icon>mdi-delete</v-icon>
-                          削除
-                        </v-btn>
-                      </v-col>
+                      <v-col cols="12" class="text-left"> 商品検索 </v-col>
                     </v-row>
                   </v-container>
                 </v-card-title>
@@ -41,6 +35,7 @@
                           :items="lists"
                           :loading="isLoading"
                           :search-input.sync="search"
+                          :disabled="fixExceptNewFlg"
                           color="green darken-1"
                           clearable
                           clear-icon="mdi-backspace"
@@ -63,20 +58,26 @@
                 <v-card-title>
                   <v-container>
                     <v-row justify="center">
-                      <v-col v-if="!model" cols="9" class="text-left">
+                      <v-col v-if="!model" cols="12" class="text-left">
                         新規作成
                       </v-col>
-                      <v-col v-else cols="9" class="text-left">
+                      <v-col v-else cols="5" class="text-left">
                         商品情報
                       </v-col>
-                      <v-col cols="3" class="text-right">
-                        <v-btn v-if="model" dark color="green darken-1">
+                      <v-col v-if="model && !fix" cols="7" class="text-right">
+                        <v-btn dark color="green darken-1" @click="fix = true">
                           <v-icon>mdi-pencil</v-icon>
-                          更新
+                          編集と削除
                         </v-btn>
-                        <v-btn v-if="model && fix" dark color="green darken-1">
-                          <v-icon>mdi-pencil</v-icon>
-                          更新取消
+                      </v-col>
+                      <v-col v-if="model && fix" cols="7" class="text-right">
+                        <v-btn
+                          dark
+                          color="green darken-1"
+                          @click="searchChange"
+                        >
+                          <v-icon>mdi-cancel</v-icon>
+                          編集取消
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -272,17 +273,49 @@
                 <v-card-actions>
                   <v-row justify="center">
                     <v-col cols="6">
-                      <v-btn @click="closeDisplay">Close</v-btn>
+                      <v-btn @click="closeDisplay">閉じる</v-btn>
                     </v-col>
                     <v-col cols="6" class="text-right">
-                      <v-btn color="blue" dark elevation="6" @click="nextTab"
+                      <v-btn
+                        v-if="!fix"
+                        color="blue"
+                        dark
+                        elevation="6"
+                        @click="nextTab"
                         >次へ</v-btn
+                      >
+                      <div v-else-if="fixExceptNewFlg">
+                        <v-btn dark color="red darken-1">
+                          <v-icon>mdi-delete</v-icon>
+                          削除
+                        </v-btn>
+                        <v-btn
+                          color="green darken-1"
+                          dark
+                          elevation="6"
+                          @click="nextTab"
+                        >
+                          <v-icon>mdi-pencil</v-icon>
+                          更新</v-btn
+                        >
+                      </div>
+
+                      <v-btn
+                        v-else
+                        color="green darken-1"
+                        :dark="!invalid"
+                        elevation="6"
+                        :disabled="invalid"
+                        @click="nextTab"
+                      >
+                        <v-icon>mdi-pencil</v-icon>
+                        登録</v-btn
                       >
                     </v-col>
                   </v-row>
                 </v-card-actions>
               </v-card>
-              <v-card v-if="index === 1" color="basil" flat>
+              <v-card v-if="index === 1 && !fix" color="basil" flat>
                 <v-card-title>{{ item.title }}</v-card-title>
                 <v-row justify="center">
                   <v-col cols="11" sm="11" md="11" lg="11" xl="11">
@@ -377,7 +410,7 @@
                 <v-card-actions>
                   <v-row justify="center">
                     <v-col cols="4" class="text-left">
-                      <v-btn @click="isDisplay = false">Close</v-btn>
+                      <v-btn @click="isDisplay = false">閉じる</v-btn>
                     </v-col>
                     <v-col cols="4" class="text-left">
                       <v-select
@@ -398,7 +431,7 @@
                         elevation="6"
                         :dark="!invalid"
                       >
-                        OK
+                        登録
                       </v-btn>
                     </v-col>
                   </v-row>
@@ -452,10 +485,6 @@ export default {
     carbohydrate: null,
     carbohydrate_total: null,
     tab: 0,
-    items: [
-      { title: '商品情報', icon: 'mdi-briefcase-search' },
-      { title: '登録', icon: 'mdi-pencil-plus' },
-    ],
     fix: true,
     post_id: null,
     percent: [
@@ -503,6 +532,19 @@ export default {
 
         return Object.assign({}, entry.attributes, { Description })
       })
+    },
+    fixExceptNewFlg() {
+      return this.fix && this.model
+    },
+    items() {
+      if (!this.fix) {
+        return [
+          { title: '商品情報', icon: 'mdi-briefcase-search' },
+          { title: '登録', icon: 'mdi-pencil-plus' },
+        ]
+      } else {
+        return [{ title: '商品情報', icon: 'mdi-briefcase-search' }]
+      }
     },
   },
   watch: {

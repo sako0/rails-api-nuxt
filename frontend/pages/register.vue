@@ -211,6 +211,7 @@ export default {
       if (response.data) {
         if (response.data.web_search) {
           if (response.data.content) {
+            this.$refs.dlg.productData = response.data
             this.$refs.dlg.productName = response.data.product_name
             this.$refs.dlg.par = response.data.par
             this.$refs.dlg.calorie = response.data.calorie
@@ -225,6 +226,7 @@ export default {
           this.lists = response.data.data
           this.$refs.listDlg.isDisplay = true
         } else {
+          this.$refs.dlg.productData = response.data.data.attributes
           this.$refs.dlg.productName =
             response.data.data.attributes.product_name
           this.$refs.dlg.par = response.data.data.attributes.par
@@ -327,6 +329,7 @@ export default {
       this.$refs.dlg.func = 'used'
       this.num = item.attributes.food_code
       this.$refs.dlg.begin = 100
+      this.$refs.dlg.productData = item.attributes
       this.$refs.dlg.productName = item.attributes.product_name
       this.$refs.dlg.par = item.attributes.par
       this.$refs.dlg.calorie = item.attributes.calorie

@@ -29,7 +29,16 @@
                       @click="manualFix"
                     >
                       <v-icon>mdi-pencil</v-icon>
-                      手動入力
+                      編集
+                    </v-btn>
+                    <v-btn
+                      v-if="func !== 'web' && fix"
+                      dark
+                      color="green darken-1"
+                      @click="editCancel"
+                    >
+                      <v-icon>mdi-cancel</v-icon>
+                      編集取消
                     </v-btn>
                   </v-col>
                   <v-col cols="4" class="text-center">
@@ -448,6 +457,7 @@ export default {
   },
   data: () => ({
     isDisplay: false,
+    productData: null,
     productName: '',
     par: '',
     calorie: null,
@@ -608,6 +618,15 @@ export default {
         this.$emit('reScan')
       }, 200)
       this.reset()
+    },
+    editCancel() {
+      this.productName = this.productData.product_name
+      this.par = this.productData.par
+      this.calorie = this.productData.calorie
+      this.protein = this.productData.protein
+      this.lipid = this.productData.lipid
+      this.carbohydrate = this.productData.carbohydrate
+      this.fix = false
     },
     reset() {
       Object.assign(this.$data, this.$options.data())
