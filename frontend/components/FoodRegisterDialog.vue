@@ -540,13 +540,13 @@ export default {
       if (this.func === 'web' || this.fix) {
         const url = '/api/v1/food_posts'
         const data = new FormData()
-        data.append('food_posts[food_code]', this.$props.number)
-        data.append('food_posts[product_name]', this.productName)
-        data.append('food_posts[par]', this.par)
-        data.append('food_posts[calorie]', this.calorie)
-        data.append('food_posts[protein]', this.protein)
-        data.append('food_posts[lipid]', this.lipid)
-        data.append('food_posts[carbohydrate]', this.carbohydrate)
+        data.append('food_post[food_code]', this.$props.number)
+        data.append('food_post[product_name]', this.productName)
+        data.append('food_post[par]', this.par)
+        data.append('food_post[calorie]', this.calorie)
+        data.append('food_post[protein]', this.protein)
+        data.append('food_post[lipid]', this.lipid)
+        data.append('food_post[carbohydrate]', this.carbohydrate)
         const headers = { 'content-type': 'multipart/form-data' }
         await this.$axios.post(url, data, { headers }).then((response) => {
           this.post_id = response.data

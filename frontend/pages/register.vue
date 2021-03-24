@@ -20,7 +20,7 @@
       :lists="lists"
       @selectedItem="selectedItem($event)"
     />
-    <FoodRegisterNoCodeDialog ref="noCodeDlg" />
+    <FoodRegisterNoCodeDialog ref="noCodeDlg" @reGet="getFoodInfo" />
     <v-row>
       <v-col class="center">
         <v-tabs
@@ -285,9 +285,8 @@ export default {
             return a + b
           })
           this.data = response.data.data.slice().reverse()
+          this.getGuideline()
         } else {
-          this.reset()
-          this.today = today
           this.getGuideline()
         }
       })
@@ -306,9 +305,8 @@ export default {
       this.$refs.editDlg.isDisplay = true
     },
     eatEdit() {
-      this.reset()
+      this.tab = 0
       this.getFoodInfo()
-      this.getGuideline()
     },
     deleteDlgView(index) {
       this.$refs.dialog.type = 'eatDelete'
@@ -319,9 +317,8 @@ export default {
       const eatData = this.data[id]
       const url = '/api/v1/food_eat/' + eatData.id
       this.$axios.delete(url).then((response) => {
-        this.reset()
+        this.tab = 0
         this.getFoodInfo()
-        this.getGuideline()
       })
     },
     selectedItem(item) {
@@ -367,6 +364,7 @@ export default {
       }
     },
     noCodeRegisterUp() {
+      this.$refs.noCodeDlg.reset()
       this.$refs.noCodeDlg.isDisplay = true
     },
     reset() {

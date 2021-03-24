@@ -1,7 +1,7 @@
 class CreateFoodPosts < ActiveRecord::Migration[6.1]
   def change
     create_table :food_posts do |t|
-      t.string :food_code, null: false
+      t.string :food_code
       t.references :user, foreign_key: true
       t.string :product_name, null: false
       t.string :par, null: false

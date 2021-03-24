@@ -23,7 +23,7 @@
                     disabled
                   ></v-text-field>
                 </v-col>
-                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                <v-col v-if="number" cols="6" sm="6" md="6" lg="6" xl="6">
                   <v-text-field
                     :value="number"
                     append-icon="mdi-barcode"
@@ -31,7 +31,47 @@
                     label="商品コード"
                   ></v-text-field>
                 </v-col>
+                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                  <v-text-field
+                    v-model.number="calorie_total"
+                    suffix="kcal"
+                    append-icon="mdi-food-fork-drink"
+                    type="number"
+                    label="カロリー"
+                    disabled
+                  ></v-text-field>
+                </v-col>
                 <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+                  <v-text-field
+                    v-model.number="protein_total"
+                    suffix="g"
+                    append-icon="mdi-food-drumstick"
+                    type="number"
+                    label="たんぱく質"
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                  <v-text-field
+                    v-model.number="lipid_total"
+                    suffix="g"
+                    append-icon="mdi-food-steak"
+                    type="number"
+                    label="脂質"
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+                  <v-text-field
+                    v-model.number="carbohydrate_total"
+                    suffix="g"
+                    append-icon="mdi-rice"
+                    type="number"
+                    label="炭水化物"
+                    disabled
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
                   <v-menu
                     v-model="dateMenu"
                     :close-on-content-click="false"
@@ -60,48 +100,6 @@
                     ></v-date-picker>
                   </v-menu>
                 </v-col>
-                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                  <v-text-field
-                    v-model.number="calorie_total"
-                    suffix="kcal"
-                    append-icon="mdi-food-fork-drink"
-                    type="number"
-                    label="カロリー"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                  <v-text-field
-                    v-model.number="protein_total"
-                    suffix="g"
-                    append-icon="mdi-food-drumstick"
-                    type="number"
-                    label="たんぱく質"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="1"> </v-col>
-                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                  <v-text-field
-                    v-model.number="lipid_total"
-                    suffix="g"
-                    append-icon="mdi-food-steak"
-                    type="number"
-                    label="脂質"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                  <v-text-field
-                    v-model.number="carbohydrate_total"
-                    suffix="g"
-                    append-icon="mdi-rice"
-                    type="number"
-                    label="炭水化物"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="1"> </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -256,7 +254,9 @@ export default {
       this.$axios.put(url, data, { headers }).then((response) => {
         console.log(response)
         this.isDisplay = false
-        this.$emit('eatEdit')
+        setTimeout(() => {
+          this.$emit('eatEdit')
+        }, 200)
         this.reset()
       })
     },

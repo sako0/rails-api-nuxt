@@ -2,10 +2,13 @@
   <v-dialog v-model="isDisplay" width="400px">
     <v-card>
       <v-card-title>{{ title }}</v-card-title>
-      <v-card-text>
+      <v-card-text v-if="type === 'postDelete'">
+        「{{ this.id }}」をデータベースから削除しますか？
+      </v-card-text>
+      <v-card-text v-if="type === 'foodRegister'">
         <v-container>
           {{ content }}
-          <v-row v-if="type === 'foodRegister'" justify="center">
+          <v-row justify="center">
             <v-col cols="6" sm="6" md="6" lg="6" xl="6" class="text-center">
               <v-btn
                 class="font-weight-light"
@@ -76,7 +79,7 @@ export default {
     type(val) {
       switch (val) {
         case 'postDelete':
-          this.title = '投稿を削除しますか？'
+          this.title = '削除'
           break
         case 'foodRegister':
           this.title = 'バーコードはありますか？'
@@ -91,7 +94,10 @@ export default {
     submit() {
       this.isDisplay = false
       this.reset()
-      this.$emit('method')
+      // 即座にdomを削除するとtransitionする前に消えてしまうので、200ms待つ
+      setTimeout(() => {
+        this.$emit('method')
+      }, 200)
     },
     closeDisplay() {
       this.reset()

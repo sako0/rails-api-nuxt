@@ -40,20 +40,10 @@ ActiveRecord::Schema.define(version: 2021_03_16_120436) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "follow_relations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.integer "follower_id"
-    t.integer "following_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["follower_id"], name: "index_follow_relations_on_follower_id"
-    t.index ["following_id"], name: "index_follow_relations_on_following_id"
-    t.index ["following_id"], name: "index_follow_relations_on_following_id_and_following_id", unique: true
-  end
-
   create_table "food_eats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "product_name", null: false
-    t.string "food_code", null: false
+    t.string "food_code"
     t.string "par", null: false
     t.float "calorie", null: false
     t.float "protein", null: false
@@ -79,7 +69,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_120436) do
   end
 
   create_table "food_posts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "food_code", null: false
+    t.string "food_code"
     t.bigint "user_id"
     t.string "product_name", null: false
     t.string "par", null: false
@@ -120,7 +110,6 @@ ActiveRecord::Schema.define(version: 2021_03_16_120436) do
     t.datetime "reset_sent_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "line_id"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
