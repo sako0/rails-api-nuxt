@@ -4,7 +4,7 @@
     <Dialog
       ref="dialog"
       @code_exist="cameraUp"
-      @no_code="dlgUp"
+      @no_code="noCodeRegisterUp"
       @eatDelete="eatDelete($event)"
     />
     <FoodRegisterDialog
@@ -20,6 +20,7 @@
       :lists="lists"
       @selectedItem="selectedItem($event)"
     />
+    <FoodRegisterNoCodeDialog ref="noCodeDlg" />
     <v-row>
       <v-col class="center">
         <v-tabs
@@ -153,6 +154,7 @@ import KcalBarChart from '@/components/KcalBarChart'
 import GBarChart from '@/components/GBarChart'
 import FoodEditDialog from '@/components/FoodEditDialog'
 import FoodRegisterListDialog from '@/components/FoodRegisterListDialog'
+import FoodRegisterNoCodeDialog from '@/components/FoodRegisterNoCodeDialog'
 
 export default {
   components: {
@@ -163,6 +165,7 @@ export default {
     GBarChart,
     FoodEditDialog,
     FoodRegisterListDialog,
+    FoodRegisterNoCodeDialog,
   },
   middleware: 'auth',
   data() {
@@ -359,6 +362,9 @@ export default {
       } else {
         return target.format('hh:mm')
       }
+    },
+    noCodeRegisterUp() {
+      this.$refs.noCodeDlg.isDisplay = true
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

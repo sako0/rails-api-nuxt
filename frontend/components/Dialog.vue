@@ -107,7 +107,10 @@ export default {
     },
     no_code() {
       this.isDisplay = false
-      this.$emit('no_code')
+      // 即座にdomを削除するとtransitionする前に消えてしまうので、200ms待つ
+      setTimeout(() => {
+        this.$emit('no_code')
+      }, 200)
       this.reset()
     },
     eatSubmit() {

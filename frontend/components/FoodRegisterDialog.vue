@@ -607,6 +607,7 @@ export default {
       setTimeout(() => {
         this.$emit('reScan')
       }, 200)
+      this.reset()
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

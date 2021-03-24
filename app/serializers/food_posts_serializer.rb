@@ -1,5 +1,5 @@
 class FoodPostsSerializer < ActiveModel::Serializer
-  attributes :id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :user_id, :created_at, :image, :post_user_image, :func
+  attributes :id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :user_id, :created_at, :post_user_image, :func
   belongs_to :user, serializer: UserSerializer
 
   # 画像のURLを返す
@@ -23,7 +23,7 @@ class FoodPostsSerializer < ActiveModel::Serializer
   # コントローラから値を受け取る
   def func
     if instance_options[:func]
-      func =  instance_options[:func]
+      func = instance_options[:func]
     end
   end
 end
