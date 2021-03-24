@@ -36,8 +36,6 @@ gem 'active_model_serializers', require: true
 # webスクレイピングを行う
 gem 'nokogiri'
 gem 'mechanize'
-# line_botを使う
-gem 'line-bot-api'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
