@@ -229,33 +229,23 @@ export default {
       title: '',
       uploadImage: '',
       uploadBackground: '',
-      name: this.user.user.name,
-      age: this.user.user.profile.age,
-      sex: this.user.user.profile.sex,
+      name: this.user.name,
+      age: this.user.profile.age,
+      sex: this.user.profile.sex,
       sex_items: [
         { text: '男性', value: false },
         { text: '女性', value: true },
       ],
-      height: this.user.user.profile.height,
-      target_weight: this.user.user.profile.target_weight,
-      action_level: this.user.user.profile.action_level,
+      height: this.user.profile.height,
+      target_weight: this.user.profile.target_weight,
+      action_level: this.user.profile.action_level,
       action_level_items: [
         { text: '低い', value: 1.5 },
         { text: '普通', value: 1.75 },
         { text: '高い', value: 2 },
       ],
-      notes: this.user.user.profile.notes,
+      notes: this.user.profile.notes,
     }
-  },
-  computed: {
-    userComputed: {
-      get() {
-        return this.$props.user
-      },
-      set(value) {
-        this.$emit('change', value)
-      },
-    },
   },
   mounted() {
     this.title = 'プロフィール情報変更'
@@ -263,7 +253,7 @@ export default {
   methods: {
     submit() {
       this.isDisplay = false
-      const url = '/api/v1/users/' + this.user.user.id
+      const url = '/api/v1/users/' + this.user.id
       const data = new FormData()
       if (this.uploadImage) {
         data.append('user[image]', this.uploadImage)

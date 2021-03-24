@@ -5,14 +5,14 @@
         <v-col cols="12" sm="12" md="4" lg="4" xl="4">
           <v-row class="mt-5">
             <v-col cols="12">
-              <profileCard :user="currentUser" @getUser="getUser" />
+              <ProfileCard :user="currentUser" @getUser="getUser" />
             </v-col>
           </v-row>
         </v-col>
         <v-col cols="12" sm="12" md="8" lg="8" xl="8">
           <v-row class="mt-5">
             <v-col cols="12">
-              <foodPostCard :foods="foodPosts" />
+              <FoodPostCard :foods="foodPosts" @getPost="getPost" />
             </v-col>
           </v-row>
         </v-col>
@@ -21,8 +21,8 @@
   </v-row>
 </template>
 <script>
-import FoodPostCard from '~/components/FoodPostCard.vue'
-import ProfileCard from '~/components/ProfileCard.vue'
+import FoodPostCard from '@/components/FoodPostCard'
+import ProfileCard from '@/components/ProfileCard'
 
 export default {
   components: {
@@ -72,26 +72,25 @@ export default {
   //     })
   //   }
   // },
-  async asyncData({ $axios, redirect }) {
-    try {
-      const currentUser = await $axios.get('api/v1/sessions')
-      const foodPosts = await $axios.get('api/v1/food_posts')
-      // 配列で返ってくるのでJSONにして返却
-      return { currentUser: currentUser.data, foodPosts: foodPosts.data }
-    } catch (err) {
-      return redirect('/')
-    }
-  },
   data() {
     return {
-      currentUser: '',
-      foodPosts: '',
+      currentUser: null,
+      foodPosts: null,
     }
+  },
+  created() {
+    this.getUser()
+    this.getPost()
   },
   methods: {
     getUser() {
       this.$axios.get('api/v1/sessions').then((response) => {
-        this.currentUser = response.data
+        this.currentUser = response.data.user
+      })
+    },
+    getPost() {
+      this.$axios.get('api/v1/food_posts').then((response) => {
+        this.foodPosts = response.data
       })
     },
   },

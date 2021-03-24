@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Dialog ref="dlg" @method="postDelete" />
+    <Dialog ref="dlg" @method="postDelete($event)" />
     <v-dialog v-model="isDisplay" width="600px">
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form>
@@ -745,7 +745,7 @@ export default {
       this.$refs.dlg.id = this.productName
       this.$refs.dlg.isDisplay = true
     },
-    postDelete() {
+    postDelete(id) {
       this.postLoading = true
       const url = '/api/v1/food_posts/' + this.post_id
       const headers = { 'content-type': 'application/json' }

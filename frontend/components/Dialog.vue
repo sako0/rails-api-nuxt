@@ -73,6 +73,7 @@ export default {
     isDisplay: false,
     title: '',
     id: null,
+    post_id: null,
     type: null,
   }),
   watch: {
@@ -93,11 +94,9 @@ export default {
   methods: {
     submit() {
       this.isDisplay = false
+      console.log(this.post_id)
+      this.$emit('method', this.post_id)
       this.reset()
-      // 即座にdomを削除するとtransitionする前に消えてしまうので、200ms待つ
-      setTimeout(() => {
-        this.$emit('method')
-      }, 200)
     },
     closeDisplay() {
       this.reset()
