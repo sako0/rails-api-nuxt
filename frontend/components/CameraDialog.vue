@@ -178,39 +178,34 @@ export default {
 </script>
 <style lang="scss">
 .camera-area {
+  margin: auto;
+  overflow: hidden;
+  height: 300px;
+  width: 300px;
+  /* relativeに設定 */
   position: relative;
-  height: 200px;
   /**
    * 指定したDIV配下にvideoとcanvasが追加される
    * 4:3になるため、margin-topで調整
    */
   video {
-    //margin-top: -7em;
-    //max-height: 17.2em;
-    width: 330px;
-    left: 0;
-    right: 0;
-    margin: -7em auto;
-    //transform: scale(1);
+    margin-top: -50px;
+    width: 300px;
+    height: 400px;
   }
   canvas {
-    margin-top: -12em;
-    width: 25em;
-    height: 20em;
-    left: 0;
-    right: 0;
+    margin-top: -600px;
+    width: 300px;
+    height: 400px;
   }
 }
 /* 検出範囲のサイズに合わせ枠線を引く */
 .detect-area {
-  position: relative;
-  top: 5em;
-  bottom: 5em;
-  left: 0;
-  right: 0;
-  margin: auto;
-  height: 7em;
-  width: 17em;
+  position: absolute;
+  top: 30%;
+  bottom: 30%;
+  left: 10%;
+  right: 10%;
   border: 3px solid #0000ff;
 }
 </style>
