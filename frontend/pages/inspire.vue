@@ -79,8 +79,8 @@ export default {
     }
   },
   created() {
-    this.getUser()
     this.getPost()
+    this.getUser()
   },
   methods: {
     getUser() {

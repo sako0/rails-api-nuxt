@@ -41,7 +41,6 @@
                             :loading="isLoading"
                             :search-input.sync="search"
                             :disabled="fixExceptNewFlg"
-                            value="aaa"
                             color="green darken-1"
                             clearable
                             clear-icon="mdi-backspace"

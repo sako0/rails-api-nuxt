@@ -14,13 +14,15 @@ class Api::V1::SessionsController < ApplicationController
   end
 
   def index
+    image = @current_user.display_image ? url_for(@current_user.display_image) : nil
+    background_image = @current_user.display_background_image ? url_for(@current_user.display_background_image) : nil
     render json: { user:
                      { id: @current_user.id,
                        name: @current_user.name,
                        email: @current_user.email,
                        profile: @current_user.profiles,
-                       image: url_for(@current_user.display_image),
-                       background_image: url_for(@current_user.display_background_image),
+                       image: image,
+                       background_image: background_image,
                      }
     }
   end

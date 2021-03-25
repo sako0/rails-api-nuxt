@@ -91,9 +91,6 @@
                   <v-list-item-title class="title">
                     {{ user.name }}
                   </v-list-item-title>
-                  <v-list-item-subtitle
-                    >{{ user.profile.age }}歳
-                  </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-col>
@@ -114,11 +111,9 @@
       </label>
     </v-hover>
     <div class="text-left">
-      <v-card-subtitle class="pb-0"
-        >身長：{{ user.profile.height }}cm
-      </v-card-subtitle>
-
       <v-card-text class="text--primary">
+        <div>{{ user.profile.age }}歳</div>
+        <div>身長：{{ user.profile.height }}cm</div>
         <div>目標体重：{{ user.profile.target_weight }}kg</div>
 
         <div>一言：{{ user.profile.notes }}</div>
@@ -145,13 +140,41 @@ export default {
   data() {
     return {
       overlay: true,
-      pImageUrl: this.user.image,
-      pBackgroundUrl: this.user.background_image,
       pImageUrlLoading: false,
       pBackgraundLoading: false,
-      imageFile: '',
-      backgroundFile: '',
+      previewImage: null,
+      previewBackground: null,
     }
+  },
+  computed: {
+    pBackgroundUrl: {
+      get() {
+        if (this.previewBackground) {
+          return this.previewBackground
+        } else if (this.user.background_image) {
+          return this.user.background_image
+        } else {
+          return 'https://season-freeillust.com/img/others-haikei/03.jpg'
+        }
+      },
+      set(val) {
+        this.previewBackground = val
+      },
+    },
+    pImageUrl: {
+      get() {
+        if (this.previewImage) {
+          return this.previewImage
+        } else if (this.user.image) {
+          return this.user.image
+        } else {
+          return 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'
+        }
+      },
+      set(val) {
+        this.previewImage = val
+      },
+    },
   },
   methods: {
     openDisplay() {
@@ -161,8 +184,6 @@ export default {
       if (e.target.files[0]) {
         this.pImageUrlLoading = true
         const image = e.target.files[0]
-        // ここでdataにimageFileを格納する
-        this.imageFile = image
         const url = `/api/v1/profiles`
         const data = new FormData()
         data.append('image', image)
@@ -178,7 +199,6 @@ export default {
       } else {
         this.pImageUrl = this.user.image
         e.currentTarget.value = ''
-        this.imageFile = ''
         this.$emit('imageFileGet', false)
       }
     },
@@ -186,8 +206,6 @@ export default {
       if (e.target.files[0]) {
         this.pBackgraundLoading = true
         const image = e.target.files[0]
-        // ここでdataにbackgroundファイルを格納する
-        this.backgroundFile = image
         const url = `/api/v1/profiles`
         const data = new FormData()
         data.append('background', image)
@@ -203,7 +221,6 @@ export default {
       } else {
         this.pBackgroundUrl = this.user.background_image
         e.currentTarget.value = ''
-        this.backgroundFile = ''
         this.$emit('backgroundFileGet', false)
       }
     },

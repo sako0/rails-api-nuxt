@@ -1,11 +1,11 @@
 <template>
-  <v-card v-if="currentUser !== null" class="mx-auto" max-width="320" tile>
+  <v-card v-if="user" class="mx-auto" max-width="320" tile>
     <ProfileImageDialog
       ref="imageDlg"
-      :user="currentUser"
+      :user="user"
       @getUser="getUser"
     ></ProfileImageDialog>
-    <v-img max-height="200px" height="100%" :src="currentUser.background_image">
+    <v-img max-height="200px" height="100%" :src="background_image">
       <v-row>
         <v-col cols="2">
           <v-btn
@@ -25,7 +25,7 @@
       <v-row justify="center" class="text-center">
         <v-col class="pa-0" cols="12">
           <v-avatar class="profile" color="grey" size="100">
-            <v-img :src="currentUser.image"></v-img>
+            <v-img :src="image"></v-img>
           </v-avatar>
         </v-col>
       </v-row>
@@ -34,25 +34,19 @@
           <v-list-item color="rgba(0, 0, 0, .4)" dark>
             <v-list-item-content>
               <v-list-item-title class="font-weight-bold">
-                {{ currentUser.name }}
+                {{ user.name }}
               </v-list-item-title>
-              <v-list-item-subtitle
-                >{{ currentUser.profile.age }}歳
-              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-col>
       </v-row>
     </v-img>
     <div class="text-left">
-      <v-card-subtitle class="pb-0"
-        >身長：{{ currentUser.profile.height }}cm
-      </v-card-subtitle>
-
       <v-card-text class="text--primary">
-        <div>目標体重：{{ currentUser.profile.target_weight }}kg</div>
-
-        <div>一言：{{ currentUser.profile.notes }}</div>
+        <div>{{ user.profile.age }}歳</div>
+        <div>身長：{{ user.profile.height }}cm</div>
+        <div>目標体重：{{ user.profile.target_weight }}kg</div>
+        <div>一言：{{ user.profile.notes }}</div>
       </v-card-text>
     </div>
   </v-card>
@@ -67,14 +61,20 @@ export default {
     // Object形に変換
     user: Object,
   },
-  data() {
-    return {
-      currentUser: null,
-    }
-  },
-  watch: {
-    user(val) {
-      this.currentUser = val
+  computed: {
+    background_image() {
+      if (this.user.background_image) {
+        return this.user.background_image
+      } else {
+        return 'https://season-freeillust.com/img/others-haikei/03.jpg'
+      }
+    },
+    image() {
+      if (this.user.image) {
+        return this.user.image
+      } else {
+        return 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'
+      }
     },
   },
   methods: {

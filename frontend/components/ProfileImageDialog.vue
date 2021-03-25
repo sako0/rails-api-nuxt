@@ -227,8 +227,8 @@ export default {
     return {
       isDisplay: false,
       title: '',
-      uploadImage: '',
-      uploadBackground: '',
+      uploadImage: null,
+      uploadBackground: null,
       name: this.user.name,
       age: this.user.profile.age,
       sex: this.user.profile.sex,
@@ -295,14 +295,14 @@ export default {
       if (value) {
         this.uploadImage = value
       } else {
-        this.uploadImage = ''
+        this.uploadImage = null
       }
     },
     backgroundFileGet(value) {
       if (value) {
         this.uploadBackground = value
       } else {
-        this.uploadBackground = ''
+        this.uploadBackground = null
       }
     },
     getUser() {
