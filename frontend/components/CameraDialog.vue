@@ -178,18 +178,15 @@ export default {
 </script>
 <style lang="scss">
 .camera-area {
-  overflow: hidden;
-  height: 247px;
-  width: 300px;
-
+  position: center;
   /**
    * 指定したDIV配下にvideoとcanvasが追加される
    * 4:3になるため、margin-topで調整
    */
   video {
-    margin-top: -110px;
-    width: 300px;
-    height: 247px;
+    margin-top: -7em;
+    max-height: 17.2em;
+    //transform: scale(1);
   }
   canvas {
     margin-top: -400px;
@@ -202,8 +199,7 @@ export default {
   position: relative;
   width: 200px;
   top: 60px;
-  left: 50px;
-  right: 50px;
+  left: 20%;
   height: 100px;
   border: 3px solid #0000ff;
 }
