@@ -112,14 +112,7 @@
                       label="商品コード"
                     ></v-text-field>
                   </v-col>
-                  <v-col
-                    v-if="func === 'web' || fix"
-                    cols="5"
-                    sm="5"
-                    md="5"
-                    lg="5"
-                    xl="5"
-                  >
+                  <v-col v-if="func === 'web' || fix" cols="11">
                     <validation-provider
                       v-slot="{ errors }"
                       rules="required|max:35"
@@ -135,14 +128,7 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col
-                    v-if="func !== 'web' && fix === false"
-                    cols="5"
-                    sm="5"
-                    md="5"
-                    lg="5"
-                    xl="5"
-                  >
+                  <v-col v-if="func !== 'web' && fix === false" cols="11">
                     <v-text-field
                       v-model.number="calorie"
                       suffix="kcal"
@@ -152,14 +138,7 @@
                       disabled
                     ></v-text-field>
                   </v-col>
-                  <v-col
-                    v-if="func === 'web' || fix"
-                    cols="5"
-                    sm="5"
-                    md="5"
-                    lg="5"
-                    xl="5"
-                  >
+                  <v-col v-if="func === 'web' || fix" cols="11">
                     <validation-provider
                       v-slot="{ errors }"
                       rules="required|max:35"
@@ -175,14 +154,7 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col
-                    v-if="func !== 'web' && fix === false"
-                    cols="5"
-                    sm="5"
-                    md="5"
-                    lg="5"
-                    xl="5"
-                  >
+                  <v-col v-if="func !== 'web' && fix === false" cols="11">
                     <v-text-field
                       v-model.number="protein"
                       suffix="g"
@@ -192,15 +164,7 @@
                       disabled
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="1"></v-col>
-                  <v-col
-                    v-if="func === 'web' || fix"
-                    cols="5"
-                    sm="5"
-                    md="5"
-                    lg="5"
-                    xl="5"
-                  >
+                  <v-col v-if="func === 'web' || fix" cols="11">
                     <validation-provider
                       v-slot="{ errors }"
                       rules="required|max:35"
@@ -216,14 +180,7 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col
-                    v-if="func !== 'web' && fix === false"
-                    cols="5"
-                    sm="5"
-                    md="5"
-                    lg="5"
-                    xl="5"
-                  >
+                  <v-col v-if="func !== 'web' && fix === false" cols="11">
                     <v-text-field
                       v-model.number="lipid"
                       suffix="g"
@@ -233,14 +190,7 @@
                       disabled
                     ></v-text-field>
                   </v-col>
-                  <v-col
-                    v-if="func === 'web' || fix"
-                    cols="5"
-                    sm="5"
-                    md="5"
-                    lg="5"
-                    xl="5"
-                  >
+                  <v-col v-if="func === 'web' || fix" cols="11">
                     <validation-provider
                       v-slot="{ errors }"
                       rules="required|max:35"
@@ -256,14 +206,7 @@
                       ></v-text-field>
                     </validation-provider>
                   </v-col>
-                  <v-col
-                    v-if="func !== 'web' && fix === false"
-                    cols="5"
-                    sm="5"
-                    md="5"
-                    lg="5"
-                    xl="5"
-                  >
+                  <v-col v-if="func !== 'web' && fix === false" cols="11">
                     <v-text-field
                       v-model.number="carbohydrate"
                       suffix="g"
@@ -273,7 +216,6 @@
                       disabled
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="1"> </v-col>
                 </v-row>
 
                 <v-card-actions>
@@ -308,42 +250,13 @@
                       disabled
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                  <v-col cols="11" sm="11" md="11" lg="11" xl="11">
                     <v-text-field
                       :value="number"
                       append-icon="mdi-barcode"
                       disabled
                       label="商品コード"
                     ></v-text-field>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6" lg="6" xl="6">
-                    <v-menu
-                      v-model="dateMenu"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template #activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="calendarDate"
-                          label="日付"
-                          prepend-icon="mdi-calendar"
-                          required
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="calendarDate"
-                        locale="jp-ja"
-                        :day-format="(date) => new Date(date).getDate()"
-                        color="light-blue darken-1"
-                        @input="dateMenu = false"
-                      ></v-date-picker>
-                    </v-menu>
                   </v-col>
                   <v-col cols="5" sm="5" md="5" lg="5" xl="5">
                     <v-text-field
@@ -387,14 +300,43 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="1"> </v-col>
+                  <v-col cols="8">
+                    <v-dialog
+                      ref="dateDlg"
+                      v-model="datePicker"
+                      :return-value.sync="calendarDate"
+                      width="290px"
+                    >
+                      <template #activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="calendarDate"
+                          label="日付"
+                          prepend-icon="mdi-calendar"
+                          required
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="calendarDate"
+                        locale="jp-ja"
+                        :day-format="(date) => new Date(date).getDate()"
+                        color="light-blue darken-1"
+                        @change="$refs.dateDlg[0].save(calendarDate)"
+                      >
+                        <v-spacer></v-spacer>
+                      </v-date-picker>
+                    </v-dialog>
+                  </v-col>
                 </v-row>
 
                 <v-card-actions>
-                  <v-row justify="center">
+                  <v-row>
                     <v-col cols="4" class="text-left">
-                      <v-btn @click="isDisplay = false">Close</v-btn>
+                      <v-btn @click="isDisplay = false">閉じる</v-btn>
                     </v-col>
-                    <v-col cols="4" class="text-left">
+                    <v-col cols="5" class="text-left">
                       <v-select
                         v-model="begin"
                         :items="percent"
@@ -406,7 +348,7 @@
                         single-line
                       ></v-select>
                     </v-col>
-                    <v-col cols="3" class="text-right">
+                    <v-col cols="2" class="text-right">
                       <v-btn
                         color="green darken-1"
                         :dark="!invalid"
@@ -414,7 +356,7 @@
                         elevation="6"
                         @click="submit"
                       >
-                        OK
+                        登録
                       </v-btn>
                     </v-col>
                   </v-row>
@@ -494,7 +436,7 @@ export default {
     ],
     begin: 100,
     calendarDate: null,
-    dateMenu: false,
+    datePicker: false,
   }),
   watch: {
     isDisplay(val) {

@@ -255,6 +255,7 @@ export default {
       this.$refs.dialog.isDisplay = true
     },
     getFoodInfo() {
+      this.reset()
       const today = this.$moment().format('YYYY-MM-DD')
       this.today = today
       const url = '/api/v1/food_eat/' + today
@@ -305,7 +306,6 @@ export default {
       this.$refs.editDlg.isDisplay = true
     },
     eatEdit() {
-      this.tab = 0
       this.getFoodInfo()
     },
     deleteDlgView(index) {
@@ -317,7 +317,6 @@ export default {
       const eatData = this.data[id]
       const url = '/api/v1/food_eat/' + eatData.id
       this.$axios.delete(url).then((response) => {
-        this.tab = 0
         this.getFoodInfo()
       })
     },
