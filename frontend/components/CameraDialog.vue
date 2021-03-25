@@ -181,7 +181,7 @@ export default {
   margin: auto;
   overflow: hidden;
   height: 300px;
-  width: 300px;
+  width: 250px;
   /* relativeに設定 */
   position: relative;
   /**
@@ -190,22 +190,22 @@ export default {
    */
   video {
     margin-top: -50px;
-    width: 300px;
+    width: 250px;
     height: 400px;
   }
   canvas {
     margin-top: -600px;
-    width: 300px;
+    width: 250px;
     height: 400px;
   }
 }
 /* 検出範囲のサイズに合わせ枠線を引く */
 .detect-area {
   position: absolute;
-  top: 30%;
-  bottom: 30%;
-  left: 10%;
-  right: 10%;
-  border: 3px solid #0000ff;
+  top: 35%;
+  bottom: 35%;
+  left: 15%;
+  right: 15%;
+  border: 2px solid #0000ff;
 }
 </style>
