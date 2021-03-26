@@ -23,5 +23,4 @@ ENV HOST 0.0.0.0
 COPY . /frontend
 
 # Start the main process.
-CMD ["nuxt", "build"]
-CMD ["nuxt", "start"]
+CMD ["cmd.sh"]
