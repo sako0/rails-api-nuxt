@@ -41,8 +41,8 @@
                         color="green darken-1"
                         clearable
                         clear-icon="mdi-backspace"
-                        no-data-text="データが存在しません"
                         hide-selected
+                        hide-no-data
                         auto-select-first
                         item-text="Description"
                         item-value="API"
