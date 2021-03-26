@@ -1,19 +1,28 @@
 <template>
   <v-row>
+    <v-snackbar v-model="snackbar" elevation="24" timeout="2000">
+      {{ snackbarMsg }}
+
+      <template #action="{ attrs }">
+        <v-btn icon v-bind="attrs" @click="snackbar = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-col class="center">
       <div v-if="!overlay">
         <v-row>
           <v-col cols="12" sm="12" md="4" lg="4" xl="4">
             <v-row class="mt-5">
               <v-col cols="12">
-                <ProfileCard :user="currentUser" @getUser="getUser" />
+                <ProfileCard :user="currentUser" @getUser="changeUser" />
               </v-col>
             </v-row>
           </v-col>
           <v-col cols="12" sm="12" md="8" lg="8" xl="8">
             <v-row class="mt-5">
               <v-col cols="12">
-                <FoodPostCard :foods="foodPosts" @getPost="getPost" />
+                <FoodPostCard :foods="foodPosts" @getPost="postDelete" />
               </v-col>
             </v-row>
           </v-col>
@@ -86,6 +95,8 @@ export default {
       getPostLoading: true,
       getUserLoading: true,
       sleepTime: 300,
+      snackbar: false,
+      snackbarMsg: null,
     }
   },
   computed: {
@@ -127,6 +138,16 @@ export default {
             this.getPostLoading = false
           }, this.sleepTime)
         })
+    },
+    postDelete() {
+      this.getPost()
+      this.snackbarMsg = '削除しました'
+      this.snackbar = true
+    },
+    changeUser() {
+      this.getUser()
+      this.snackbarMsg = 'ユーザ情報を更新しました'
+      this.snackbar = true
     },
   },
 }

@@ -1,5 +1,14 @@
 <template>
   <div>
+    <v-snackbar v-model="snackbar" elevation="24" timeout="2000">
+      {{ snackbarMsg }}
+
+      <template #action="{ attrs }">
+        <v-btn icon v-bind="attrs" @click="snackbar = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
     <div v-if="!pageOverlay">
       <cameraDialog ref="cameraDlg" @code="code" />
       <Dialog
@@ -11,7 +20,7 @@
       <FoodRegisterDialog
         ref="dlg"
         :number="num"
-        @reGet="getFoodInfo"
+        @reGet="registerFinish"
         @codeSearch="codeSearch($event)"
         @reScan="cameraUp"
       />
@@ -21,7 +30,7 @@
         :lists="lists"
         @selectedItem="selectedItem($event)"
       />
-      <FoodRegisterNoCodeDialog ref="noCodeDlg" @reGet="getFoodInfo" />
+      <FoodRegisterNoCodeDialog ref="noCodeDlg" @reGet="registerFinish" />
       <v-row>
         <v-col class="center">
           <v-tabs
@@ -203,6 +212,8 @@ export default {
       getFoodInfoLoading: true,
       getGuidelineLoading: true,
       sleepTime: 300,
+      snackbar: false,
+      snackbarMsg: null,
     }
   },
   computed: {
@@ -355,6 +366,8 @@ export default {
     },
     eatEdit() {
       this.getFoodInfo()
+      this.snackbarMsg = '更新しました'
+      this.snackbar = true
     },
     deleteDlgView(index) {
       this.$refs.dialog.type = 'eatDelete'
@@ -366,6 +379,8 @@ export default {
       const url = '/api/v1/food_eat/' + eatData.id
       this.$axios.delete(url).then((response) => {
         this.getFoodInfo()
+        this.snackbarMsg = '削除しました'
+        this.snackbar = true
       })
     },
     selectedItem(item) {
@@ -421,6 +436,11 @@ export default {
     noCodeRegisterUp() {
       this.$refs.noCodeDlg.reset()
       this.$refs.noCodeDlg.isDisplay = true
+    },
+    registerFinish() {
+      this.getFoodInfo()
+      this.snackbarMsg = '登録しました'
+      this.snackbar = true
     },
     reset() {
       Object.assign(this.$data, this.$options.data())
