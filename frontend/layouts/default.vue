@@ -59,37 +59,47 @@
         <nuxt />
       </v-container>
     </v-main>
-    <!--    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>-->
-    <!--      <v-list>-->
-    <!--        <v-list-item>-->
-    <!--          <v-list-item-title>ログイン中のユーザ</v-list-item-title>-->
-    <!--        </v-list-item>-->
-    <!--      </v-list>-->
-    <!--    </v-navigation-drawer>-->
-    <v-footer :absolute="!fixed" app color="green darken-1" dark elevation="20">
-      <v-row justify="center" class="d-lg-none">
-        <v-col cols="3">
-          <v-btn text to="/register"><v-icon>mdi-pencil-plus</v-icon></v-btn>
-        </v-col>
-        <v-col cols="3">
-          <v-btn text to="/inspire"
-            ><v-icon>mdi-notebook-multiple</v-icon></v-btn
-          >
-        </v-col>
-        <v-col cols="3">
-          <v-btn text to="/"><v-icon>mdi-information-outline</v-icon></v-btn>
-        </v-col>
-        <v-col cols="3">
-          <v-btn text to="/inspire"><v-icon>mdi-cog</v-icon></v-btn>
-        </v-col>
-      </v-row>
+    <v-footer
+      class="d-none d-lg-block"
+      :absolute="!fixed"
+      app
+      color="green darken-1"
+      dark
+      elevation="20"
+    >
       <span class="d-none d-lg-block"
         >&copy; {{ new Date().getFullYear() }}</span
       >
     </v-footer>
+    <v-bottom-navigation
+      background-color="green darken-1"
+      elevation="20"
+      app
+      fixed
+      dark
+      grow
+      shift
+      class="d-lg-none"
+    >
+      <v-btn to="/register">
+        <span>登録</span>
+        <v-icon>mdi-pencil-plus</v-icon>
+      </v-btn>
+      <v-btn to="/inspire">
+        <span>データ</span>
+        <v-icon>mdi-notebook-multiple</v-icon>
+      </v-btn>
+      <v-btn to="/">
+        <span>info</span>
+        <v-icon>mdi-information-outline</v-icon>
+      </v-btn>
+      <v-btn to="/inspire">
+        <span>設定</span>
+        <v-icon>mdi-cog</v-icon>
+      </v-btn>
+    </v-bottom-navigation>
   </v-app>
 </template>
-
 <script>
 export default {
   data() {
@@ -130,10 +140,14 @@ export default {
       rightDrawer: false,
       userPullDown: false,
       title: 'ダイエットリーダー',
+      loading: true,
     }
   },
   mounted() {
     this.$vuetify.theme.dark = false
+    this.$nextTick(() => {
+      this.loading = false // DOM更新後にこのコードに到達する
+    })
   },
   methods: {
     async logout() {
@@ -146,6 +160,6 @@ export default {
 <style scoped>
 .v-application {
   background-color: cornsilk;
-  font-family: 'Hachi Maru Pop', cursive;
+  padding-bottom: 20px;
 }
 </style>
