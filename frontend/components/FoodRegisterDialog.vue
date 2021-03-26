@@ -2,7 +2,7 @@
   <v-dialog v-model="isDisplay" width="600px">
     <validation-observer ref="observer" v-slot="{ invalid }">
       <form>
-        <v-card>
+        <v-card style="overflow-y: hidden">
           <v-tabs
             v-model="tab"
             fixed-tabs
@@ -48,7 +48,7 @@
                     <v-col cols="4" class="text-center">
                       <v-btn dark color="green darken-1" @click="reScan">
                         <v-icon>mdi-barcode-scan</v-icon>
-                        バーコード再読込
+                        読込
                       </v-btn>
                     </v-col>
                     <v-col cols="4" class="text-center">
@@ -116,7 +116,7 @@
                         label="商品コード"
                       ></v-text-field>
                     </v-col>
-                    <v-col v-if="func === 'web' || fix" cols="11">
+                    <v-col v-if="func === 'web' || fix" cols="6">
                       <validation-provider
                         v-slot="{ errors }"
                         rules="required|max:35"
@@ -132,7 +132,7 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-                    <v-col v-if="func !== 'web' && fix === false" cols="11">
+                    <v-col v-if="func !== 'web' && fix === false" cols="6">
                       <v-text-field
                         v-model.number="calorie"
                         suffix="kcal"
@@ -142,7 +142,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col v-if="func === 'web' || fix" cols="11">
+                    <v-col v-if="func === 'web' || fix" cols="5">
                       <validation-provider
                         v-slot="{ errors }"
                         rules="required|max:35"
@@ -158,7 +158,7 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-                    <v-col v-if="func !== 'web' && fix === false" cols="11">
+                    <v-col v-if="func !== 'web' && fix === false" cols="5">
                       <v-text-field
                         v-model.number="protein"
                         suffix="g"
@@ -168,7 +168,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col v-if="func === 'web' || fix" cols="11">
+                    <v-col v-if="func === 'web' || fix" cols="6">
                       <validation-provider
                         v-slot="{ errors }"
                         rules="required|max:35"
@@ -184,7 +184,7 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-                    <v-col v-if="func !== 'web' && fix === false" cols="11">
+                    <v-col v-if="func !== 'web' && fix === false" cols="6">
                       <v-text-field
                         v-model.number="lipid"
                         suffix="g"
@@ -194,7 +194,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col v-if="func === 'web' || fix" cols="11">
+                    <v-col v-if="func === 'web' || fix" cols="5">
                       <validation-provider
                         v-slot="{ errors }"
                         rules="required|max:35"
@@ -210,7 +210,7 @@
                         ></v-text-field>
                       </validation-provider>
                     </v-col>
-                    <v-col v-if="func !== 'web' && fix === false" cols="11">
+                    <v-col v-if="func !== 'web' && fix === false" cols="5">
                       <v-text-field
                         v-model.number="carbohydrate"
                         suffix="g"
@@ -224,7 +224,7 @@
                   <v-card-actions>
                     <v-row justify="center">
                       <v-col cols="6">
-                        <v-btn @click="closeDisplay">Close</v-btn>
+                        <v-btn @click="closeDisplay">閉じる</v-btn>
                       </v-col>
                       <v-col cols="6" class="text-right">
                         <v-btn color="blue" dark elevation="6" @click="nextTab"
@@ -261,7 +261,7 @@
                         label="商品コード"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                    <v-col cols="6">
                       <v-text-field
                         v-model.number="calorie_total"
                         suffix="kcal"
@@ -271,7 +271,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                    <v-col cols="5">
                       <v-text-field
                         v-model.number="protein_total"
                         suffix="g"
@@ -281,8 +281,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="1"> </v-col>
-                    <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                    <v-col cols="6">
                       <v-text-field
                         v-model.number="lipid_total"
                         suffix="g"
@@ -292,7 +291,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                    <v-col cols="5">
                       <v-text-field
                         v-model.number="carbohydrate_total"
                         suffix="g"
@@ -302,7 +301,6 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="1"> </v-col>
                     <v-col cols="8">
                       <v-dialog
                         ref="dateDlg"

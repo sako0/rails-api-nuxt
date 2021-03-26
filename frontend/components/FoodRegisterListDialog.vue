@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="isDisplay" width="600px">
-    <v-card>
+    <v-card style="overflow-y: hidden">
       <v-card-title>どのバーコード情報を使用しますか？</v-card-title>
       <div v-if="!codeListOverlay">
         <v-list two-line>

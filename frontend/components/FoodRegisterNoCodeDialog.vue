@@ -4,7 +4,7 @@
     <v-dialog v-model="isDisplay" width="600px">
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form>
-          <v-card>
+          <v-card style="overflow-y: hidden">
             <v-tabs
               v-model="tab"
               fixed-tabs
@@ -25,234 +25,211 @@
               >
                 <v-card v-if="index === 0" color="basil" flat>
                   <v-card-title>
-                    <v-container>
-                      <v-row justify="center">
-                        <v-col cols="12" class="text-left"> 商品検索 </v-col>
-                      </v-row>
-                    </v-container>
+                    <v-row justify="center">
+                      <v-col cols="11" class="text-left"> 商品検索 </v-col>
+                    </v-row>
                   </v-card-title>
-                  <v-card-text>
-                    <v-container>
-                      <v-row justify="center">
-                        <v-col cols="11">
-                          <v-autocomplete
-                            v-model="model"
-                            :items="lists"
-                            :loading="isLoading"
-                            :search-input.sync="search"
-                            :disabled="fixExceptNewFlg"
-                            color="green darken-1"
-                            clearable
-                            clear-icon="mdi-backspace"
-                            no-data-text="データが存在しません"
-                            hide-selected
-                            auto-select-first
-                            item-text="Description"
-                            item-value="API"
-                            label="商品検索"
-                            placeholder="商品名を入力..."
-                            prepend-icon="mdi-database-search"
-                            return-object
-                            @update:search-input="copyProductName"
-                            @click:clear="searchClear"
-                            @change="searchChange"
-                          ></v-autocomplete>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-                  <v-card-text> <v-divider></v-divider></v-card-text>
-                  <v-card-title>
-                    <v-container>
-                      <v-row justify="center">
-                        <v-col v-if="!model" cols="12" class="text-left">
-                          新規作成
-                        </v-col>
-                        <v-col v-else cols="5" class="text-left">
-                          商品情報
-                        </v-col>
-                        <v-col v-if="model && !fix" cols="7" class="text-right">
-                          <v-btn
-                            dark
-                            color="green darken-1"
-                            @click="fix = true"
-                          >
-                            <v-icon>mdi-pencil</v-icon>
-                            編集と削除
-                          </v-btn>
-                        </v-col>
-                        <v-col v-if="model && fix" cols="7" class="text-right">
-                          <v-btn
-                            dark
-                            color="green darken-1"
-                            @click="searchChange"
-                          >
-                            <v-icon>mdi-cancel</v-icon>
-                            編集取消
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col v-if="fix" cols="11">
-                          <validation-provider
-                            v-slot="{ errors }"
-                            rules="required|max:70"
-                            name="商品名"
-                          >
-                            <v-text-field
-                              v-model="productName"
-                              append-icon="mdi-briefcase"
-                              :error-messages="errors"
-                              :counter="35"
-                              label="商品名"
-                            ></v-text-field>
-                          </validation-provider>
-                        </v-col>
-                        <v-col v-if="fix === false" cols="11">
-                          <v-text-field
-                            v-model="productName"
-                            append-icon="mdi-briefcase"
-                            label="商品名"
-                            disabled
-                          ></v-text-field>
-                        </v-col>
-                        <v-col v-if="fix" cols="11">
-                          <validation-provider
-                            v-slot="{ errors }"
-                            rules="required|max:70"
-                            name="個数・単位"
-                          >
-                            <v-text-field
-                              v-model="par"
-                              append-icon="mdi-beaker"
-                              :error-messages="errors"
-                              :counter="35"
-                              label="個数・単位"
-                            ></v-text-field>
-                          </validation-provider>
-                        </v-col>
-                        <v-col v-if="fix === false" cols="11">
-                          <v-text-field
-                            v-model="par"
-                            append-icon="mdi-beaker"
-                            label="個数・単位"
-                            disabled
-                          ></v-text-field>
-                        </v-col>
-                        <v-col v-if="fix" cols="11">
-                          <validation-provider
-                            v-slot="{ errors }"
-                            rules="required|max:35"
-                            name="カロリー"
-                          >
-                            <v-text-field
-                              v-model.number="calorie"
-                              suffix="kcal"
-                              append-icon="mdi-food-fork-drink"
-                              :error-messages="errors"
-                              type="number"
-                              label="カロリー"
-                            ></v-text-field>
-                          </validation-provider>
-                        </v-col>
-                        <v-col v-if="fix === false" cols="6">
-                          <v-text-field
-                            v-model.number="calorie"
-                            suffix="kcal"
-                            append-icon="mdi-food-fork-drink"
-                            type="number"
-                            label="カロリー"
-                            disabled
-                          ></v-text-field>
-                        </v-col>
-                        <v-col v-if="fix" cols="11">
-                          <validation-provider
-                            v-slot="{ errors }"
-                            rules="required|max:35"
-                            name="たんぱく質"
-                          >
-                            <v-text-field
-                              v-model.number="protein"
-                              suffix="g"
-                              append-icon="mdi-food-drumstick"
-                              :error-messages="errors"
-                              type="number"
-                              label="たんぱく質"
-                            ></v-text-field>
-                          </validation-provider>
-                        </v-col>
-                        <v-col v-if="fix === false" cols="11">
-                          <v-text-field
-                            v-model.number="protein"
-                            suffix="g"
-                            append-icon="mdi-food-drumstick"
-                            type="number"
-                            label="たんぱく質"
-                            disabled
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="1"></v-col>
-                        <v-col v-if="fix" cols="11">
-                          <validation-provider
-                            v-slot="{ errors }"
-                            rules="required|max:35"
-                            name="脂質"
-                          >
-                            <v-text-field
-                              v-model.number="lipid"
-                              suffix="g"
-                              append-icon="mdi-food-steak"
-                              :error-messages="errors"
-                              type="number"
-                              label="脂質"
-                            ></v-text-field>
-                          </validation-provider>
-                        </v-col>
-                        <v-col v-if="fix === false" cols="11">
-                          <v-text-field
-                            v-model.number="lipid"
-                            suffix="g"
-                            append-icon="mdi-food-steak"
-                            type="number"
-                            label="脂質"
-                            disabled
-                          ></v-text-field>
-                        </v-col>
-                        <v-col v-if="fix" cols="11">
-                          <validation-provider
-                            v-slot="{ errors }"
-                            rules="required|max:35"
-                            name="炭水化物"
-                          >
-                            <v-text-field
-                              v-model.number="carbohydrate"
-                              suffix="g"
-                              append-icon="mdi-rice"
-                              :error-messages="errors"
-                              type="number"
-                              label="炭水化物"
-                            ></v-text-field>
-                          </validation-provider>
-                        </v-col>
-                        <v-col v-if="fix === false" cols="11">
-                          <v-text-field
-                            v-model.number="carbohydrate"
-                            suffix="g"
-                            append-icon="mdi-rice"
-                            type="number"
-                            label="炭水化物"
-                            disabled
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="1"> </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
 
+                  <v-row justify="center">
+                    <v-col cols="11">
+                      <v-autocomplete
+                        v-model="model"
+                        :items="lists"
+                        :loading="isLoading"
+                        :search-input.sync="search"
+                        :disabled="fixExceptNewFlg"
+                        color="green darken-1"
+                        clearable
+                        clear-icon="mdi-backspace"
+                        no-data-text="データが存在しません"
+                        hide-selected
+                        auto-select-first
+                        item-text="Description"
+                        item-value="API"
+                        label="商品検索"
+                        placeholder="商品名を入力..."
+                        prepend-icon="mdi-database-search"
+                        return-object
+                        @update:search-input="copyProductName"
+                        @click:clear="searchClear"
+                        @change="searchChange"
+                      ></v-autocomplete>
+                    </v-col>
+                  </v-row>
+
+                  <v-card-text> <v-divider></v-divider></v-card-text>
+
+                  <v-row justify="center">
+                    <v-col v-if="!model" cols="11" class="text-left">
+                      新規作成
+                    </v-col>
+                    <v-col v-else cols="5" class="text-left"> 商品情報 </v-col>
+                    <v-col v-if="model && !fix" cols="6" class="text-right">
+                      <v-btn dark color="green darken-1" @click="fix = true">
+                        <v-icon>mdi-pencil</v-icon>
+                        編集と削除
+                      </v-btn>
+                    </v-col>
+                    <v-col v-if="model && fix" cols="6" class="text-right">
+                      <v-btn dark color="green darken-1" @click="searchChange">
+                        <v-icon>mdi-cancel</v-icon>
+                        編集取消
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+
+                  <v-row justify="center">
+                    <v-col v-if="fix" cols="11">
+                      <validation-provider
+                        v-slot="{ errors }"
+                        rules="required|max:70"
+                        name="商品名"
+                      >
+                        <v-text-field
+                          v-model="productName"
+                          append-icon="mdi-briefcase"
+                          :error-messages="errors"
+                          :counter="35"
+                          label="商品名"
+                        ></v-text-field>
+                      </validation-provider>
+                    </v-col>
+                    <v-col v-if="fix === false" cols="11">
+                      <v-text-field
+                        v-model="productName"
+                        append-icon="mdi-briefcase"
+                        label="商品名"
+                        disabled
+                      ></v-text-field>
+                    </v-col>
+                    <v-col v-if="fix" cols="11">
+                      <validation-provider
+                        v-slot="{ errors }"
+                        rules="required|max:70"
+                        name="個数・単位"
+                      >
+                        <v-text-field
+                          v-model="par"
+                          append-icon="mdi-beaker"
+                          :error-messages="errors"
+                          :counter="35"
+                          label="個数・単位"
+                        ></v-text-field>
+                      </validation-provider>
+                    </v-col>
+                    <v-col v-if="fix === false" cols="11">
+                      <v-text-field
+                        v-model="par"
+                        append-icon="mdi-beaker"
+                        label="個数・単位"
+                        disabled
+                      ></v-text-field>
+                    </v-col>
+                    <v-col v-if="fix" cols="6">
+                      <validation-provider
+                        v-slot="{ errors }"
+                        rules="required|max:35"
+                        name="カロリー"
+                      >
+                        <v-text-field
+                          v-model.number="calorie"
+                          suffix="kcal"
+                          append-icon="mdi-food-fork-drink"
+                          :error-messages="errors"
+                          type="number"
+                          label="カロリー"
+                        ></v-text-field>
+                      </validation-provider>
+                    </v-col>
+                    <v-col v-if="fix === false" cols="6">
+                      <v-text-field
+                        v-model.number="calorie"
+                        suffix="kcal"
+                        append-icon="mdi-food-fork-drink"
+                        type="number"
+                        label="カロリー"
+                        disabled
+                      ></v-text-field>
+                    </v-col>
+                    <v-col v-if="fix" cols="5">
+                      <validation-provider
+                        v-slot="{ errors }"
+                        rules="required|max:35"
+                        name="たんぱく質"
+                      >
+                        <v-text-field
+                          v-model.number="protein"
+                          suffix="g"
+                          append-icon="mdi-food-drumstick"
+                          :error-messages="errors"
+                          type="number"
+                          label="たんぱく質"
+                        ></v-text-field>
+                      </validation-provider>
+                    </v-col>
+                    <v-col v-if="fix === false" cols="5">
+                      <v-text-field
+                        v-model.number="protein"
+                        suffix="g"
+                        append-icon="mdi-food-drumstick"
+                        type="number"
+                        label="たんぱく質"
+                        disabled
+                      ></v-text-field>
+                    </v-col>
+                    <v-col v-if="fix" cols="5">
+                      <validation-provider
+                        v-slot="{ errors }"
+                        rules="required|max:35"
+                        name="脂質"
+                      >
+                        <v-text-field
+                          v-model.number="lipid"
+                          suffix="g"
+                          append-icon="mdi-food-steak"
+                          :error-messages="errors"
+                          type="number"
+                          label="脂質"
+                        ></v-text-field>
+                      </validation-provider>
+                    </v-col>
+                    <v-col v-if="fix === false" cols="5">
+                      <v-text-field
+                        v-model.number="lipid"
+                        suffix="g"
+                        append-icon="mdi-food-steak"
+                        type="number"
+                        label="脂質"
+                        disabled
+                      ></v-text-field>
+                    </v-col>
+                    <v-col v-if="fix" cols="6">
+                      <validation-provider
+                        v-slot="{ errors }"
+                        rules="required|max:35"
+                        name="炭水化物"
+                      >
+                        <v-text-field
+                          v-model.number="carbohydrate"
+                          suffix="g"
+                          append-icon="mdi-rice"
+                          :error-messages="errors"
+                          type="number"
+                          label="炭水化物"
+                        ></v-text-field>
+                      </validation-provider>
+                    </v-col>
+                    <v-col v-if="fix === false" cols="6">
+                      <v-text-field
+                        v-model.number="carbohydrate"
+                        suffix="g"
+                        append-icon="mdi-rice"
+                        type="number"
+                        label="炭水化物"
+                        disabled
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
                   <v-card-actions>
                     <v-row justify="center">
                       <v-col cols="3">
@@ -325,7 +302,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                    <v-col cols="6">
                       <v-text-field
                         v-model.number="calorie_total"
                         suffix="kcal"
@@ -335,7 +312,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                    <v-col cols="5">
                       <v-text-field
                         v-model.number="protein_total"
                         suffix="g"
@@ -345,8 +322,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="1"> </v-col>
-                    <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                    <v-col cols="6">
                       <v-text-field
                         v-model.number="lipid_total"
                         suffix="g"
@@ -356,7 +332,7 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="5" sm="5" md="5" lg="5" xl="5">
+                    <v-col cols="5">
                       <v-text-field
                         v-model.number="carbohydrate_total"
                         suffix="g"
@@ -366,7 +342,6 @@
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="1"> </v-col>
                     <v-col cols="8" sm="8" md="8" lg="8" xl="8">
                       <v-dialog
                         ref="dateDlg"
@@ -400,8 +375,8 @@
                   </v-row>
 
                   <v-card-actions>
-                    <v-row>
-                      <v-col cols="4" class="text-left">
+                    <v-row justify="center">
+                      <v-col cols="3" class="text-left">
                         <v-btn @click="isDisplay = false">閉じる</v-btn>
                       </v-col>
                       <v-col cols="5" class="text-left">
@@ -416,7 +391,7 @@
                           single-line
                         ></v-select>
                       </v-col>
-                      <v-col cols="2" class="text-right">
+                      <v-col cols="3" class="text-right">
                         <v-btn
                           color="green darken-1"
                           :disabled="invalid"

@@ -350,6 +350,7 @@ export default {
     },
     editDlgView(item) {
       this.editData = item
+      this.$refs.editDlg.reset()
       this.$refs.editDlg.isDisplay = true
     },
     eatEdit() {

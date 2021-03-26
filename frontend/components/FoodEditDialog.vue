@@ -1,140 +1,134 @@
 <template>
   <v-dialog v-model="isDisplay" width="600px">
-    <v-card>
+    <v-card style="overflow-y: hidden">
       <v-card-title>編集</v-card-title>
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form>
-          <v-card-text>
-            <v-container>
-              <v-row justify="center">
-                <v-col cols="11" sm="11" md="11" lg="11" xl="11">
+          <v-row justify="center">
+            <v-col cols="11">
+              <v-text-field
+                v-model="productName"
+                append-icon="mdi-briefcase"
+                label="商品名"
+                disabled
+              ></v-text-field>
+            </v-col>
+            <v-col cols="11">
+              <v-text-field
+                v-model="par"
+                append-icon="mdi-beaker"
+                label="個数・単位"
+                disabled
+              ></v-text-field>
+            </v-col>
+            <v-col v-if="number" cols="11">
+              <v-text-field
+                :value="number"
+                append-icon="mdi-barcode"
+                disabled
+                label="商品コード"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model.number="calorie_total"
+                suffix="kcal"
+                append-icon="mdi-food-fork-drink"
+                type="number"
+                label="カロリー"
+                disabled
+              ></v-text-field>
+            </v-col>
+            <v-col cols="5">
+              <v-text-field
+                v-model.number="protein_total"
+                suffix="g"
+                append-icon="mdi-food-drumstick"
+                type="number"
+                label="たんぱく質"
+                disabled
+              ></v-text-field>
+            </v-col>
+            <v-col cols="5">
+              <v-text-field
+                v-model.number="lipid_total"
+                suffix="g"
+                append-icon="mdi-food-steak"
+                type="number"
+                label="脂質"
+                disabled
+              ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model.number="carbohydrate_total"
+                suffix="g"
+                append-icon="mdi-rice"
+                type="number"
+                label="炭水化物"
+                disabled
+              ></v-text-field>
+            </v-col>
+            <v-col cols="8">
+              <v-dialog
+                ref="dateDlg"
+                v-model="datePicker"
+                :return-value.sync="calendarDate"
+                width="290px"
+              >
+                <template #activator="{ on, attrs }">
                   <v-text-field
-                    v-model="productName"
-                    append-icon="mdi-briefcase"
-                    label="商品名"
-                    disabled
+                    v-model="calendarDate"
+                    label="日付"
+                    prepend-icon="mdi-calendar"
+                    required
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
                   ></v-text-field>
-                </v-col>
-                <v-col cols="11" sm="11" md="11" lg="11" xl="11">
-                  <v-text-field
-                    v-model="par"
-                    append-icon="mdi-beaker"
-                    label="個数・単位"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col v-if="number" cols="6" sm="6" md="6" lg="6" xl="6">
-                  <v-text-field
-                    :value="number"
-                    append-icon="mdi-barcode"
-                    disabled
-                    label="商品コード"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                  <v-text-field
-                    v-model.number="calorie_total"
-                    suffix="kcal"
-                    append-icon="mdi-food-fork-drink"
-                    type="number"
-                    label="カロリー"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6" sm="6" md="6" lg="6" xl="6">
-                  <v-text-field
-                    v-model.number="protein_total"
-                    suffix="g"
-                    append-icon="mdi-food-drumstick"
-                    type="number"
-                    label="たんぱく質"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                  <v-text-field
-                    v-model.number="lipid_total"
-                    suffix="g"
-                    append-icon="mdi-food-steak"
-                    type="number"
-                    label="脂質"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6" sm="6" md="6" lg="6" xl="6">
-                  <v-text-field
-                    v-model.number="carbohydrate_total"
-                    suffix="g"
-                    append-icon="mdi-rice"
-                    type="number"
-                    label="炭水化物"
-                    disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="5" sm="5" md="5" lg="5" xl="5">
-                  <v-menu
-                    v-model="dateMenu"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <template #activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="calendarDate"
-                        label="日付"
-                        prepend-icon="mdi-calendar"
-                        required
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="calendarDate"
-                      locale="jp-ja"
-                      :allowed-dates="allowedDate"
-                      :day-format="(date) => new Date(date).getDate()"
-                      color="light-blue darken-1"
-                      @input="dateMenu = false"
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
+                </template>
+                <v-date-picker
+                  v-model="calendarDate"
+                  locale="jp-ja"
+                  :day-format="(date) => new Date(date).getDate()"
+                  color="light-blue darken-1"
+                  :allowed-dates="allowedDate"
+                  @change="$refs.dateDlg.save(calendarDate)"
+                >
+                  <v-spacer></v-spacer>
+                </v-date-picker>
+              </v-dialog>
+            </v-col>
+          </v-row>
 
           <v-card-actions>
-            <v-container>
-              <v-row justify="center">
-                <v-col cols="4" class="text-left">
-                  <v-btn @click="isDisplay = false">Close</v-btn>
-                </v-col>
-                <v-col cols="4" class="text-left">
-                  <v-select
-                    v-model="begin"
-                    :items="percent"
-                    menu-props="auto"
-                    label="Select"
-                    hide-details
-                    suffix="％"
-                    append-icon="mdi-format-list-bulleted-triangle"
-                    single-line
-                  ></v-select>
-                </v-col>
-                <v-col cols="3" class="text-right">
-                  <v-btn
-                    color="green darken-1"
-                    :dark="!invalid"
-                    :disabled="invalid"
-                    @click="submit"
-                  >
-                    OK
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-container>
+            <v-row justify="center">
+              <v-col cols="3" class="text-center">
+                <v-btn @click="isDisplay = false">閉じる</v-btn>
+              </v-col>
+              <v-col cols="5" class="text-center">
+                <v-select
+                  v-model="begin"
+                  :items="percent"
+                  menu-props="auto"
+                  label="Select"
+                  hide-details
+                  suffix="％"
+                  append-icon="mdi-format-list-bulleted-triangle"
+                  single-line
+                ></v-select>
+              </v-col>
+              <v-col cols="3" class="text-center">
+                <v-btn
+                  color="green darken-1"
+                  :dark="!invalid"
+                  :disabled="invalid"
+                  @click="submit"
+                >
+                  更新
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-card-actions>
         </form>
       </validation-observer>
@@ -205,9 +199,20 @@ export default {
     ],
     begin: null,
     percent_base: null,
-    calendarDate: null,
-    dateMenu: false,
+    strDate: null,
+    datePicker: false,
   }),
+  computed: {
+    calendarDate: {
+      set(val) {
+        this.strDate = this.$moment(val).format('YYYY-MM-DD')
+      },
+      get() {
+        const date = Date.parse(this.strDate)
+        return this.$moment(date).format('YYYY-MM-DD')
+      },
+    },
+  },
   watch: {
     isDisplay(val) {
       if (val) {
@@ -220,7 +225,7 @@ export default {
         this.carbohydrate = this.$props.foodInfo.attributes.carbohydrate
         this.percent_base = this.$props.foodInfo.attributes.percent
         this.begin = this.$props.foodInfo.attributes.percent
-        this.calendarDate = this.$props.foodInfo.attributes.date
+        this.strDate = this.$props.foodInfo.attributes.date
         this.calorie_total = (this.calorie * this.begin) / this.percent_base
         this.protein_total = (this.protein * this.begin) / this.percent_base
         this.lipid_total = (this.lipid * this.begin) / this.percent_base
@@ -237,6 +242,7 @@ export default {
   },
   methods: {
     submit() {
+      console.log(this.strDate)
       const url = '/api/v1/food_eat/' + this.$props.foodInfo.id
       const headers = { 'content-type': 'application/json' }
       const data = {
@@ -250,7 +256,7 @@ export default {
         lipid: this.lipid_total,
         carbohydrate: this.carbohydrate_total,
         percent: this.begin,
-        date: this.calendarDate,
+        date: this.strDate,
       }
       this.$axios.put(url, data, { headers }).then((response) => {
         console.log(response)
@@ -258,7 +264,6 @@ export default {
         setTimeout(() => {
           this.$emit('eatEdit')
         }, 200)
-        this.reset()
       })
     },
     allowedDate(val) {
