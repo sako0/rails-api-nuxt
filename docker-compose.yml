@@ -49,6 +49,8 @@ services:
     tty: true
     ports:
       - 80:80
-    command: yarn dev
+    command: >
+      bash -c "nuxt build &&
+      nuxt start"
     volumes:
       - ./frontend:/frontend

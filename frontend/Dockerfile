@@ -23,4 +23,5 @@ ENV HOST 0.0.0.0
 COPY . /frontend
 
 # Start the main process.
-CMD ["yarn", "dev"]
+CMD ["nuxt", "build"]
+CMD ["nuxt", "start"]

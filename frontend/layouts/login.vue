@@ -15,6 +15,5 @@ export default {
 <style scoped>
 .v-application {
   background-color: cornsilk;
-  font-family: 'Hachi Maru Pop', cursive;
 }
 </style>

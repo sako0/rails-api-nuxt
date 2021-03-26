@@ -41,17 +41,17 @@
 <script>
 export default {
   layout: 'login',
-  middleware({ store, redirect }) {
-    if (store.$auth.loggedIn) {
-      redirect('/')
-    }
-  },
   data() {
     return {
       login: {
         email: '',
         password: '',
       },
+    }
+  },
+  beforeCreate() {
+    if (this.$auth.loggedIn) {
+      this.$router.push('/')
     }
   },
   methods: {

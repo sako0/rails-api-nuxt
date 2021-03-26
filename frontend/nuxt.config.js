@@ -4,11 +4,14 @@ require('dotenv').config()
 const BASEURL = process.env.NUXT_ENV_RAILS_URL
 
 export default {
+  server: {
+    host: '0.0.0.0',
+    port: 80,
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
-  ssr: true,
   head: {
-    titleTemplate: '%s - diet-reader',
-    title: 'diet-reader',
+    titleTemplate: '%s - koda',
+    title: 'ダイエットリーダー',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -23,15 +26,12 @@ export default {
     dir: '../public',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    { src: '~/plugins/localStorage.js', ssr: false },
-    '@/plugins/axios',
-    '@/plugins/auth',
-  ],
+  plugins: ['@/plugins/axios', '@/plugins/auth'],
   build: {
     transpile: ['vee-validate'], // 追加 https://qiita.com/TK-C/items/9cab072c65d2f9ade5d0
     extend(config, ctx) {},
-    quiet: true,
+    // ログの出力を減らす
+    // quiet: true,
   },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -85,12 +85,22 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
+      name: 'ダイエットリーダ',
       lang: 'ja',
+      display: 'standalone',
+      start_url: '/register',
     },
   },
+  ssr: true,
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
+    defaultAssets: {
+      font: {
+        family: 'Hachi Maru Pop',
+      },
+    },
     theme: {
       dark: false,
       themes: {
@@ -110,9 +120,9 @@ export default {
   auth: {
     redirect: {
       login: '/login', // 未ログイン時に認証ルートへアクセスした際のリダイレクトURL
-      logout: '/', // ログアウト時のリダイレクトURL
+      logout: '/login', // ログアウト時のリダイレクトURL
       callback: false, // Oauth認証等で必要となる コールバックルート
-      home: '/login', // ログイン後のリダイレクトURL一度リダイレクトに成功しないとログインができないためlogin画面にリダイレクトさせている
+      home: '/', // ログイン後のリダイレクトURL一度リダイレクトに成功しないとログインができないためlogin画面にリダイレクトさせている
     },
     strategies: {
       local: {

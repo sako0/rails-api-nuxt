@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-navigation-drawer
-      v-show="!loading"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -36,7 +35,6 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
-      v-show="!loading"
       :clipped-left="clipped"
       fixed
       app
@@ -57,17 +55,11 @@
       <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
     </v-app-bar>
     <v-main>
-      <v-container v-if="loading">
-        <v-overlay z-index="2">
-          <v-progress-circular indeterminate size="80"></v-progress-circular>
-        </v-overlay>
-      </v-container>
-      <v-container v-show="!loading">
+      <v-container>
         <nuxt />
       </v-container>
     </v-main>
     <v-footer
-      v-if="!loading"
       class="d-none d-lg-block"
       :absolute="!fixed"
       app
@@ -80,7 +72,6 @@
       >
     </v-footer>
     <v-bottom-navigation
-      v-show="!loading"
       background-color="green darken-1"
       elevation="20"
       app
@@ -169,7 +160,6 @@ export default {
 <style scoped>
 .v-application {
   background-color: cornsilk;
-  font-family: 'Hachi Maru Pop', cursive;
   padding-bottom: 20px;
 }
 </style>
