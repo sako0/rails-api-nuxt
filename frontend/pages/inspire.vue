@@ -1,22 +1,29 @@
 <template>
   <v-row>
     <v-col class="center">
-      <v-row>
-        <v-col cols="12" sm="12" md="4" lg="4" xl="4">
-          <v-row class="mt-5">
-            <v-col cols="12">
-              <ProfileCard :user="currentUser" @getUser="getUser" />
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="12" sm="12" md="8" lg="8" xl="8">
-          <v-row class="mt-5">
-            <v-col cols="12">
-              <FoodPostCard :foods="foodPosts" @getPost="getPost" />
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
+      <div v-if="!overlay">
+        <v-row>
+          <v-col cols="12" sm="12" md="4" lg="4" xl="4">
+            <v-row class="mt-5">
+              <v-col cols="12">
+                <ProfileCard :user="currentUser" @getUser="getUser" />
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="12" sm="12" md="8" lg="8" xl="8">
+            <v-row class="mt-5">
+              <v-col cols="12">
+                <FoodPostCard :foods="foodPosts" @getPost="getPost" />
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </div>
+      <div v-else>
+        <v-overlay z-index="2">
+          <v-progress-circular indeterminate size="80"></v-progress-circular>
+        </v-overlay>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -76,7 +83,19 @@ export default {
     return {
       currentUser: null,
       foodPosts: null,
+      getPostLoading: true,
+      getUserLoading: true,
+      sleepTime: 300,
     }
+  },
+  computed: {
+    overlay() {
+      if (this.getPostLoading || this.getUserLoading) {
+        return true
+      } else {
+        return false
+      }
+    },
   },
   created() {
     this.getPost()
@@ -84,14 +103,30 @@ export default {
   },
   methods: {
     getUser() {
-      this.$axios.get('api/v1/sessions').then((response) => {
-        this.currentUser = response.data.user
-      })
+      this.getUserLoading = true
+      this.$axios
+        .get('api/v1/sessions')
+        .then((response) => {
+          this.currentUser = response.data.user
+        })
+        .finally((response) => {
+          setTimeout(() => {
+            this.getUserLoading = false
+          }, this.sleepTime)
+        })
     },
     getPost() {
-      this.$axios.get('api/v1/food_posts').then((response) => {
-        this.foodPosts = response.data
-      })
+      this.getPostLoading = true
+      this.$axios
+        .get('api/v1/food_posts')
+        .then((response) => {
+          this.foodPosts = response.data
+        })
+        .finally((response) => {
+          setTimeout(() => {
+            this.getPostLoading = false
+          }, this.sleepTime)
+        })
     },
   },
 }

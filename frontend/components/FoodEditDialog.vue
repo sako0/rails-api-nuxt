@@ -94,6 +94,7 @@
                     <v-date-picker
                       v-model="calendarDate"
                       locale="jp-ja"
+                      :allowed-dates="allowedDate"
                       :day-format="(date) => new Date(date).getDate()"
                       color="light-blue darken-1"
                       @input="dateMenu = false"
@@ -259,6 +260,12 @@ export default {
         }, 200)
         this.reset()
       })
+    },
+    allowedDate(val) {
+      return (
+        this.$moment(val).format('YYYY-MM-DD') <=
+        this.$moment().format('YYYY-MM-DD')
+      )
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

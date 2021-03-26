@@ -255,10 +255,10 @@
 
                   <v-card-actions>
                     <v-row justify="center">
-                      <v-col cols="6">
+                      <v-col cols="3">
                         <v-btn @click="closeDisplay">閉じる</v-btn>
                       </v-col>
-                      <v-col cols="6" class="text-right">
+                      <v-col cols="9" class="text-right">
                         <v-btn
                           v-if="!fix"
                           color="blue"
@@ -390,6 +390,7 @@
                           locale="jp-ja"
                           :day-format="(date) => new Date(date).getDate()"
                           color="light-blue darken-1"
+                          :allowed-dates="allowedDate"
                           @change="$refs.dateDlg[0].save(calendarDate)"
                         >
                           <v-spacer></v-spacer>
@@ -754,6 +755,12 @@ export default {
           this.reset()
           this.$emit('reGet')
         })
+    },
+    allowedDate(val) {
+      return (
+        this.$moment(val).format('YYYY-MM-DD') <=
+        this.$moment().format('YYYY-MM-DD')
+      )
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

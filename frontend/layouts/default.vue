@@ -1,92 +1,126 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <v-list>
-        <v-list-item @click="logout">
-          <v-list-item-action>
-            <v-icon>mdi-logout-variant</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>ログアウト</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-      dark
-      color="green darken-1"
-      elevation="6"
-    >
-      <v-btn
-        icon
-        class="d-none d-lg-block"
-        @click.stop="miniVariant = !miniVariant"
+    <div v-show="!loading">
+      <v-navigation-drawer
+        v-model="drawer"
+        :mini-variant="miniVariant"
+        :clipped="clipped"
+        fixed
+        app
       >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-icon dark large>mdi-cat</v-icon>
-      <v-toolbar-title class="font-weight-black" v-text="title" />
-      <v-spacer />
-      <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
-    </v-app-bar>
-    <v-main>
-      <v-container>
-        <nuxt />
-      </v-container>
-    </v-main>
-    <!--    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>-->
-    <!--      <v-list>-->
-    <!--        <v-list-item>-->
-    <!--          <v-list-item-title>ログイン中のユーザ</v-list-item-title>-->
-    <!--        </v-list-item>-->
-    <!--      </v-list>-->
-    <!--    </v-navigation-drawer>-->
-    <v-footer :absolute="!fixed" app color="green darken-1" dark elevation="20">
-      <v-row justify="center" class="d-lg-none">
-        <v-col cols="3">
-          <v-btn text to="/register"><v-icon>mdi-pencil-plus</v-icon></v-btn>
-        </v-col>
-        <v-col cols="3">
-          <v-btn text to="/inspire"
-            ><v-icon>mdi-notebook-multiple</v-icon></v-btn
+        <v-list>
+          <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+            :to="item.to"
+            router
+            exact
           >
-        </v-col>
-        <v-col cols="3">
-          <v-btn text to="/"><v-icon>mdi-information-outline</v-icon></v-btn>
-        </v-col>
-        <v-col cols="3">
-          <v-btn text to="/inspire"><v-icon>mdi-cog</v-icon></v-btn>
-        </v-col>
-      </v-row>
-      <span class="d-none d-lg-block"
-        >&copy; {{ new Date().getFullYear() }}</span
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-list>
+          <v-list-item @click="logout">
+            <v-list-item-action>
+              <v-icon>mdi-logout-variant</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>ログアウト</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+      <v-app-bar
+        :clipped-left="clipped"
+        fixed
+        app
+        dark
+        color="green darken-1"
+        elevation="6"
       >
-    </v-footer>
+        <v-btn
+          icon
+          class="d-none d-lg-block"
+          @click.stop="miniVariant = !miniVariant"
+        >
+          <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
+        </v-btn>
+        <v-icon dark large>mdi-cat</v-icon>
+        <v-toolbar-title class="font-weight-black" v-text="title" />
+        <v-spacer />
+        <v-app-bar-nav-icon class="d-lg-none" @click.stop="drawer = !drawer" />
+      </v-app-bar>
+      <v-main>
+        <v-container>
+          <nuxt />
+        </v-container>
+      </v-main>
+      <!--    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>-->
+      <!--      <v-list>-->
+      <!--        <v-list-item>-->
+      <!--          <v-list-item-title>ログイン中のユーザ</v-list-item-title>-->
+      <!--        </v-list-item>-->
+      <!--      </v-list>-->
+      <!--    </v-navigation-drawer>-->
+      <v-bottom-navigation
+        background-color="green darken-1"
+        elevation="20"
+        app
+        fixed
+        dark
+        grow
+        shift
+        class="d-lg-none"
+      >
+        <v-btn to="/register">
+          <span>登録</span>
+          <v-icon>mdi-pencil-plus</v-icon>
+        </v-btn>
+        <v-btn to="/inspire">
+          <span>データ</span>
+          <v-icon>mdi-notebook-multiple</v-icon>
+        </v-btn>
+        <v-btn to="/">
+          <span>info</span>
+          <v-icon>mdi-information-outline</v-icon>
+        </v-btn>
+        <v-btn to="/inspire">
+          <span>設定</span>
+          <v-icon>mdi-cog</v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+      <v-footer
+        class="d-none d-lg-block"
+        :absolute="!fixed"
+        app
+        color="green darken-1"
+        dark
+        elevation="20"
+      >
+        <span>&copy; {{ new Date().getFullYear() }}</span>
+      </v-footer>
+    </div>
+    <div v-if="loading">
+      <v-main>
+        <v-container>
+          <template>
+            <v-card>
+              <v-overlay z-index="2">
+                <v-progress-circular
+                  indeterminate
+                  size="80"
+                ></v-progress-circular>
+              </v-overlay>
+            </v-card>
+          </template>
+        </v-container>
+      </v-main>
+    </div>
   </v-app>
 </template>
 
@@ -130,10 +164,14 @@ export default {
       rightDrawer: false,
       userPullDown: false,
       title: 'ダイエットリーダー',
+      loading: true,
     }
   },
   mounted() {
     this.$vuetify.theme.dark = false
+    this.$nextTick(() => {
+      this.loading = false // DOM更新後にこのコードに到達する
+    })
   },
   methods: {
     async logout() {
