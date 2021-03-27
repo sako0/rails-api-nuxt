@@ -201,7 +201,7 @@ export default {
     FoodRegisterListDialog,
     FoodRegisterNoCodeDialog,
   },
-  // middleware: 'auth',
+  middleware: 'auth',
   data() {
     return {
       num: null,

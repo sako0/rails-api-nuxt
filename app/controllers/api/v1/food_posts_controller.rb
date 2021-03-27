@@ -18,6 +18,7 @@ class Api::V1::FoodPostsController < ApplicationController
           search_food_code = @current_user.food_posts.find_by(food_code: params[:food_post][:food_code])
           search_food_code.updated_at = Time.now
           search_food_code.update(food_posts_params)
+          render json: search_food_code.id
         else
           food_post = @current_user.food_posts.create(food_posts_params)
           if food_post
