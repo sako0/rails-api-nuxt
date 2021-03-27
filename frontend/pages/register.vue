@@ -20,6 +20,7 @@
       <FoodRegisterDialog
         ref="dlg"
         :number="num"
+        :date="tabDate"
         @reGet="registerFinish"
         @codeSearch="codeSearch($event)"
         @reScan="cameraUp"
@@ -30,7 +31,11 @@
         :lists="lists"
         @selectedItem="selectedItem($event)"
       />
-      <FoodRegisterNoCodeDialog ref="noCodeDlg" @reGet="registerFinish" />
+      <FoodRegisterNoCodeDialog
+        ref="noCodeDlg"
+        :date="tabDate"
+        @reGet="registerFinish"
+      />
       <v-row>
         <v-col class="center">
           <v-tabs
@@ -66,7 +71,7 @@
                           fab
                           dark
                           color="green darken-1"
-                          @click="code_confirm_dialog"
+                          @click="code_confirm_dialog(item.date)"
                         >
                           <v-icon dark> mdi-plus</v-icon>
                         </v-btn>
@@ -101,39 +106,42 @@
                     <v-container>
                       <v-card-title>食事内容</v-card-title>
                       <v-list two-line>
-                        <template v-for="(item, index) in data">
+                        <v-divider></v-divider>
+                        <template
+                          v-for="(attributes, index) in item.attributes"
+                        >
                           <v-list-item :key="index">
                             <v-list-item-content>
                               <v-list-item-title
                                 class="green--text"
-                                v-text="item.attributes.product_name"
+                                v-text="attributes.product_name"
                               ></v-list-item-title>
 
                               <v-list-item-subtitle
                                 class="text--primary"
-                                v-text="item.attributes.par"
+                                v-text="attributes.par"
                               ></v-list-item-subtitle>
 
                               <v-list-item-subtitle>
-                                カロリー:{{ item.attributes.calorie }}kcal
+                                カロリー:{{ attributes.calorie }}kcal
                               </v-list-item-subtitle>
                               <v-list-item-subtitle>
-                                たんぱく質:{{ item.attributes.protein }}g
+                                たんぱく質:{{ attributes.protein }}g
                               </v-list-item-subtitle>
                               <v-list-item-subtitle>
-                                脂質:{{ item.attributes.lipid }}g
+                                脂質:{{ attributes.lipid }}g
                               </v-list-item-subtitle>
                               <v-list-item-subtitle>
-                                炭水化物:{{ item.attributes.carbohydrate }}g
+                                炭水化物:{{ attributes.carbohydrate }}g
                               </v-list-item-subtitle>
                             </v-list-item-content>
 
                             <v-list-item-action>
                               <v-list-item-action-text
-                                v-text="dateTime(item.attributes.created_at)"
+                                v-text="dateTime(attributes.created_at)"
                               ></v-list-item-action-text>
                               <v-list-item-icon>
-                                <v-btn icon @click="editDlgView(item)">
+                                <v-btn icon @click="editDlgView(attributes)">
                                   <v-icon color="green darken-1">
                                     mdi-tooltip-edit
                                   </v-icon>
@@ -142,7 +150,7 @@
                                   <v-icon
                                     color="red darken-3"
                                     elevation="5"
-                                    @click="deleteDlgView(index)"
+                                    @click="deleteDlgView(attributes.eat_id)"
                                   >
                                     mdi-delete
                                   </v-icon>
@@ -150,9 +158,8 @@
                               </v-list-item-icon>
                             </v-list-item-action>
                           </v-list-item>
-
                           <v-divider
-                            v-if="index < data.length - 1"
+                            v-if="index < item.attributes.length - 1"
                             :key="`third-` + index"
                           ></v-divider>
                         </template>
@@ -221,6 +228,8 @@ export default {
       snackbarMsg: null,
       foodLists: [],
       tabChangeOverlay: false,
+      eatChangeOverlay: false,
+      tabDate: null,
     }
   },
   computed: {
@@ -248,6 +257,7 @@ export default {
             protein: [],
             lipid: [],
             carbohydrate: [],
+            attributes: [],
           })
         } else if (i === 0) {
           array.push({
@@ -258,6 +268,7 @@ export default {
             protein: [],
             lipid: [],
             carbohydrate: [],
+            attributes: [],
           })
         } else if (i === 1) {
           array.push({
@@ -268,6 +279,7 @@ export default {
             protein: [],
             lipid: [],
             carbohydrate: [],
+            attributes: [],
           })
         } else {
           array.push({
@@ -278,6 +290,7 @@ export default {
             protein: [],
             lipid: [],
             carbohydrate: [],
+            attributes: [],
           })
         }
       }
@@ -295,6 +308,7 @@ export default {
         array[tabNum].protein.push(foodEat.attributes.protein)
         array[tabNum].lipid.push(foodEat.attributes.lipid)
         array[tabNum].carbohydrate.push(foodEat.attributes.carbohydrate)
+        array[tabNum].attributes.push(foodEat.attributes)
       })
       return array
     },
@@ -345,7 +359,6 @@ export default {
             this.$refs.dlg.carbohydrate = response.data.carbohydrate
           }
           this.$refs.dlg.func = 'web'
-          this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
           this.$refs.dlg.isDisplay = true
         } else if (response.data.data.length > 0) {
           this.lists = response.data.data
@@ -370,12 +383,12 @@ export default {
             this.$refs.dlg.func = 'used'
             this.$refs.dlg.tab = 1
           }
-          this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
           this.$refs.dlg.isDisplay = true
         }
       }
     },
-    code_confirm_dialog() {
+    code_confirm_dialog(date) {
+      this.tabDate = date
       this.$refs.dialog.type = 'foodRegister'
       this.$refs.dialog.isDisplay = true
     },
@@ -388,7 +401,7 @@ export default {
         .get(url)
         .then((response) => {
           console.log(response)
-          this.foodLists = response.data.data
+          this.foodLists = response.data.data.slice().reverse()
           this.getGuideline()
         })
         .finally((response) => {
@@ -424,14 +437,13 @@ export default {
       this.snackbarMsg = '更新しました'
       this.snackbar = true
     },
-    deleteDlgView(index) {
+    deleteDlgView(eatId) {
       this.$refs.dialog.type = 'eatDelete'
-      this.$refs.dialog.id = index
+      this.$refs.dialog.id = eatId
       this.$refs.dialog.isDisplay = true
     },
-    eatDelete(id) {
-      const eatData = this.data[id]
-      const url = '/api/v1/food_eat/' + eatData.id
+    eatDelete(eatId) {
+      const url = '/api/v1/food_eat/' + eatId
       this.$axios.delete(url).then((response) => {
         this.getFoodInfo()
         this.snackbarMsg = '削除しました'
@@ -452,7 +464,6 @@ export default {
       this.$refs.dlg.carbohydrate = item.attributes.carbohydrate
       this.$refs.dlg.post_id = parseInt(item.id)
       this.$refs.dlg.tab = 1
-      this.$refs.dlg.calendarDate = this.$moment().format('YYYY-MM-DD')
       this.$refs.dlg.isDisplay = true
     },
     codeSearch(code) {
@@ -476,7 +487,8 @@ export default {
       const now = this.$moment()
       const target = this.$moment(datetime)
       const difference = now.diff(target, 'minutes')
-      if (difference < 60) {
+      const differenceDate = now.diff(target, 'days')
+      if (differenceDate === 0 && difference < 60) {
         if (difference < 2) {
           const seconds = now.diff(target, 'seconds').toString()
           return seconds + '秒前'
@@ -485,7 +497,7 @@ export default {
           return minutes + '分前'
         }
       } else {
-        return target.format('hh:mm')
+        return target.format('MM/DD hh:mm')
       }
     },
     noCodeRegisterUp() {
@@ -516,7 +528,6 @@ export default {
       }
     },
     arraySum(array) {
-      console.log(this.items)
       if (array.length) {
         const sum = array.reduce(function (a, b) {
           return a + b

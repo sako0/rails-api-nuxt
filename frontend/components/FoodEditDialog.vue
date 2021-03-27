@@ -216,16 +216,16 @@ export default {
   watch: {
     isDisplay(val) {
       if (val) {
-        this.productName = this.$props.foodInfo.attributes.product_name
-        this.number = this.$props.foodInfo.attributes.food_code
-        this.par = this.$props.foodInfo.attributes.par
-        this.calorie = this.$props.foodInfo.attributes.calorie
-        this.protein = this.$props.foodInfo.attributes.protein
-        this.lipid = this.$props.foodInfo.attributes.lipid
-        this.carbohydrate = this.$props.foodInfo.attributes.carbohydrate
-        this.percent_base = this.$props.foodInfo.attributes.percent
-        this.begin = this.$props.foodInfo.attributes.percent
-        this.strDate = this.$props.foodInfo.attributes.date
+        this.productName = this.$props.foodInfo.product_name
+        this.number = this.$props.foodInfo.food_code
+        this.par = this.$props.foodInfo.par
+        this.calorie = this.$props.foodInfo.calorie
+        this.protein = this.$props.foodInfo.protein
+        this.lipid = this.$props.foodInfo.lipid
+        this.carbohydrate = this.$props.foodInfo.carbohydrate
+        this.percent_base = this.$props.foodInfo.percent
+        this.begin = this.$props.foodInfo.percent
+        this.strDate = this.$props.foodInfo.date
         this.calorie_total = (this.calorie * this.begin) / this.percent_base
         this.protein_total = (this.protein * this.begin) / this.percent_base
         this.lipid_total = (this.lipid * this.begin) / this.percent_base
@@ -243,10 +243,10 @@ export default {
   methods: {
     submit() {
       console.log(this.strDate)
-      const url = '/api/v1/food_eat/' + this.$props.foodInfo.id
+      const url = '/api/v1/food_eat/' + this.$props.foodInfo.eat_id
       const headers = { 'content-type': 'application/json' }
       const data = {
-        id: this.$props.foodInfo.id,
+        id: this.$props.foodInfo.eat_id,
         food_code: this.number,
         food_post_id: this.post_id,
         product_name: this.productName,
