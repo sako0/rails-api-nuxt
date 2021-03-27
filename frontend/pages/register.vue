@@ -223,7 +223,7 @@ export default {
       lists: null,
       getFoodInfoLoading: false,
       getGuidelineLoading: false,
-      sleepTime: 300,
+      sleepTime: 50,
       snackbar: false,
       snackbarMsg: null,
       foodLists: [],
@@ -256,7 +256,7 @@ export default {
       this.tab = val
       setTimeout(() => {
         this.tabChangeOverlay = false
-      }, 200)
+      }, 1)
     },
   },
   created() {

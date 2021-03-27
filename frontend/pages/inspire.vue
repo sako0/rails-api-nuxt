@@ -94,7 +94,7 @@ export default {
       foodPosts: null,
       getPostLoading: true,
       getUserLoading: true,
-      sleepTime: 300,
+      sleepTime: 50,
       snackbar: false,
       snackbarMsg: null,
     }

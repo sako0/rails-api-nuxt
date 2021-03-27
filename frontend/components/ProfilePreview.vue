@@ -168,7 +168,7 @@ export default {
         } else if (this.user.image) {
           return this.user.image
         } else {
-          return 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'
+          return 'http://gahag.net/img/201510/04s/gahag-0010787309-1.jpg'
         }
       },
       set(val) {
