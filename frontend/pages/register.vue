@@ -38,18 +38,25 @@
             fixed-tabs
             background-color="green darken-1"
             dark
-            icons-and-text
+            center-active
+            next-icon="mdi-arrow-right-bold-box-outline"
+            prev-icon="mdi-arrow-left-bold-box-outline"
+            show-arrows
           >
             <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
-            <v-tab v-for="(item, index) in items" :key="`first-` + index">
+            <v-tab v-for="item in items" :key="item.id">
               <div v-text="item.title"></div>
-              <v-icon>{{ item.icon }}</v-icon>
             </v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
-            <v-tab-item v-for="(item, index) in items" :key="`second-` + index">
-              <v-row v-if="index === 0">
-                <v-col cols="12" class="mt-5">
+            <v-tab-item
+              v-for="item in items"
+              :key="item.id"
+              eager
+              style="background-color: cornsilk"
+            >
+              <v-row>
+                <v-col cols="12">
                   <v-card>
                     <v-card-title>栄養分摂取量を登録する</v-card-title>
                     <v-row>
@@ -65,91 +72,92 @@
                         </v-btn>
                       </v-col>
                       <v-col cols="9" class="text-right">
-                        <v-card-text>{{ today }}</v-card-text>
+                        <v-card-text>{{ item.date }}</v-card-text>
                       </v-col>
                     </v-row>
-                    <v-row justify="center">
+                    <v-row v-if="!tabChangeOverlay" justify="center">
                       <v-col cols="4" sm="4" md="3" lg="3" xl="3">
                         <kcalBarChart
-                          :calorie="todayCalorie"
+                          :calorie="arraySum(item.calorie)"
                           :calorie-guideline="calorieGuideline"
                         />
                       </v-col>
                       <v-col cols="8" sm="8" md="5" lg="5" xl="5">
                         <gBarChart
-                          :protein="todayProtein"
+                          :protein="arraySum(item.protein)"
                           :protein-guideline="proteinGuideline"
-                          :lipid="todayLipid"
+                          :lipid="arraySum(item.lipid)"
                           :lipid-guideline="lipidGuideline"
-                          :carbohydrate="todayCarbohydrate"
+                          :carbohydrate="arraySum(item.carbohydrate)"
                           :carbohydrate-guideline="carbohydrateGuideline"
                         />
                       </v-col>
                     </v-row>
                   </v-card>
                 </v-col>
-              </v-row>
-              <v-row v-else>
-                <v-col cols="12" class="mt-5">
+                <v-spacer></v-spacer>
+                <v-col cols="12">
                   <v-card>
-                    <v-card-title>今日食べた物一覧</v-card-title>
-                    <v-list two-line>
-                      <template v-for="(item, index) in data">
-                        <v-list-item :key="index">
-                          <v-list-item-content>
-                            <v-list-item-title
-                              class="green--text"
-                              v-text="item.attributes.product_name"
-                            ></v-list-item-title>
+                    <v-container>
+                      <v-card-title>食事内容</v-card-title>
+                      <v-list two-line>
+                        <template v-for="(item, index) in data">
+                          <v-list-item :key="index">
+                            <v-list-item-content>
+                              <v-list-item-title
+                                class="green--text"
+                                v-text="item.attributes.product_name"
+                              ></v-list-item-title>
 
-                            <v-list-item-subtitle
-                              class="text--primary"
-                              v-text="item.attributes.par"
-                            ></v-list-item-subtitle>
+                              <v-list-item-subtitle
+                                class="text--primary"
+                                v-text="item.attributes.par"
+                              ></v-list-item-subtitle>
 
-                            <v-list-item-subtitle>
-                              カロリー:{{ item.attributes.calorie }}kcal
-                            </v-list-item-subtitle>
-                            <v-list-item-subtitle>
-                              たんぱく質:{{ item.attributes.protein }}g
-                            </v-list-item-subtitle>
-                            <v-list-item-subtitle>
-                              脂質:{{ item.attributes.lipid }}g
-                            </v-list-item-subtitle>
-                            <v-list-item-subtitle>
-                              炭水化物:{{ item.attributes.carbohydrate }}g
-                            </v-list-item-subtitle>
-                          </v-list-item-content>
+                              <v-list-item-subtitle>
+                                カロリー:{{ item.attributes.calorie }}kcal
+                              </v-list-item-subtitle>
+                              <v-list-item-subtitle>
+                                たんぱく質:{{ item.attributes.protein }}g
+                              </v-list-item-subtitle>
+                              <v-list-item-subtitle>
+                                脂質:{{ item.attributes.lipid }}g
+                              </v-list-item-subtitle>
+                              <v-list-item-subtitle>
+                                炭水化物:{{ item.attributes.carbohydrate }}g
+                              </v-list-item-subtitle>
+                            </v-list-item-content>
 
-                          <v-list-item-action>
-                            <v-list-item-action-text
-                              v-text="dateTime(item.attributes.created_at)"
-                            ></v-list-item-action-text>
-                            <v-list-item-icon>
-                              <v-btn icon @click="editDlgView(item)">
-                                <v-icon color="green darken-1">
-                                  mdi-tooltip-edit
-                                </v-icon>
-                              </v-btn>
-                              <v-btn icon>
-                                <v-icon
-                                  color="red darken-3"
-                                  elevation="5"
-                                  @click="deleteDlgView(index)"
-                                >
-                                  mdi-delete
-                                </v-icon>
-                              </v-btn>
-                            </v-list-item-icon>
-                          </v-list-item-action>
-                        </v-list-item>
+                            <v-list-item-action>
+                              <v-list-item-action-text
+                                v-text="dateTime(item.attributes.created_at)"
+                              ></v-list-item-action-text>
+                              <v-list-item-icon>
+                                <v-btn icon @click="editDlgView(item)">
+                                  <v-icon color="green darken-1">
+                                    mdi-tooltip-edit
+                                  </v-icon>
+                                </v-btn>
+                                <v-btn icon>
+                                  <v-icon
+                                    color="red darken-3"
+                                    elevation="5"
+                                    @click="deleteDlgView(index)"
+                                  >
+                                    mdi-delete
+                                  </v-icon>
+                                </v-btn>
+                              </v-list-item-icon>
+                            </v-list-item-action>
+                          </v-list-item>
 
-                        <v-divider
-                          v-if="index < data.length - 1"
-                          :key="`third-` + index"
-                        ></v-divider>
-                      </template>
-                    </v-list>
+                          <v-divider
+                            v-if="index < data.length - 1"
+                            :key="`third-` + index"
+                          ></v-divider>
+                        </template>
+                      </v-list>
+                    </v-container>
                   </v-card>
                 </v-col>
               </v-row>
@@ -190,20 +198,17 @@ export default {
   data() {
     return {
       num: null,
-      todayCalorie: 0,
-      todayProtein: 0,
-      todayLipid: 0,
-      todayCarbohydrate: 0,
+      todayCalorie: [],
+      todayProtein: [],
+      todayLipid: [],
+      todayCarbohydrate: [],
       calorieGuideline: 0,
       proteinGuideline: 0,
       lipidGuideline: 0,
       carbohydrateGuideline: 0,
       today: null,
-      tab: 0,
-      items: [
-        { title: '登録', icon: 'mdi-pencil-plus' },
-        { title: 'リスト', icon: 'mdi-file-document' },
-      ],
+      tabCount: 10,
+      tab: 10,
       selected: [],
       todayItems: [],
       data: null,
@@ -214,6 +219,8 @@ export default {
       sleepTime: 300,
       snackbar: false,
       snackbarMsg: null,
+      foodLists: [],
+      tabChangeOverlay: false,
     }
   },
   computed: {
@@ -223,6 +230,82 @@ export default {
       } else {
         return false
       }
+    },
+    todayMoment() {
+      return this.$moment().format('YYYY-MM-DD')
+    },
+    items() {
+      const array = []
+      for (let i = -this.tabCount; i < this.tabCount; i++) {
+        const targetDay = this.$moment().add(i, 'days')
+        const day = this.dayParse(targetDay.day())
+        if (i === -1) {
+          array.push({
+            title: '昨日',
+            date: targetDay.format('YYYY-MM-DD'),
+            id: i,
+            calorie: [],
+            protein: [],
+            lipid: [],
+            carbohydrate: [],
+          })
+        } else if (i === 0) {
+          array.push({
+            title: '今日',
+            date: targetDay.format('YYYY-MM-DD'),
+            id: i,
+            calorie: [],
+            protein: [],
+            lipid: [],
+            carbohydrate: [],
+          })
+        } else if (i === 1) {
+          array.push({
+            title: '明日',
+            date: targetDay.format('YYYY-MM-DD'),
+            id: i,
+            calorie: [],
+            protein: [],
+            lipid: [],
+            carbohydrate: [],
+          })
+        } else {
+          array.push({
+            title: targetDay.format(day + ',MM/DD'),
+            date: targetDay.format('YYYY-MM-DD'),
+            id: i,
+            calorie: [],
+            protein: [],
+            lipid: [],
+            carbohydrate: [],
+          })
+        }
+      }
+      this.foodLists.forEach((foodEat) => {
+        const targetDate = this.$moment(foodEat.attributes.date)
+        const diff = this.$moment().diff(targetDate, 'days')
+        let moment = 0
+        if (targetDate.isBefore(this.$moment())) {
+          moment = -diff
+        } else {
+          moment = diff
+        }
+        const tabNum = moment + this.tabCount
+        array[tabNum].calorie.push(foodEat.attributes.calorie)
+        array[tabNum].protein.push(foodEat.attributes.protein)
+        array[tabNum].lipid.push(foodEat.attributes.lipid)
+        array[tabNum].carbohydrate.push(foodEat.attributes.carbohydrate)
+      })
+      return array
+    },
+  },
+  watch: {
+    tab(val) {
+      this.tabChangeOverlay = true
+      this.tab = val
+      setTimeout(() => {
+        this.tabChangeOverlay = false
+      }, 0.00001)
     },
   },
   created() {
@@ -298,43 +381,15 @@ export default {
     },
     getFoodInfo() {
       this.getFoodInfoLoading = true
-      this.reset()
       const today = this.$moment().format('YYYY-MM-DD')
       this.today = today
       const url = '/api/v1/food_eat/' + today
       this.$axios
         .get(url)
         .then((response) => {
-          if (response.data.data.length) {
-            const calorieArray = response.data.data.map(
-              (attribute) => attribute.attributes.calorie
-            )
-            this.todayCalorie = calorieArray.reduce(function (a, b) {
-              return a + b
-            })
-            const proteinArray = response.data.data.map(
-              (attribute) => attribute.attributes.protein
-            )
-            this.todayProtein = proteinArray.reduce(function (a, b) {
-              return a + b
-            })
-            const lipidArray = response.data.data.map(
-              (attribute) => attribute.attributes.lipid
-            )
-            this.todayLipid = lipidArray.reduce(function (a, b) {
-              return a + b
-            })
-            const carbohydrateArray = response.data.data.map(
-              (attribute) => attribute.attributes.carbohydrate
-            )
-            this.todayCarbohydrate = carbohydrateArray.reduce(function (a, b) {
-              return a + b
-            })
-            this.data = response.data.data.slice().reverse()
-            this.getGuideline()
-          } else {
-            this.getGuideline()
-          }
+          console.log(response)
+          this.foodLists = response.data.data
+          this.getGuideline()
         })
         .finally((response) => {
           setTimeout(() => {
@@ -441,6 +496,35 @@ export default {
       this.getFoodInfo()
       this.snackbarMsg = '登録しました'
       this.snackbar = true
+    },
+    dayParse(val) {
+      switch (val) {
+        case 0:
+          return '日'
+        case 1:
+          return '月'
+        case 2:
+          return '火'
+        case 3:
+          return '水'
+        case 4:
+          return '木'
+        case 5:
+          return '金'
+        case 6:
+          return '土'
+      }
+    },
+    arraySum(array) {
+      console.log(this.items)
+      if (array.length) {
+        const sum = array.reduce(function (a, b) {
+          return a + b
+        })
+        return sum
+      } else {
+        return 0
+      }
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

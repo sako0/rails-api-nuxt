@@ -73,6 +73,11 @@ export default {
             },
           ],
         },
+        layout: {
+          padding: {
+            bottom: 0,
+          },
+        },
       },
     }
   },
@@ -80,7 +85,7 @@ export default {
     protein(val) {
       const int = Math.round(val)
       this.chartdata.datasets[0].data = [int, this.lipid, this.carbohydrate, 0]
-      this.renderChart(this.chartdata, this.options)
+      this.reload()
     },
     proteinGuideline(val) {
       this.chartdata.datasets[1].data = [
@@ -89,7 +94,7 @@ export default {
         this.carbohydrateGuideline,
         0,
       ]
-      this.renderChart(this.chartdata, this.options)
+      this.reload()
     },
     lipid(val) {
       const int = Math.round(val)
@@ -99,7 +104,7 @@ export default {
         this.carbohydrate,
         0,
       ]
-      this.renderChart(this.chartdata, this.options)
+      this.reload()
     },
     lipidGuideline(val) {
       this.chartdata.datasets[1].data = [
@@ -108,12 +113,12 @@ export default {
         this.carbohydrateGuideline,
         0,
       ]
-      this.renderChart(this.chartdata, this.options)
+      this.reload()
     },
     carbohydrate(val) {
       const int = Math.round(val)
       this.chartdata.datasets[0].data = [this.protein, this.lipid, int, 0]
-      this.renderChart(this.chartdata, this.options)
+      this.reload()
     },
     carbohydrateGuideline(val) {
       this.chartdata.datasets[1].data = [
@@ -122,11 +127,17 @@ export default {
         val,
         0,
       ]
-      this.renderChart(this.chartdata, this.options)
+      this.reload()
     },
   },
   mounted() {
-    this.renderChart(this.chartdata, this.options)
+    this.reload()
+  },
+  methods: {
+    reload() {
+      this.$refs.canvas.height = 200
+      this.renderChart(this.chartdata, this.options)
+    },
   },
 }
 </script>

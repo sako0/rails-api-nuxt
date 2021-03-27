@@ -59,6 +59,11 @@ export default {
             },
           ],
         },
+        layout: {
+          padding: {
+            bottom: 6,
+          },
+        },
       },
     }
   },
@@ -66,15 +71,21 @@ export default {
     calorie(val) {
       const int = Math.round(val)
       this.chartdata.datasets[0].data = [int, 0]
-      this.renderChart(this.chartdata, this.options)
+      this.reload()
     },
     calorieGuideline(val) {
       this.chartdata.datasets[1].data = [val, 0]
-      this.renderChart(this.chartdata, this.options)
+      this.reload()
     },
   },
   mounted() {
-    this.renderChart(this.chartdata, this.options)
+    this.reload()
+  },
+  methods: {
+    reload() {
+      this.$refs.canvas.height = 200
+      this.renderChart(this.chartdata, this.options)
+    },
   },
 }
 </script>
