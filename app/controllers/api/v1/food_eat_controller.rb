@@ -126,7 +126,7 @@ class Api::V1::FoodEatController < ApplicationController
   private
 
   def food_eat_params
-    params.require(:food_eat).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :date, :percent)
+    params.require(:food_eat).permit(:id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :date, :percent, :post_id)
   end
 
   def destroy_id_get

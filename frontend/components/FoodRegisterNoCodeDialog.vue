@@ -721,6 +721,7 @@ export default {
         carbohydrate: this.carbohydrate_total,
         percent: this.begin,
         date: this.calendarDate,
+        post_id: this.post_id,
       }
       this.$axios
         .post(url, data, { headers })

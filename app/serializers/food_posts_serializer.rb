@@ -1,5 +1,5 @@
 class FoodPostsSerializer < ActiveModel::Serializer
-  attributes :id, :post_id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :user_id, :created_at, :post_user_image, :func
+  attributes :id, :post_id, :food_code, :product_name, :par, :calorie, :protein, :lipid, :carbohydrate, :user_id, :created_at, :post_user_id, :func
   belongs_to :user, serializer: UserSerializer
 
   # 画像のURLを返す
@@ -15,13 +15,9 @@ class FoodPostsSerializer < ActiveModel::Serializer
     object.id
   end
 
-  # 投稿者の画像のURLを返す
-  def post_user_image
-    if object.user.image_url
-      object.user.image_url
-    else
-      nil
-    end
+  # 投稿者のidを返す
+  def post_user_id
+    object.user.id
   end
 
   # コントローラから値を受け取る
