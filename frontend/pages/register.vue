@@ -244,82 +244,19 @@ export default {
       return this.$moment().format('YYYY-MM-DD')
     },
     items() {
-      const array = []
-      for (let i = -this.tabCount; i < this.tabCount; i++) {
-        const targetDay = this.$moment().add(i, 'days')
-        const day = this.dayParse(targetDay.day())
-        if (i === -1) {
-          array.push({
-            title: '昨日',
-            date: targetDay.format('YYYY-MM-DD'),
-            id: i,
-            calorie: [],
-            protein: [],
-            lipid: [],
-            carbohydrate: [],
-            attributes: [],
-          })
-        } else if (i === 0) {
-          array.push({
-            title: '今日',
-            date: targetDay.format('YYYY-MM-DD'),
-            id: i,
-            calorie: [],
-            protein: [],
-            lipid: [],
-            carbohydrate: [],
-            attributes: [],
-          })
-        } else if (i === 1) {
-          array.push({
-            title: '明日',
-            date: targetDay.format('YYYY-MM-DD'),
-            id: i,
-            calorie: [],
-            protein: [],
-            lipid: [],
-            carbohydrate: [],
-            attributes: [],
-          })
-        } else {
-          array.push({
-            title: targetDay.format(day + ',MM/DD'),
-            date: targetDay.format('YYYY-MM-DD'),
-            id: i,
-            calorie: [],
-            protein: [],
-            lipid: [],
-            carbohydrate: [],
-            attributes: [],
-          })
-        }
-      }
-      this.foodLists.forEach((foodEat) => {
-        const targetDate = this.$moment(foodEat.attributes.date)
-        const diff = this.$moment().diff(targetDate, 'days')
-        let moment = 0
-        if (targetDate.isBefore(this.$moment())) {
-          moment = -diff
-        } else {
-          moment = diff
-        }
-        const tabNum = moment + this.tabCount
-        array[tabNum].calorie.push(foodEat.attributes.calorie)
-        array[tabNum].protein.push(foodEat.attributes.protein)
-        array[tabNum].lipid.push(foodEat.attributes.lipid)
-        array[tabNum].carbohydrate.push(foodEat.attributes.carbohydrate)
-        array[tabNum].attributes.push(foodEat.attributes)
-      })
-      return array
+      return this.itemsGet()
     },
   },
   watch: {
     tab(val) {
+      if (val === 11) {
+        console.log(this.items)
+      }
       this.tabChangeOverlay = true
       this.tab = val
       setTimeout(() => {
         this.tabChangeOverlay = false
-      }, 0.00001)
+      }, 200)
     },
   },
   created() {
@@ -536,6 +473,72 @@ export default {
       } else {
         return 0
       }
+    },
+    itemsGet() {
+      const array = []
+      for (let i = -this.tabCount; i < this.tabCount; i++) {
+        const targetDay = this.$moment().add(i, 'days')
+        const day = this.dayParse(targetDay.day())
+        if (i === -1) {
+          array.push({
+            title: '昨日',
+            date: targetDay.format('YYYY-MM-DD'),
+            id: i,
+            calorie: [],
+            protein: [],
+            lipid: [],
+            carbohydrate: [],
+            attributes: [],
+          })
+        } else if (i === 0) {
+          array.push({
+            title: '今日',
+            date: this.$moment().format('YYYY-MM-DD'),
+            id: i,
+            calorie: [],
+            protein: [],
+            lipid: [],
+            carbohydrate: [],
+            attributes: [],
+          })
+        } else if (i === 1) {
+          array.push({
+            title: '明日',
+            date: targetDay.format('YYYY-MM-DD'),
+            id: i,
+            calorie: [],
+            protein: [],
+            lipid: [],
+            carbohydrate: [],
+            attributes: [],
+          })
+        } else {
+          array.push({
+            title: targetDay.format(day + ',MM/DD'),
+            date: targetDay.format('YYYY-MM-DD'),
+            id: i,
+            calorie: [],
+            protein: [],
+            lipid: [],
+            carbohydrate: [],
+            attributes: [],
+          })
+        }
+      }
+      this.foodLists.forEach((foodEat) => {
+        const targetDate = this.$moment(foodEat.attributes.date)
+        let diff = targetDate.diff(this.$moment(), 'days')
+        if (diff >= 0 && targetDate.isAfter(this.$moment())) {
+          diff += 1
+        }
+        const tabNum = diff + this.tabCount
+        array[tabNum].calorie.push(foodEat.attributes.calorie)
+        array[tabNum].protein.push(foodEat.attributes.protein)
+        array[tabNum].lipid.push(foodEat.attributes.lipid)
+        array[tabNum].carbohydrate.push(foodEat.attributes.carbohydrate)
+        array[tabNum].attributes.push(foodEat.attributes)
+      })
+      return array
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

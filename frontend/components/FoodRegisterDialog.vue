@@ -598,7 +598,7 @@ export default {
     allowedDate(val) {
       return (
         this.$moment(val).format('YYYY-MM-DD') <=
-        this.$moment().format('YYYY-MM-DD')
+        this.$moment().add(9, 'days').format('YYYY-MM-DD')
       )
     },
     reset() {
