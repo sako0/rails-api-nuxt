@@ -1,7 +1,7 @@
 <template>
   <div>
     <Dialog ref="dlg" @method="postDelete($event)" />
-    <v-dialog v-model="isDisplay" width="600px">
+    <v-dialog v-model="isDisplay" v-scroll-lock width="600px" class="dialog">
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form>
           <v-card style="overflow-y: hidden">

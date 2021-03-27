@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isDisplay" width="400px">
+  <v-dialog v-model="isDisplay" v-scroll-lock width="400px">
     <v-card style="overflow-y: hidden">
       <v-card-title>{{ title }}</v-card-title>
       <v-card-text v-if="type === 'postDelete'">

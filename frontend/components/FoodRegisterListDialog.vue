@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isDisplay" width="600px">
+  <v-dialog v-model="isDisplay" v-scroll-lock width="600px">
     <v-card style="overflow-y: hidden">
       <v-card-title>どのバーコード情報を使用しますか？</v-card-title>
       <div v-if="!codeListOverlay">

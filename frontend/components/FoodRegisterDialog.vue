@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isDisplay" width="600px">
+  <v-dialog v-model="isDisplay" v-scroll-lock width="600px">
     <validation-observer ref="observer" v-slot="{ invalid }">
       <form>
         <v-card style="overflow-y: hidden">

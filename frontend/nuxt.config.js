@@ -26,7 +26,7 @@ export default {
     dir: '../public',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/axios', '@/plugins/auth'],
+  plugins: ['@/plugins/axios', '@/plugins/auth', '@/plugins/scrollLock'],
   build: {
     transpile: ['vee-validate'], // 追加 https://qiita.com/TK-C/items/9cab072c65d2f9ade5d0
     extend(config, ctx) {},
