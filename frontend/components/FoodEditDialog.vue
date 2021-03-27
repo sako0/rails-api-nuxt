@@ -494,13 +494,13 @@ export default {
         this.percent_base = 100
         this.begin = this.$props.foodInfo.percent
         this.calorie =
-          (this.$props.foodInfo.calorie / this.begin) * this.percent_base
+          (this.$props.foodInfo.calorie * this.percent_base) / this.begin
         this.protein =
-          (this.$props.foodInfo.protein / this.begin) * this.percent_base
+          (this.$props.foodInfo.protein * this.percent_base) / this.begin
         this.lipid =
-          (this.$props.foodInfo.lipid / this.begin) * this.percent_base
+          (this.$props.foodInfo.lipid * this.percent_base) / this.begin
         this.carbohydrate =
-          (this.$props.foodInfo.carbohydrate / this.begin) * this.percent_base
+          (this.$props.foodInfo.carbohydrate * this.percent_base) / this.begin
         this.strDate = this.$props.foodInfo.date
         this.post_id = this.$props.foodInfo.post_id
         this.post_user_id = this.$props.foodInfo.post_user_id
