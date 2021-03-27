@@ -418,6 +418,7 @@ export default {
   },
   props: {
     number: String,
+    date: String,
   },
   data: () => ({
     isDisplay: false,
@@ -464,6 +465,7 @@ export default {
   watch: {
     isDisplay(val) {
       if (val) {
+        this.calendarDate = this.$props.date
         this.begin = 100
         this.calorie_total = (this.calorie * this.begin) / 100
         this.protein_total = (this.protein * this.begin) / 100
