@@ -42,6 +42,11 @@ class Api::V1::FoodEatController < ApplicationController
     render json: food_eat_at_day, each_serializer: FoodEatSerializer
   end
 
+  def index
+    food_eat_all = @current_user.food_eats.all
+    render json: food_eat_all, each_serializer: FoodEatSerializer
+  end
+
   def guideline
     age = @current_user.profiles.age
     sex = @current_user.profiles.sex
