@@ -14,12 +14,14 @@ class Api::V1::FoodPostsController < ApplicationController
     logger.error(params)
     if params[:food_post].present?
       if params[:food_post][:food_code].present?
-        if @current_user.food_posts.find_by(food_code: params[:food_post][:food_code])
+        # 対象バーコードに対して自分の投稿したfood_postがある場合、POSTの新規作成ではなく更新を行う
+        if @current_user.food_posts.exists?(food_code: params[:food_post][:food_code])
           search_food_code = @current_user.food_posts.find_by(food_code: params[:food_post][:food_code])
           search_food_code.updated_at = Time.now
           search_food_code.update(food_posts_params)
           render json: search_food_code.id
         else
+          # バーコードに対する、自分のfood_postが1件もない場合、POSTの新規作成を行う
           food_post = @current_user.food_posts.create(food_posts_params)
           if food_post
             render json: food_post.id
@@ -32,12 +34,32 @@ class Api::V1::FoodPostsController < ApplicationController
           end
         end
       else
+        # food_codeがない場合は下記
+        # paramsにidがある場合
         if params[:food_post][:id]
-          search_food_post = @current_user.food_posts.find(params[:food_post][:id])
-          search_food_post.updated_at = Time.now
-          search_food_post.update(food_posts_params)
-          render json: search_food_post.id
+          # paramのidが自分のpostであれば、updateを行う
+          logger.error('idがある！')
+          if @current_user.food_posts.exists?(params[:food_post][:id])
+            search_food_post = @current_user.food_posts.find(params[:food_post][:id])
+            search_food_post.updated_at = Time.now
+            search_food_post.update(food_posts_params)
+            render json: search_food_post.id
+          else
+            logger.error('postが見つからなかった')
+            # 削除等により、idに紐づくpostが存在しない場合は新規で作成する
+            food_post = @current_user.food_posts.create(food_posts_params)
+            if food_post
+              render json: food_post.id
+            else
+              if food_post.errors.any?
+                render json: food_post.errors.full_messages.to_s.gsub(",", "<br>").gsub("[", "").gsub("]", "").gsub('"', "").to_json
+              else
+                render json: "不明なエラー"
+              end
+            end
+          end
         else
+          # paramsにidがない場合はpostの新規作成を行う
           food_post = @current_user.food_posts.create(food_posts_params)
           if food_post
             render json: food_post.id

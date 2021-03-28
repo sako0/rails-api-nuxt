@@ -6,8 +6,8 @@ class FoodEatSerializer < ActiveModel::Serializer
   end
 
   def post_user_id
-    if object.post_id
-      if FoodPost.find(object.post_id)
+    unless object.post_id.nil?
+      if FoodPost.exists?(object.post_id)
         FoodPost.find(object.post_id).user_id
       end
     end

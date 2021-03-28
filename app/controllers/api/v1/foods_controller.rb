@@ -42,23 +42,22 @@ class Api::V1::FoodsController < ApplicationController
       render json: "投稿に失敗しました"
     end
     if @food_post_useds_params
-      if @food_post_useds_params.target_user_id == @current_user.id
-        # 同じバーコードに対して自分の投稿がふたつ以上ある場合は古いものを削除する
-        if @current_user.food_post_useds.find_by(food_code: @food_post_useds_params.food_code)
-          search_used_code = @current_user.food_post_useds.find_by(food_code: @food_post_useds_params.food_code)
-          search_used_code.destroy
-          if @current_user.food_posts.where(food_code: @food_post_useds_params.food_code).count > 1
-            old_post = @current_user.food_posts.where(food_code: @food_post_useds_params.food_code).order(created_at: "ASK").first
-            old_post.food_post_useds.destroy_all
-            old_post.destroy
-          end
+      # 同じバーコードに対して自分のusedが存在する場合は初めに削除する
+      unless @current_user.food_post_useds.find_by(food_code: @food_post_useds_params.food_code).nil?
+        search_used_code = @current_user.food_post_useds.where(food_code: @food_post_useds_params.food_code)
+        search_used_code.destroy_all
+        if @current_user.food_posts.where(food_code: @food_post_useds_params.food_code).count > 1
+          old_post = @current_user.food_posts.where(food_code: @food_post_useds_params.food_code).order(created_at: "ASK").first
+          old_post.destroy_all
+          # old_post.food_post_useds.destroy_all
         end
-      else
-        # 自分が使用しているバーコード情報を使わなかった場合はそのPOSTを削除する
+      end
+      if @food_post_useds_params.target_user_id != @current_user.id
+        # 自分が作成したバーコード情報を使わなかった場合はそのPOSTを削除する
         if @current_user.food_posts.find_by(food_code: @food_post_useds_params.food_code).present?
           my_old_post = @current_user.food_posts.find_by(food_code: @food_post_useds_params.food_code)
-          my_old_post.food_post_useds.destroy_all
-          my_old_post.delete
+          my_old_post.destroy
+          # my_old_post.food_post_useds.destroy_all
         end
       end
       if @food_post_useds_params.save
