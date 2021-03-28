@@ -5,41 +5,45 @@
       :lists="lists"
       @selectedItem="selectedItem($event)"
     />
+    <Dialog ref="dialog" @method="postDelete($event)" />
     <v-dialog v-model="isDisplay" v-scroll-lock width="600px">
-      <v-card style="overflow-y: hidden">
-        <v-tabs
-          v-model="tab"
-          fixed-tabs
-          background-color="green darken-1"
-          dark
-          icons-and-text
-        >
-          <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
-          <v-tab v-for="(item, index) in items" :key="`first-` + index">
-            <div v-text="item.title"></div>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-tab>
-        </v-tabs>
-        <v-tabs-items v-model="tab">
-          <v-tab-item v-for="(item, index) in items" :key="`second-` + index">
-            <validation-observer ref="observer" v-slot="{ invalid }">
-              <form>
+      <validation-observer ref="observer" v-slot="{ invalid }">
+        <form>
+          <v-card style="overflow-y: hidden">
+            <v-tabs
+              v-model="tab"
+              fixed-tabs
+              background-color="green darken-1"
+              dark
+              icons-and-text
+            >
+              <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
+              <v-tab v-for="(item, index) in items" :key="`first-` + index">
+                <div v-text="item.title"></div>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-tab>
+            </v-tabs>
+            <v-tabs-items v-model="tab">
+              <v-tab-item
+                v-for="(item, index) in items"
+                :key="`second-` + index"
+              >
                 <div v-if="item.title === '商品情報'">
                   <v-card-title>商品情報</v-card-title>
 
                   <v-row justify="center">
                     <v-col cols="6" class="text-center">
                       <v-btn
-                        v-if="sameUserFlg && !fix"
+                        v-if="!fix && !deleteFlg"
                         dark
                         color="green darken-1"
                         @click="fix = true"
                       >
                         <v-icon>mdi-pencil</v-icon>
-                        編集
+                        編集と削除
                       </v-btn>
                       <v-btn
-                        v-if="sameUserFlg && fix"
+                        v-if="fix && !deleteFlg"
                         dark
                         color="green darken-1"
                         @click="editCancel"
@@ -229,11 +233,23 @@
                   </v-row>
 
                   <v-card-actions>
-                    <v-row justify="center">
-                      <v-col cols="6">
+                    <v-row justify="center" class="text-center">
+                      <v-col cols="4">
                         <v-btn @click="isDisplay = false">閉じる</v-btn>
                       </v-col>
-                      <v-col cols="6" class="text-right">
+                      <v-col cols="4" class="text-center">
+                        <v-btn
+                          v-if="sameUserFlg && fix && !deleteFlg"
+                          dark
+                          color="red darken-1"
+                          :loading="deleteLoading"
+                          @click="postDeleteDlgUp"
+                        >
+                          <v-icon>mdi-delete</v-icon>
+                          情報の削除
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="4" class="text-center">
                         <v-btn color="blue" dark elevation="6" @click="tab = 1"
                           >次へ</v-btn
                         >
@@ -332,7 +348,7 @@
                           :day-format="(date) => new Date(date).getDate()"
                           color="light-blue darken-1"
                           :allowed-dates="allowedDate"
-                          @change="$refs.dateDlg.save(calendarDate)"
+                          @change="$refs.dateDlg[0].save(calendarDate)"
                         >
                           <v-spacer></v-spacer>
                         </v-date-picker>
@@ -369,11 +385,11 @@
                     </v-row>
                   </v-card-actions>
                 </div>
-              </form>
-            </validation-observer>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-card>
+              </v-tab-item>
+            </v-tabs-items>
+          </v-card>
+        </form>
+      </validation-observer>
     </v-dialog>
   </div>
 </template>
@@ -454,6 +470,8 @@ export default {
     currentUserId: null,
     post_user_id: null,
     selectedFlg: false,
+    deleteLoading: false,
+    deleteFlg: false,
   }),
   computed: {
     calendarDate: {
@@ -504,7 +522,8 @@ export default {
         this.strDate = this.$props.foodInfo.date
         this.post_id = this.$props.foodInfo.post_id
         this.post_user_id = this.$props.foodInfo.post_user_id
-        console.log(this.post_id)
+        console.log(this.post_user_id)
+        console.log(this.currentUserId)
       }
     },
     calorie(val) {
@@ -530,13 +549,7 @@ export default {
     submit() {
       // this.isDisplay = false
       if (this.postChangeFlg) {
-        if (this.sameUserFlg) {
-          this.foodPost()
-        } else if (this.number) {
-          this.post_used()
-        } else {
-          this.foodPost()
-        }
+        this.foodPost()
       } else {
         this.foodEat()
       }
@@ -641,9 +654,8 @@ export default {
     foodPost() {
       const url = '/api/v1/food_posts'
       let data = ''
-      if (this.post_id) {
+      if (this.number) {
         data = {
-          id: this.post_id,
           food_code: this.number,
           product_name: this.productName,
           par: this.par,
@@ -654,7 +666,7 @@ export default {
         }
       } else {
         data = {
-          food_code: this.number,
+          id: this.post_id,
           product_name: this.productName,
           par: this.par,
           calorie: this.calorie,
@@ -673,6 +685,36 @@ export default {
           this.foodEat()
         }
       })
+    },
+    postDeleteDlgUp() {
+      this.$refs.dialog.type = 'postDelete'
+      this.$refs.dialog.id = this.productName
+      this.$refs.dialog.isDisplay = true
+    },
+    postDelete(id) {
+      this.postLoading = true
+      const url = '/api/v1/food_posts/' + this.post_id
+      const headers = { 'content-type': 'application/json' }
+      this.$axios
+        .delete(url, { headers })
+        .then((response) => {
+          this.formClear()
+        })
+        .finally((response) => {
+          this.postLoading = false
+        })
+    },
+    formClear() {
+      this.productName = null
+      this.number = this.$props.foodInfo.food_code
+      this.par = null
+      this.percent_base = 100
+      this.begin = 100
+      this.calorie = null
+      this.protein = null
+      this.lipid = null
+      this.carbohydrate = null
+      this.deleteFlg = true
     },
     reset() {
       Object.assign(this.$data, this.$options.data())
