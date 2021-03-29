@@ -249,9 +249,6 @@ export default {
   },
   watch: {
     tab(val) {
-      if (val === 11) {
-        console.log(this.items)
-      }
       this.tabChangeOverlay = true
       this.tab = val
       setTimeout(() => {

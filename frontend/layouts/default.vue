@@ -86,8 +86,8 @@
         <v-icon>mdi-pencil-plus</v-icon>
       </v-btn>
       <v-btn to="/calendar">
-        <span>データ</span>
-        <v-icon>mdi-notebook-multiple</v-icon>
+        <span>カレンダー</span>
+        <v-icon>mdi-calendar-month</v-icon>
       </v-btn>
       <v-btn to="/">
         <span>info</span>
@@ -120,8 +120,8 @@ export default {
           to: '/register',
         },
         {
-          icon: 'mdi-notebook-multiple',
-          title: 'データ',
+          icon: 'mdi-calendar-month',
+          title: 'カレンダー',
           to: '/calendar',
         },
         {

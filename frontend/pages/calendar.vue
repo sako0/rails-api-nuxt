@@ -36,155 +36,171 @@
         :date="selectedDate"
         @reGet="registerFinish"
       />
+      <v-tabs
+        v-model="tab"
+        fixed-tabs
+        background-color="green darken-1"
+        dark
+        icons-and-text
+      >
+        <v-tabs-slider color="cyan accent-2"></v-tabs-slider>
+        <v-tab v-for="(item, index) in items" :key="`first-` + index">
+          <div v-text="item.title"></div>
+          <v-icon>{{ item.icon }}</v-icon>
+        </v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tab">
+        <v-tab-item v-for="(item, index) in items" :key="`second-` + index">
+          <v-container v-show="index === 0">
+            <v-card-title>カレンダー</v-card-title>
+            <v-sheet tile height="54" class="d-flex">
+              <v-btn icon class="ma-2" @click="$refs.calendar[0].prev()">
+                <v-icon>mdi-chevron-left</v-icon>
+              </v-btn>
+              <v-spacer></v-spacer>
+              {{ calendarMonth }}
+              <v-spacer></v-spacer>
+              <v-btn icon class="ma-2" @click="$refs.calendar[0].next()">
+                <v-icon>mdi-chevron-right</v-icon>
+              </v-btn>
+            </v-sheet>
+            <v-sheet height="500">
+              <v-calendar
+                ref="calendar"
+                v-model="value"
+                :event-height="40"
+                locale="jp-ja"
+                :day-format="(timestamp) => new Date(timestamp.date).getDate()"
+                :weekdays="weekday"
+                :show-month-on-first="false"
+                :type="type"
+                :events="events"
+                :event-overlap-mode="mode"
+                :event-overlap-threshold="30"
+                :value="selectedDate"
+                @change="getEvents"
+                @click:date="showFoodEat"
+                @click:event="showFoodEat"
+              ></v-calendar>
+            </v-sheet>
+          </v-container>
+          <v-spacer></v-spacer>
+          <v-container v-show="index === 1" v-if="selectedDateItem">
+            <v-card-title>内容</v-card-title>
+            <v-row>
+              <v-col cols="12">
+                <v-card>
+                  <v-card-title>栄養分摂取量を登録する</v-card-title>
+                  <v-row>
+                    <v-col cols="2">
+                      <v-btn
+                        class="mx-2"
+                        fab
+                        dark
+                        color="green darken-1"
+                        @click="code_confirm_dialog(selectedDate)"
+                      >
+                        <v-icon dark> mdi-plus</v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="9" class="text-right">
+                      <v-card-text>{{ selectedDate }}</v-card-text>
+                    </v-col>
+                  </v-row>
+                  <v-row v-if="!tabChangeOverlay" justify="center">
+                    <v-col cols="4" sm="4" md="3" lg="3" xl="3">
+                      <kcalBarChart
+                        :calorie="selectedDateItem.totals.calorie"
+                        :calorie-guideline="calorieGuideline"
+                      />
+                    </v-col>
+                    <v-col cols="8" sm="8" md="5" lg="5" xl="5">
+                      <gBarChart
+                        :protein="selectedDateItem.totals.protein"
+                        :protein-guideline="proteinGuideline"
+                        :lipid="selectedDateItem.totals.lipid"
+                        :lipid-guideline="lipidGuideline"
+                        :carbohydrate="selectedDateItem.totals.carbohydrate"
+                        :carbohydrate-guideline="carbohydrateGuideline"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+              <v-spacer></v-spacer>
+              <v-col cols="12">
+                <v-card>
+                  <v-container>
+                    <v-card-title>食事内容</v-card-title>
+                    <v-list v-if="selectedDateItem.lists.length" two-line>
+                      <v-divider></v-divider>
+                      <template v-for="(item, index) in selectedDateItem.lists">
+                        <v-list-item :key="index">
+                          <v-list-item-content>
+                            <v-list-item-title
+                              class="green--text"
+                              v-text="item.attributes.product_name"
+                            ></v-list-item-title>
 
-      <v-container>
-        <v-card-title>カレンダー</v-card-title>
-        <v-sheet tile height="54" class="d-flex">
-          <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-spacer></v-spacer>
-          {{ calendarMonth }}
-          <v-spacer></v-spacer>
-          <v-btn icon class="ma-2" @click="$refs.calendar.next()">
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-        </v-sheet>
-        <v-sheet height="500">
-          <v-calendar
-            ref="calendar"
-            v-model="value"
-            :event-height="40"
-            locale="jp-ja"
-            :day-format="(timestamp) => new Date(timestamp.date).getDate()"
-            :weekdays="weekday"
-            :show-month-on-first="false"
-            :type="type"
-            :events="events"
-            :event-overlap-mode="mode"
-            :event-overlap-threshold="30"
-            :value="selectedDate"
-            @change="getEvents"
-            @click:date="showFoodEat"
-            @click:event="showFoodEat"
-          ></v-calendar>
-        </v-sheet>
-      </v-container>
-      <v-spacer></v-spacer>
-      <v-container v-if="selectedDateItem">
-        <v-card-title>内容</v-card-title>
-        <v-row>
-          <v-col cols="12">
+                            <v-list-item-subtitle
+                              class="text--primary"
+                              v-text="item.attributes.par"
+                            ></v-list-item-subtitle>
+
+                            <v-list-item-subtitle>
+                              カロリー:{{ item.attributes.calorie }}kcal
+                            </v-list-item-subtitle>
+                            <v-list-item-subtitle>
+                              たんぱく質:{{ item.attributes.protein }}g
+                            </v-list-item-subtitle>
+                            <v-list-item-subtitle>
+                              脂質:{{ item.attributes.lipid }}g
+                            </v-list-item-subtitle>
+                            <v-list-item-subtitle>
+                              炭水化物:{{ item.attributes.carbohydrate }}g
+                            </v-list-item-subtitle>
+                          </v-list-item-content>
+
+                          <v-list-item-action>
+                            <v-list-item-action-text
+                              v-text="dateTime(item.attributes.created_at)"
+                            ></v-list-item-action-text>
+                            <v-list-item-icon>
+                              <v-btn icon @click="editDlgView(item.attributes)">
+                                <v-icon color="green darken-1">
+                                  mdi-tooltip-edit
+                                </v-icon>
+                              </v-btn>
+                              <v-btn icon>
+                                <v-icon
+                                  color="red darken-3"
+                                  elevation="5"
+                                  @click="deleteDlgView(item.attributes.eat_id)"
+                                >
+                                  mdi-delete
+                                </v-icon>
+                              </v-btn>
+                            </v-list-item-icon>
+                          </v-list-item-action>
+                        </v-list-item>
+                        <v-divider
+                          v-if="index < selectedDateItem.lists.length - 1"
+                          :key="`third-` + index"
+                        ></v-divider>
+                      </template>
+                    </v-list>
+                  </v-container>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-container v-show="index === 1" v-else>
             <v-card>
-              <v-card-title>栄養分摂取量を登録する</v-card-title>
-              <v-row>
-                <v-col cols="2">
-                  <v-btn
-                    class="mx-2"
-                    fab
-                    dark
-                    color="green darken-1"
-                    @click="code_confirm_dialog(item.date)"
-                  >
-                    <v-icon dark> mdi-plus</v-icon>
-                  </v-btn>
-                </v-col>
-                <v-col cols="9" class="text-right">
-                  <v-card-text>{{ selectedDate }}</v-card-text>
-                </v-col>
-              </v-row>
-              <v-row v-if="!tabChangeOverlay" justify="center">
-                <v-col cols="4" sm="4" md="3" lg="3" xl="3">
-                  <kcalBarChart
-                    :calorie="selectedDateItem.totals.calorie"
-                    :calorie-guideline="calorieGuideline"
-                  />
-                </v-col>
-                <v-col cols="8" sm="8" md="5" lg="5" xl="5">
-                  <gBarChart
-                    :protein="selectedDateItem.totals.protein"
-                    :protein-guideline="proteinGuideline"
-                    :lipid="selectedDateItem.totals.lipid"
-                    :lipid-guideline="lipidGuideline"
-                    :carbohydrate="selectedDateItem.totals.carbohydrate"
-                    :carbohydrate-guideline="carbohydrateGuideline"
-                  />
-                </v-col>
-              </v-row>
+              <v-card-text> まだ登録できません </v-card-text>
             </v-card>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="12">
-            <v-card>
-              <v-container>
-                <v-card-title>食事内容</v-card-title>
-                <v-list v-if="selectedDateItem.lists.length" two-line>
-                  <v-divider></v-divider>
-                  <template v-for="(item, index) in selectedDateItem.lists">
-                    <v-list-item :key="index">
-                      <v-list-item-content>
-                        <v-list-item-title
-                          class="green--text"
-                          v-text="item.attributes.product_name"
-                        ></v-list-item-title>
-
-                        <v-list-item-subtitle
-                          class="text--primary"
-                          v-text="item.attributes.par"
-                        ></v-list-item-subtitle>
-
-                        <v-list-item-subtitle>
-                          カロリー:{{ item.attributes.calorie }}kcal
-                        </v-list-item-subtitle>
-                        <v-list-item-subtitle>
-                          たんぱく質:{{ item.attributes.protein }}g
-                        </v-list-item-subtitle>
-                        <v-list-item-subtitle>
-                          脂質:{{ item.attributes.lipid }}g
-                        </v-list-item-subtitle>
-                        <v-list-item-subtitle>
-                          炭水化物:{{ item.attributes.carbohydrate }}g
-                        </v-list-item-subtitle>
-                      </v-list-item-content>
-
-                      <v-list-item-action>
-                        <v-list-item-action-text
-                          v-text="dateTime(item.attributes.created_at)"
-                        ></v-list-item-action-text>
-                        <v-list-item-icon>
-                          <v-btn icon @click="editDlgView(item.attributes)">
-                            <v-icon color="green darken-1">
-                              mdi-tooltip-edit
-                            </v-icon>
-                          </v-btn>
-                          <v-btn icon>
-                            <v-icon
-                              color="red darken-3"
-                              elevation="5"
-                              @click="deleteDlgView(item.attributes.eat_id)"
-                            >
-                              mdi-delete
-                            </v-icon>
-                          </v-btn>
-                        </v-list-item-icon>
-                      </v-list-item-action>
-                    </v-list-item>
-                    <v-divider
-                      v-if="index < selectedDateItem.lists.length - 1"
-                      :key="`third-` + index"
-                    ></v-divider>
-                  </template>
-                </v-list>
-              </v-container>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-container v-else>
-        <v-card>
-          <v-card-text> まだ登録できません </v-card-text>
-        </v-card>
-      </v-container>
+          </v-container>
+        </v-tab-item>
+      </v-tabs-items>
     </div>
     <div v-else>
       <v-overlay z-index="2">
@@ -230,7 +246,12 @@ export default {
       value: '',
       events: [],
       colors: ['blue', 'deep-purple', 'orange', 'grey darken-1'],
-      names: ['適正', '注意', '少ない', '判別中'],
+      names: ['適正', '多い', '少ない', '判別中'],
+      tab: 0,
+      items: [
+        { title: 'カレンダー', icon: 'mdi-calendar-month' },
+        { title: '登録情報', icon: 'mdi-pencil-plus' },
+      ],
       calorieGuideline: 0,
       proteinGuideline: 0,
       lipidGuideline: 0,
@@ -254,6 +275,15 @@ export default {
       calendarMonth: null,
       selectedDate: null,
     }
+  },
+  watch: {
+    tab(val) {
+      this.tabChangeOverlay = true
+      this.tab = val
+      setTimeout(() => {
+        this.tabChangeOverlay = false
+      }, 1)
+    },
   },
   computed: {
     pageOverlay() {
@@ -514,11 +544,26 @@ export default {
       }
     },
     getEvents({ start, end }) {
-      this.calendarMonth = this.$refs.calendar.title + '年'
+      this.calendarMonth = this.$refs.calendar[0].title + '年'
       const events = []
       this.eatItems.forEach((item) => {
         const day = this.$moment(item.date).format('YYYY-MM-DD')
-        const check = 2
+        const today = this.$moment().format('YYYY-MM-DD')
+        let check = 4
+        if (day >= today) {
+          check = 3
+        } else if (
+          item.totals.calorie + 300 < this.calorieGuideline &&
+          this.calorieGuideline < item.totals.calorie + 20
+        ) {
+          check = 0
+        } else if (this.calorieGuideline < item.totals.calorie + 21) {
+          check = 1
+        } else if (item.totals.calorie + 301 < this.calorieGuideline) {
+          check = 2
+        } else {
+          check = 3
+        }
         events.push({
           name: this.names[check],
           start: day,
@@ -536,9 +581,7 @@ export default {
       } else if (selected.day.date) {
         this.selectedDate = selected.day.date
       }
-    },
-    logVeit() {
-      console.log('aaa')
+      this.tab = 1
     },
     reset() {
       Object.assign(this.$data, this.$options.data())
