@@ -27,7 +27,7 @@ gem "active_storage_validations"
 # ログの出力先を標準出力にする
 gem 'rails_semantic_logger'
 # 画像の保存先をS3に変更
-gem "aws-sdk-s3", require: false
+gem "aws-sdk-s3"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 # Jsonを加工しやすくする

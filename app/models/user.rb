@@ -10,6 +10,8 @@ class User < ApplicationRecord
   has_one_attached :back_ground
   has_one_attached :image_preview
   has_one_attached :back_ground_preview
+  # ユーザ作成前の画像アタッチ
+  before_create :default_image, :default_back_ground_image
   validates(:name, presence: true, length: { maximum: 50 })
   validates(:email, presence: true, length: { maximum: 255 })
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -43,6 +45,9 @@ class User < ApplicationRecord
 
   # プレビューイメージを圧縮したURLを返す
   def preview_image(image)
+    if self.image_preview.attached?
+      self.image_preview.purge
+    end
     self.image_preview.attach(image)
     routes = Rails.application.routes.url_helpers
     image = image_preview.variant(gravity: :center, resize: "640x640^", crop: "640x640+0+0")
@@ -51,6 +56,9 @@ class User < ApplicationRecord
 
   # プレビューイメージを圧縮したURLを返す
   def preview_background_image(image)
+    if self.back_ground_preview.attached?
+      self.back_ground_preview.purge
+    end
     self.back_ground_preview.attach(image)
     routes = Rails.application.routes.url_helpers
     image = back_ground_preview.variant(gravity: :center, resize: "2400x1600^", crop: "2400x1920+0+0")
@@ -69,21 +77,21 @@ class User < ApplicationRecord
     end
   end
 
-  # def default_image
-  #   if !self.image.attached?
-  #     url = URI.parse("http://free-photo.net/photo_img/0812105448.jpg")
-  #     filename = File.basename(url.path)
-  #     image = URI.open(url)
-  #     self.image.attach(io: image, filename: filename)
-  #   end
-  # end
-  #
-  # def default_back_ground_image
-  #   if !self.back_ground.attached?
-  #     url = URI.parse("https://publicdomainq.net/images/201710/07s/publicdomainq-0014143ddc.jpg")
-  #     filename = File.basename(url.path)
-  #     image = URI.open(url)
-  #     self.back_ground.attach(io: image, filename: filename)
-  #   end
-  # end
+  def default_image
+    if !self.image.attached?
+      url = URI.parse("http://free-photo.net/photo_img/0812105448.jpg")
+      filename = File.basename(url.path)
+      image = URI.open(url)
+      self.image.attach(io: image, filename: filename)
+    end
+  end
+
+  def default_back_ground_image
+    if !self.back_ground.attached?
+      url = URI.parse("https://publicdomainq.net/images/201710/07s/publicdomainq-0014143ddc.jpg")
+      filename = File.basename(url.path)
+      image = URI.open(url)
+      self.back_ground.attach(io: image, filename: filename)
+    end
+  end
 end
