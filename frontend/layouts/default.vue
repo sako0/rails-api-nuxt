@@ -85,9 +85,9 @@
         <span>登録</span>
         <v-icon>mdi-pencil-plus</v-icon>
       </v-btn>
-      <v-btn to="/inspire">
-        <span>データ</span>
-        <v-icon>mdi-notebook-multiple</v-icon>
+      <v-btn to="/calendar">
+        <span>カレンダー</span>
+        <v-icon>mdi-calendar-month</v-icon>
       </v-btn>
       <v-btn to="/">
         <span>info</span>
@@ -118,6 +118,11 @@ export default {
           icon: 'mdi-pencil-plus',
           title: '食べた物を登録する',
           to: '/register',
+        },
+        {
+          icon: 'mdi-calendar-month',
+          title: 'カレンダー',
+          to: '/calendar',
         },
         {
           icon: 'mdi-cog',
@@ -159,7 +164,7 @@ export default {
 </script>
 <style scoped>
 .v-application {
-  background-color: cornsilk;
+  background-color: #fff8dc;
   padding-bottom: 20px;
 }
 </style>
