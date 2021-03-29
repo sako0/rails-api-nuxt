@@ -63,13 +63,15 @@
             :events="events"
             :event-overlap-mode="mode"
             :event-overlap-threshold="30"
+            :value="selectedDate"
             @change="getEvents"
             @click:date="showFoodEat"
+            @click:event="showFoodEat"
           ></v-calendar>
         </v-sheet>
       </v-container>
       <v-spacer></v-spacer>
-      <v-container>
+      <v-container v-if="selectedDateItem">
         <v-card-title>内容</v-card-title>
         <v-row>
           <v-col cols="12">
@@ -116,43 +118,41 @@
             <v-card>
               <v-container>
                 <v-card-title>食事内容</v-card-title>
-                <v-list two-line>
+                <v-list v-if="selectedDateItem.lists.length" two-line>
                   <v-divider></v-divider>
-                  <template
-                    v-for="(attributes, index) in selectedDateItem.attributes"
-                  >
+                  <template v-for="(item, index) in selectedDateItem.lists">
                     <v-list-item :key="index">
                       <v-list-item-content>
                         <v-list-item-title
                           class="green--text"
-                          v-text="attributes.product_name"
+                          v-text="item.attributes.product_name"
                         ></v-list-item-title>
 
                         <v-list-item-subtitle
                           class="text--primary"
-                          v-text="attributes.par"
+                          v-text="item.attributes.par"
                         ></v-list-item-subtitle>
 
                         <v-list-item-subtitle>
-                          カロリー:{{ attributes.calorie }}kcal
+                          カロリー:{{ item.attributes.calorie }}kcal
                         </v-list-item-subtitle>
                         <v-list-item-subtitle>
-                          たんぱく質:{{ attributes.protein }}g
+                          たんぱく質:{{ item.attributes.protein }}g
                         </v-list-item-subtitle>
                         <v-list-item-subtitle>
-                          脂質:{{ attributes.lipid }}g
+                          脂質:{{ item.attributes.lipid }}g
                         </v-list-item-subtitle>
                         <v-list-item-subtitle>
-                          炭水化物:{{ attributes.carbohydrate }}g
+                          炭水化物:{{ item.attributes.carbohydrate }}g
                         </v-list-item-subtitle>
                       </v-list-item-content>
 
                       <v-list-item-action>
                         <v-list-item-action-text
-                          v-text="dateTime(attributes.created_at)"
+                          v-text="dateTime(item.attributes.created_at)"
                         ></v-list-item-action-text>
                         <v-list-item-icon>
-                          <v-btn icon @click="editDlgView(attributes)">
+                          <v-btn icon @click="editDlgView(item.attributes)">
                             <v-icon color="green darken-1">
                               mdi-tooltip-edit
                             </v-icon>
@@ -161,7 +161,7 @@
                             <v-icon
                               color="red darken-3"
                               elevation="5"
-                              @click="deleteDlgView(attributes.eat_id)"
+                              @click="deleteDlgView(item.attributes.eat_id)"
                             >
                               mdi-delete
                             </v-icon>
@@ -170,7 +170,7 @@
                       </v-list-item-action>
                     </v-list-item>
                     <v-divider
-                      v-if="index < item.attributes.length - 1"
+                      v-if="index < selectedDateItem.lists.length - 1"
                       :key="`third-` + index"
                     ></v-divider>
                   </template>
@@ -179,6 +179,11 @@
             </v-card>
           </v-col>
         </v-row>
+      </v-container>
+      <v-container v-else>
+        <v-card>
+          <v-card-text> まだ登録できません </v-card-text>
+        </v-card>
       </v-container>
     </div>
     <div v-else>
@@ -261,24 +266,27 @@ export default {
     todayMoment() {
       return this.$moment().format('YYYY-MM-DD')
     },
-    item() {
-      return this.eatItems[2].lists[0].attributes
-    },
     selectedDateItem() {
       const item = this.eatItems.find((t) => t.date === this.selectedDate)
       if (item) {
         return item
       } else {
-        return {
-          date: this.selectedDate,
-          lists: null,
-          totals: {
-            calorie: 0,
-            protein: 0,
-            lipid: 0,
-            carbohydrate: 0,
-          },
+        if (
+          this.$moment(this.selectedDate).format('YYYY-MM-DD') <=
+          this.$moment().add(9, 'days').format('YYYY-MM-DD')
+        ) {
+          return {
+            date: this.selectedDate,
+            lists: [],
+            totals: {
+              calorie: 0,
+              protein: 0,
+              lipid: 0,
+              carbohydrate: 0,
+            },
+          }
         }
+        return null
       }
     },
   },
@@ -354,6 +362,7 @@ export default {
       this.$refs.dialog.isDisplay = true
     },
     getFoodInfo() {
+      this.eatItems = []
       this.getFoodInfoLoading = true
       const url = '/api/v1/food_eat'
       this.$axios
@@ -522,7 +531,14 @@ export default {
       this.events = events
     },
     showFoodEat(selected) {
-      this.selectedDate = selected.date
+      if (selected.date) {
+        this.selectedDate = selected.date
+      } else if (selected.day.date) {
+        this.selectedDate = selected.day.date
+      }
+    },
+    logVeit() {
+      console.log('aaa')
     },
     reset() {
       Object.assign(this.$data, this.$options.data())

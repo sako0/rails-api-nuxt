@@ -246,7 +246,7 @@
                           @click="postDeleteDlgUp"
                         >
                           <v-icon>mdi-delete</v-icon>
-                          情報の削除
+                          削除
                         </v-btn>
                       </v-col>
                       <v-col cols="4" class="text-center">
