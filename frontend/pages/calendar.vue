@@ -20,7 +20,7 @@
       <FoodRegisterDialog
         ref="dlg"
         :number="num"
-        :date="tabDate"
+        :date="selectedDate"
         @reGet="registerFinish"
         @codeSearch="codeSearch($event)"
         @reScan="cameraUp"
@@ -33,16 +33,28 @@
       />
       <FoodRegisterNoCodeDialog
         ref="noCodeDlg"
-        :date="tabDate"
+        :date="selectedDate"
         @reGet="registerFinish"
       />
 
       <v-container>
         <v-card-title>カレンダー</v-card-title>
-        <v-sheet height="600">
+        <v-sheet tile height="54" class="d-flex">
+          <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
+          {{ calendarMonth }}
+          <v-spacer></v-spacer>
+          <v-btn icon class="ma-2" @click="$refs.calendar.next()">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </v-sheet>
+        <v-sheet height="500">
           <v-calendar
             ref="calendar"
             v-model="value"
+            :event-height="40"
             locale="jp-ja"
             :day-format="(timestamp) => new Date(timestamp.date).getDate()"
             :weekdays="weekday"
@@ -51,8 +63,8 @@
             :events="events"
             :event-overlap-mode="mode"
             :event-overlap-threshold="30"
-            :event-color="getEventColor"
             @change="getEvents"
+            @click:date="showFoodEat"
           ></v-calendar>
         </v-sheet>
       </v-container>
@@ -76,23 +88,23 @@
                   </v-btn>
                 </v-col>
                 <v-col cols="9" class="text-right">
-                  <v-card-text>{{ item.date }}</v-card-text>
+                  <v-card-text>{{ selectedDate }}</v-card-text>
                 </v-col>
               </v-row>
               <v-row v-if="!tabChangeOverlay" justify="center">
                 <v-col cols="4" sm="4" md="3" lg="3" xl="3">
                   <kcalBarChart
-                    :calorie="arraySum(item.calorie)"
+                    :calorie="selectedDateItem.totals.calorie"
                     :calorie-guideline="calorieGuideline"
                   />
                 </v-col>
                 <v-col cols="8" sm="8" md="5" lg="5" xl="5">
                   <gBarChart
-                    :protein="arraySum(item.protein)"
+                    :protein="selectedDateItem.totals.protein"
                     :protein-guideline="proteinGuideline"
-                    :lipid="arraySum(item.lipid)"
+                    :lipid="selectedDateItem.totals.lipid"
                     :lipid-guideline="lipidGuideline"
-                    :carbohydrate="arraySum(item.carbohydrate)"
+                    :carbohydrate="selectedDateItem.totals.carbohydrate"
                     :carbohydrate-guideline="carbohydrateGuideline"
                   />
                 </v-col>
@@ -106,7 +118,9 @@
                 <v-card-title>食事内容</v-card-title>
                 <v-list two-line>
                   <v-divider></v-divider>
-                  <template v-for="(attributes, index) in item.attributes">
+                  <template
+                    v-for="(attributes, index) in selectedDateItem.attributes"
+                  >
                     <v-list-item :key="index">
                       <v-list-item-content>
                         <v-list-item-title
@@ -200,9 +214,7 @@ export default {
     return {
       num: null,
       type: 'month',
-      types: ['month', 'week'],
       mode: 'stack',
-      modes: ['stack', 'column'],
       weekday: [0, 1, 2, 3, 4, 5, 6],
       weekdays: [
         { text: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6] },
@@ -212,25 +224,8 @@ export default {
       ],
       value: '',
       events: [],
-      colors: [
-        'blue',
-        'indigo',
-        'deep-purple',
-        'cyan',
-        'green',
-        'orange',
-        'grey darken-1',
-      ],
-      names: [
-        'Meeting',
-        'Holiday',
-        'PTO',
-        'Travel',
-        'Event',
-        'Birthday',
-        'Conference',
-        'Party',
-      ],
+      colors: ['blue', 'deep-purple', 'orange', 'grey darken-1'],
+      names: ['適正', '注意', '少ない', '判別中'],
       calorieGuideline: 0,
       proteinGuideline: 0,
       lipidGuideline: 0,
@@ -251,6 +246,8 @@ export default {
       eatChangeOverlay: false,
       tabDate: null,
       eatItems: [],
+      calendarMonth: null,
+      selectedDate: null,
     }
   },
   computed: {
@@ -267,20 +264,26 @@ export default {
     item() {
       return this.eatItems[2].lists[0].attributes
     },
-  },
-  watch: {
-    tab(val) {
-      if (val === 11) {
-        console.log(this.items)
+    selectedDateItem() {
+      const item = this.eatItems.find((t) => t.date === this.selectedDate)
+      if (item) {
+        return item
+      } else {
+        return {
+          date: this.selectedDate,
+          lists: null,
+          totals: {
+            calorie: 0,
+            protein: 0,
+            lipid: 0,
+            carbohydrate: 0,
+          },
+        }
       }
-      this.tabChangeOverlay = true
-      this.tab = val
-      setTimeout(() => {
-        this.tabChangeOverlay = false
-      }, 1)
     },
   },
   created() {
+    this.selectedDate = this.$moment().format('YYYY-MM-DD')
     this.getFoodInfo()
   },
   methods: {
@@ -466,27 +469,17 @@ export default {
       this.snackbarMsg = '登録しました'
       this.snackbar = true
     },
-    arraySum(array) {
-      if (array.length) {
-        const sum = array.reduce(function (a, b) {
-          return a + b
-        })
-        return sum
-      } else {
-        return 0
-      }
-    },
     itemsGet(obj) {
+      console.log(obj)
       if (obj) {
         Object.keys(obj).forEach((foodEat) => {
           const item = {
             id: obj[foodEat].attributes.eat_id,
             attributes: obj[foodEat].attributes,
           }
-          const index =
-            this.eatItems.findIndex(
-              (t) => t.date === obj[foodEat].attributes.date
-            ) - 1
+          const index = this.eatItems.findIndex(
+            (t) => t.date === obj[foodEat].attributes.date
+          )
           if (index > -1) {
             this.eatItems[index].lists.push(item)
             this.eatItems[index].totals.calorie +=
@@ -508,42 +501,28 @@ export default {
               },
             })
           }
-          console.log(this.eatItems[index])
         })
-        console.log(this.eatItems)
       }
     },
     getEvents({ start, end }) {
+      this.calendarMonth = this.$refs.calendar.title + '年'
       const events = []
-
-      const min = new Date(`${start.date}T00:00:00`)
-      const max = new Date(`${end.date}T23:59:59`)
-      const days = (max.getTime() - min.getTime()) / 86400000
-      const eventCount = this.rnd(days, days + 20)
-
-      for (let i = 0; i < eventCount; i++) {
-        const allDay = this.rnd(0, 3) === 0
-        const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-        const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-        const second = new Date(first.getTime() + secondTimestamp)
-
+      this.eatItems.forEach((item) => {
+        const day = this.$moment(item.date).format('YYYY-MM-DD')
+        const check = 2
         events.push({
-          name: this.names[this.rnd(0, this.names.length - 1)],
-          start: first,
-          end: second,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
-          timed: !allDay,
+          name: this.names[check],
+          start: day,
+          end: day,
+          color: this.colors[check],
+          timed: false,
         })
-      }
+      })
 
       this.events = events
     },
-    getEventColor(event) {
-      return event.color
-    },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a
+    showFoodEat(selected) {
+      this.selectedDate = selected.date
     },
     reset() {
       Object.assign(this.$data, this.$options.data())
