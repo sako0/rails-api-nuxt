@@ -1,4 +1,6 @@
 import firebase from 'firebase'
+import 'firebase/auth'
+import 'firebase/analytics'
 
 const config = {
   apiKey: process.env.FIREBASE_API_KEY,

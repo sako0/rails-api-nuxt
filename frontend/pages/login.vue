@@ -86,13 +86,13 @@ export default {
       auth()
         .signInWithPopup(new auth.TwitterAuthProvider())
         .then((response) => {
-          console.log(response)
           auth()
             .currentUser.getIdToken(/* forceRefresh */ true)
             .then((idToken) => {
               this.$auth.loginWith('local', {
                 data: { token: idToken },
               })
+              this.$router.push('/')
             })
         })
         .catch(() => {
