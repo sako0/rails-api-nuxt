@@ -155,9 +155,9 @@ export default {
     })
   },
   methods: {
-    async logout() {
-      await this.$auth.logout() // ログアウト
-      location.reload()
+    logout() {
+      this.$auth.logout() // ログアウト
+      this.$router.push('/login')
     },
   },
 }

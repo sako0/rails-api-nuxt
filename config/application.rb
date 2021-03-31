@@ -39,5 +39,13 @@ module RailsApiNuxt
     config.api_only = true
     # config.middleware.use ActionDispatch::Cookies
     # config.action_controller.default_protect_from_forgery = false
+    # クッキーを使用可能にしておくための設定（今回は使用しない）
+    # 参考URL:https://qiita.com/k_kind/items/e26f03f4e24551b46b98
+    # config.middleware.insert_after(ActiveRecord::Migration::CheckPending, ActionDispatch::Cookies)
+    # config.middleware.insert_after(ActionDispatch::Cookies, ActionDispatch::Session::CookieStore)
+    # config.session_store :cookie_store, key: '_interslice_session'
+    # config.middleware.use ActionDispatch::Cookies # Required for all session management
+    # config.middleware.use ActionDispatch::Session::CookieStore
+    # config.middleware.use ActionDispatch::ContentSecurityPolicy::Middleware
   end
 end
