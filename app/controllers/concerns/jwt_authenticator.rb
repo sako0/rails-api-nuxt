@@ -31,4 +31,27 @@ module JwtAuthenticator
     decoded_dwt.first
   end
 
+  def firebase_decode(encoded_token)
+    url = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'
+    res = Net::HTTP.get_response(URI(url))
+    body = JSON.parse(res.body)
+    options = {
+      algorithm: 'RS256',
+      iss: 'https://securetoken.google.com/' + 'dietapp-359f3',
+      verify_iss: true,
+      aud: 'dietapp-359f3',
+      verify_aud: true,
+      verify_iat: true,
+    }
+    decoded_dwt = JWT.decode(encoded_token, nil, true, options) do |header|
+      cert = body[header['kid']]
+      if cert.present?
+        OpenSSL::X509::Certificate.new(cert).public_key
+      else
+        nil
+      end
+    end
+    decoded_dwt.first
+  end
+
 end

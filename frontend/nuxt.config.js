@@ -26,7 +26,12 @@ export default {
     dir: '../public',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/axios', '@/plugins/auth', '@/plugins/scrollLock'],
+  plugins: [
+    '@/plugins/axios',
+    '@/plugins/auth',
+    '@/plugins/scrollLock',
+    '@/plugins/firebase.js',
+  ],
   build: {
     transpile: ['vee-validate'], // 追加 https://qiita.com/TK-C/items/9cab072c65d2f9ade5d0
     extend(config, ctx) {},
@@ -69,6 +74,7 @@ export default {
   axios: {
     proxy: true,
     prefix: BASEURL,
+    credentials: true,
     // baseURL: BASEURL,
     // browserBaseURL: BASEURL,
   },
@@ -121,7 +127,7 @@ export default {
     redirect: {
       login: '/login', // 未ログイン時に認証ルートへアクセスした際のリダイレクトURL
       logout: '/login', // ログアウト時のリダイレクトURL
-      callback: false, // Oauth認証等で必要となる コールバックルート
+      callback: '/', // Oauth認証等で必要となる コールバックルート
       home: '/login', // ログイン後のリダイレクトURL一度リダイレクトに成功しないとログインができないためlogin画面にリダイレクトさせている
     },
     strategies: {

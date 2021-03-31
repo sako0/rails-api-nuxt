@@ -8,6 +8,7 @@
     "@rails/webpacker": "5.2.1",
     "core-js": "3.8.3",
     "prettier": "^2.2.1",
+    "save": "^2.4.0",
     "turbolinks": "^5.2.0",
     "vuetify": "^2.4.4"
   },

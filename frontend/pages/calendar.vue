@@ -276,15 +276,6 @@ export default {
       selectedDate: null,
     }
   },
-  watch: {
-    tab(val) {
-      this.tabChangeOverlay = true
-      this.tab = val
-      setTimeout(() => {
-        this.tabChangeOverlay = false
-      }, 1)
-    },
-  },
   computed: {
     pageOverlay() {
       if (this.getFoodInfoLoading || this.getGuidelineLoading) {
@@ -318,6 +309,15 @@ export default {
         }
         return null
       }
+    },
+  },
+  watch: {
+    tab(val) {
+      this.tabChangeOverlay = true
+      this.tab = val
+      setTimeout(() => {
+        this.tabChangeOverlay = false
+      }, 1)
     },
   },
   created() {

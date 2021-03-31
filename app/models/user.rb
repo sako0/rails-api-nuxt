@@ -13,11 +13,11 @@ class User < ApplicationRecord
   # ユーザ作成前の画像アタッチ
   before_create :default_image, :default_back_ground_image
   validates(:name, presence: true, length: { maximum: 50 })
-  validates(:email, presence: true, length: { maximum: 255 })
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates(:email, format: { with: VALID_EMAIL_REGEX }, uniqueness: true)
-  has_secure_password
-  validates(:password, presence: true, length: { minimum: 6 }, allow_nil: true)
+  validates(:email, format: { with: VALID_EMAIL_REGEX }, uniqueness: true, allow_nil: true)
+  has_secure_password(validations: false)
+  validates(:email, length: { maximum: 255 }, allow_nil: true)
+  validates(:password, length: { minimum: 6 }, allow_nil: true)
   attr_accessor :remember_token, :activation_token, :reset_token
   validates :image, content_type: { in: %w[image/jpeg image/gif image/png],
                                     message: "must be a valid image format" },
@@ -77,15 +77,22 @@ class User < ApplicationRecord
     end
   end
 
+  # 画像のURLからユーザのイメージをアタッチする
+  def image_attach_by_url(url)
+    uri = URI.parse(url)
+    filename = File.basename(uri.path)
+    image = URI.open(uri)
+    self.image.attach(io: image, filename: filename)
+  end
+
+  # 初期イメージのアタッチ
   def default_image
     if !self.image.attached?
-      url = URI.parse("http://free-photo.net/photo_img/0812105448.jpg")
-      filename = File.basename(url.path)
-      image = URI.open(url)
-      self.image.attach(io: image, filename: filename)
+      image_attach_by_url("http://free-photo.net/photo_img/0812105448.jpg")
     end
   end
 
+  # 初期背景イメージのアタッチ
   def default_back_ground_image
     if !self.back_ground.attached?
       url = URI.parse("https://publicdomainq.net/images/201710/07s/publicdomainq-0014143ddc.jpg")

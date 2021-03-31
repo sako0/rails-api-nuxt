@@ -22,13 +22,23 @@
             </v-col>
           </v-row>
           <v-row justify="center">
-            <v-col cols="12" md="10" sm="10">
+            <v-col cols="10">
               <v-btn
                 block
-                class="mr-4 blue white--text"
+                class="grey white--text"
                 @click="loginWithAuthModule"
               >
                 ログイン
+              </v-btn>
+            </v-col>
+            <v-col cols="10">
+              <v-btn block class="green white--text" @click="guestLogin">
+                ゲストログイン
+              </v-btn>
+            </v-col>
+            <v-col cols="10">
+              <v-btn block dark color="#1DA1F2" @click="twitterLogin">
+                <v-icon>mdi-twitter</v-icon>Twitter
               </v-btn>
             </v-col>
           </v-row>
@@ -39,6 +49,8 @@
 </template>
 
 <script>
+import { auth } from '@/plugins/firebase'
+
 export default {
   layout: 'login',
   data() {
@@ -64,6 +76,30 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    guestLogin() {
+      this.login.email = 'kodakoda@gmail.com'
+      this.login.password = '11111111'
+      this.loginWithAuthModule()
+    },
+    twitterLogin() {
+      auth()
+        .signInWithPopup(new auth.TwitterAuthProvider())
+        .then((response) => {
+          console.log(response)
+          auth()
+            .currentUser.getIdToken(/* forceRefresh */ true)
+            .then((idToken) => {
+              this.$auth.loginWith('local', {
+                data: { token: idToken },
+              })
+            })
+        })
+        .catch(() => {
+          console.log(
+            '現在Twitterでのログインは使用できません。後ほどお試しください。'
+          )
+        })
     },
   },
 }

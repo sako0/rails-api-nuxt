@@ -3,13 +3,37 @@ class Api::V1::SessionsController < ApplicationController
   before_action :jwt_authenticate, except: :create
 
   def create
-    user = User.find_by(email: params[:email].downcase)
-    if user && user.authenticate(params[:password])
-      # jwtの発行
-      jwt_token = encode(user.id.to_s)
+    if params[:token]
+      twitter_user = firebase_decode(params[:token])
+      user = User.find_by(twitter_id: twitter_user['user_id'])
+      jwt_token = nil
+      if user
+        logger.error(user)
+        jwt_token = encode(user.id.to_s)
+      else
+        user = User.create!(name: twitter_user['name'],
+                           twitter_id: twitter_user['user_id'])
+        user.image_attach_by_url(twitter_user['picture'])
+        user.build_profiles(age: 20, sex: false, height: 170, target_weight: 65, action_level: 1.5, notes: "プロフィールを修正して下さい")
+        user.save
+        jwt_token = encode(user.id.to_s)
+      end
       # レスポンスヘッダーにトークンを設定
-      response.headers['Authorization'] = jwt_token
-      render json: jwt_token
+      if jwt_token
+        response.headers['Authorization'] = jwt_token
+        render json: jwt_token
+      else
+        render false
+      end
+    else
+      user = User.find_by(email: params[:email].downcase)
+      if user && user.authenticate(params[:password])
+        # jwtの発行
+        jwt_token = encode(user.id.to_s)
+        # レスポンスヘッダーにトークンを設定
+        response.headers['Authorization'] = jwt_token
+        render json: jwt_token
+      end
     end
   end
 
@@ -26,4 +50,5 @@ class Api::V1::SessionsController < ApplicationController
                      }
     }
   end
+
 end
