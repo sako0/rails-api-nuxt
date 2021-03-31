@@ -51,8 +51,6 @@
 </template>
 
 <script>
-import { auth } from '@/plugins/firebase'
-
 export default {
   layout: 'login',
   data() {
@@ -85,10 +83,13 @@ export default {
       this.loginWithAuthModule()
     },
     twitterLogin() {
-      auth()
-        .signInWithPopup(new auth.TwitterAuthProvider())
+      const provider = new this.$fireModule.auth.TwitterAuthProvider()
+      this.$fireModule
+        .auth()
+        .signInWithPopup(provider)
         .then((response) => {
-          auth()
+          this.$fireModule
+            .auth()
             .currentUser.getIdToken(/* forceRefresh */ true)
             .then((idToken) => {
               this.$auth.loginWith('local', {

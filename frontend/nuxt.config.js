@@ -26,12 +26,7 @@ export default {
     dir: '../public',
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    '@/plugins/axios',
-    '@/plugins/auth',
-    '@/plugins/scrollLock',
-    '@/plugins/firebase.js',
-  ],
+  plugins: ['@/plugins/axios', '@/plugins/auth', '@/plugins/scrollLock'],
   build: {
     transpile: ['vee-validate'], // 追加 https://qiita.com/TK-C/items/9cab072c65d2f9ade5d0
     extend(config, ctx) {},
@@ -64,7 +59,25 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
     'nuxt-webfontloader',
+    '@nuxtjs/firebase',
   ],
+  firebase: {
+    config: {
+      apiKey: process.env.FIREBASE_API_KEY,
+      authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+      databaseURL: process.env.FIREBASE_DATABASE_URL,
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.FIREBASE_MESSSAGE_SENDER_ID,
+      appId: process.env.FIREBASE_APP_ID,
+      measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+    },
+    services: {
+      auth: {
+        ssr: true, // default
+      },
+    },
+  },
   webfontloader: {
     google: {
       families: ['Hachi+Maru+Pop&display=swap'], // Loads Lato font with weights 400 and 700
