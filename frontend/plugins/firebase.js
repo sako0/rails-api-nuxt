@@ -12,8 +12,8 @@ const config = {
   appId: process.env.FIREBASE_APP_ID,
   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 }
-
-if (!firebase.apps.length) {
+// https://qiita.com/GENYA/items/cba59f80d9b678c555db
+if (typeof window !== 'undefined' && !firebase.apps.length) {
   firebase.initializeApp(config)
   firebase.analytics()
 }

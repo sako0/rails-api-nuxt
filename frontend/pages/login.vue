@@ -4,7 +4,9 @@
       <v-form ref="form">
         <v-container>
           <v-row justify="center">
-            <p cols="12" class="mt-3 grey--text font-weight-bold">ログイン</p>
+            <v-col cols="12">
+              <p class="mt-3 grey--text font-weight-bold">ログイン</p>
+            </v-col>
           </v-row>
           <v-row justify="center">
             <v-col cols="12" md="10" sm="10">
