@@ -108,9 +108,7 @@
       ],
       "command": [
         "rails",
-        "db:migrate:reset",
-        "db:seed",
-        "RAILS_ENV=development"
+        "db:migrate"
       ],
       "linuxParameters": null,
       "cpu": 0,

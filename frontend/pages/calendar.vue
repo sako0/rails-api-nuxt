@@ -549,17 +549,18 @@ export default {
       this.eatItems.forEach((item) => {
         const day = this.$moment(item.date).format('YYYY-MM-DD')
         const today = this.$moment().format('YYYY-MM-DD')
-        let check = 4
+        let check = 3
         if (day >= today) {
           check = 3
+          // カロリー基準値を1000とした場合1300~900までなら正常値
         } else if (
-          item.totals.calorie + 300 < this.calorieGuideline &&
-          this.calorieGuideline < item.totals.calorie + 20
+          item.totals.calorie <= this.calorieGuideline + 300 &&
+          this.calorieGuideline - 300 <= item.totals.calorie
         ) {
           check = 0
-        } else if (this.calorieGuideline < item.totals.calorie + 21) {
+        } else if (item.totals.calorie >= this.calorieGuideline + 301) {
           check = 1
-        } else if (item.totals.calorie + 301 < this.calorieGuideline) {
+        } else if (this.calorieGuideline - 301 >= item.totals.calorie) {
           check = 2
         } else {
           check = 3
