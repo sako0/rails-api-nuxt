@@ -1,3 +1,4 @@
+/* eslint-disable */
 const ignorePaths = ["\u002F__webpack_hmr","\u002F_loading","\u002F_nuxt\u002F"]
 
 importScripts(
@@ -97,3 +98,4 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('activate', event => {
   event.waitUntil(clients.claim())
 })
+/* eslint-enable */
