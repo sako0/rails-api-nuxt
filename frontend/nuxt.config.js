@@ -74,7 +74,6 @@ export default {
   axios: {
     proxy: true,
     prefix: BASEURL,
-    credentials: true,
     // baseURL: BASEURL,
     // browserBaseURL: BASEURL,
   },

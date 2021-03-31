@@ -99,13 +99,13 @@
     }
   ],
   "placementConstraints": [],
-  "memory": "512",
+  "memory": "1024",
   "taskRoleArn": null,
   "compatibilities": [
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:282706015608:task-definition/frontend-nuxt-rails-task-definition:54",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:282706015608:task-definition/frontend-nuxt-rails-task-definition:58",
   "family": "frontend-nuxt-rails-task-definition",
   "requiresAttributes": [
     {
@@ -169,7 +169,7 @@
   ],
   "networkMode": "awsvpc",
   "cpu": "256",
-  "revision": 54,
+  "revision": 58,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
