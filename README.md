@@ -1,8 +1,13 @@
 # README
-## 1.ポートフォリオ紹介
+リポジトリを確認いただきありがとうございます。
+
+[こだ](https://twitter.com/koda_program)と申します
+
+簡単にこのポートフォリオの紹介をさせていただきます。
+
+## ポートフォリオ紹介
 URL : https://study-meeting.com/
 (レスポンシブ対応しておりますが、スマホのカメラを使ったバーコードの読取を行うため、IPhoneなどでの使用を想定しております。)
-[GitHubはこちら](https://github.com/kodakoda0921/rails-api-nuxt "GitHubリンク")
 
 #### 使用イメージ
 
