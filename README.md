@@ -3,6 +3,13 @@
 
 [こだ](https://twitter.com/koda_program)と申します
 
+# 起動方法
+1. gitを使ってlocalへcloneする
+2. `docker-compose build`を実行する
+3. `docker-compose run web rails db:migrate`を実行する
+4. `docker-compose run web rails db:seed`を実行する
+5. `docker-compose up`を実行する
+
 簡単にこのポートフォリオの紹介をさせていただきます。
 
 ## ポートフォリオ紹介
