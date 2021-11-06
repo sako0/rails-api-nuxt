@@ -38,11 +38,6 @@
                 ゲストログイン
               </v-btn>
             </v-col>
-            <v-col cols="10">
-              <v-btn block dark color="#1DA1F2" @click="twitterLogin">
-                <v-icon>mdi-twitter</v-icon>Twitter
-              </v-btn>
-            </v-col>
           </v-row>
         </v-container>
       </v-form>
@@ -81,28 +76,6 @@ export default {
       this.login.email = 'kodakoda@gmail.com'
       this.login.password = '11111111'
       this.loginWithAuthModule()
-    },
-    twitterLogin() {
-      const provider = new this.$fireModule.auth.TwitterAuthProvider()
-      this.$fireModule
-        .auth()
-        .signInWithPopup(provider)
-        .then((response) => {
-          this.$fireModule
-            .auth()
-            .currentUser.getIdToken(/* forceRefresh */ true)
-            .then((idToken) => {
-              this.$auth.loginWith('local', {
-                data: { token: idToken },
-              })
-              this.$router.push('/')
-            })
-        })
-        .catch(() => {
-          console.log(
-            '現在Twitterでのログインは使用できません。後ほどお試しください。'
-          )
-        })
     },
   },
 }

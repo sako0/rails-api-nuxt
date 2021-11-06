@@ -18,9 +18,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY package.json /frontend/package.json
 COPY yarn.lock /frontend/yarn.lock
 
-RUN yarn install --no-progress --registry http://registry.npmjs.org/
+RUN yarn install
 ENV HOST 0.0.0.0
 COPY . /frontend
 
 # Start the main process.
-CMD bash -c "nuxt build && nuxt start"
+CMD bash -c "yarn build && yarn start"

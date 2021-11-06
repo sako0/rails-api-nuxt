@@ -95,7 +95,7 @@ class User < ApplicationRecord
   # 初期背景イメージのアタッチ
   def default_back_ground_image
     if !self.back_ground.attached?
-      url = URI.parse("https://publicdomainq.net/images/201710/07s/publicdomainq-0014143ddc.jpg")
+      url = URI.parse("https://eiga.k-img.com/images/movie/90444/photo/4e9495e749834086/640.jpg?1554077750")
       filename = File.basename(url.path)
       image = URI.open(url)
       self.back_ground.attach(io: image, filename: filename)
