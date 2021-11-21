@@ -3,12 +3,15 @@
 
 [こだ](https://twitter.com/koda_program)と申します
 
-# 起動方法
+# 実行方法
 1. gitを使ってlocalへcloneする
-2. `docker-compose build`を実行する
-3. `docker-compose run web rails db:migrate`を実行する
-4. `docker-compose run web rails db:seed`を実行する
-5. `docker-compose up`を実行する
+2. `cd rails-api-nuxt`でディレクトリを変える
+3. `docker-compose build`を実行する
+4. `docker-compose up`を実行する
+5. コンテナが起動するまで待つ
+6. `docker-compose run exec rails db:migrate`を実行する
+7. `docker-compose run exec rails db:seed`を実行する
+
 
 簡単にこのポートフォリオの紹介をさせていただきます。
 
