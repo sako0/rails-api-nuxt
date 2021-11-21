@@ -1,26 +1,24 @@
 FROM node:latest
 
 WORKDIR /frontend
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+  && apt-get install -y tzdata
+
+ENV TZ Asia/Tokyo
+
+RUN apt-get update && \
+  apt-get upgrade -y && \
+  apt-get install -y \
+  git
+
+COPY . /frontend
+RUN yarn install
 
 ENV PATH /frontend/node_modules/.bin:$PATH
 
-RUN apt-get update -qq  \
-  && apt install -y tzdata  \
-  && apt-get clean  \
-  && rm -rf /var/lib/apt/lists/*
-
-ENV TZ Asia/Tokyo
-ENV LANG ja_JP.UTF-8
-ENV LANGUAGE ja_JP:ja
-ENV LC_ALL ja_JP.UTF-8
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-COPY package.json /frontend/package.json
-COPY yarn.lock /frontend/yarn.lock
-
-RUN yarn install
 ENV HOST 0.0.0.0
-COPY . /frontend
 
 # Start the main process.
 CMD bash -c "yarn build && yarn start"

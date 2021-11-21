@@ -4,6 +4,9 @@ require('dotenv').config()
 const BASEURL = process.env.NUXT_ENV_RAILS_URL
 
 export default {
+
+  modulesDir: ['./node_modules'],
+
   server: {
     host: '0.0.0.0',
     port: 80,
