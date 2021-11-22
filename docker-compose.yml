@@ -31,14 +31,14 @@ services:
       RAILS_DB_USER: user # MYSQL_USERと一致させる
       RAILS_DB_PASSWORD: root # MYSQL_PASSWORDと一致させる
       RAILS_ENV: development
-      RAILS_HOST_URL: http://localhost:3000
+      RAILS_HOST_URL: ${RAILS_HOST_URL}
   frontend:
     build: ./frontend
     ports:
       - "80:80"
     environment:
       NODE_OPTIONS: '--openssl-legacy-provider'
-      NUXT_ENV_RAILS_URL: http://localhost:3000
+      NUXT_ENV_RAILS_URL: ${RAILS_HOST_URL}
     command: yarn dev
 #    volumes:
 #      - ./frontend:/frontend
