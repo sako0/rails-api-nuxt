@@ -65,5 +65,6 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
   # modelでurl_forなどを使う場合はこちらを指定しないと上手くいかない
   Rails.application.routes.default_url_options[:host] = ENV['RAILS_HOST_URL']
+  config.hosts << "http://3.112.125.249:3000/"
   config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
 end
