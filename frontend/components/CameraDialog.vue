@@ -69,7 +69,7 @@ export default {
   methods: {
     initQuagga() {
       // requireで読み込み
-      this.Quagga = require('quagga')
+      this.Quagga = require('@ericblade/quagga2').default;
 
       // 解析中に呼び出される処理を設定
       this.Quagga.onProcessed(this.onProcessed)
