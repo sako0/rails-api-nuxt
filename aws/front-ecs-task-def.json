@@ -1,0 +1,52 @@
+{
+  "executionRoleArn": "arn:aws:iam::282706015608:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": [],
+        "options": {
+          "awslogs-group": "/ecs/diet-reader-task-definition",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "entryPoint": [],
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "command": [],
+      "environment": [
+        {
+          "name": "NODE_OPTIONS",
+          "value": "--openssl-legacy-provider"
+        }
+      ],
+      "mountPoints": [],
+      "secrets": [
+        {
+          "valueFrom": "NUXT_ENV_RAILS_URL",
+          "name": "NUXT_ENV_RAILS_URL"
+        }
+      ],
+      "volumesFrom": [],
+      "image": "%IMAGE_FRONT%",
+      "dependsOn": [],
+      "essential": true,
+      "name": "%FRONTEND_CONTAINER_NAME%"
+    }
+  ],
+  "memory": "512",
+  "taskRoleArn": "arn:aws:iam::282706015608:role/ecsTaskExecutionRole",
+  "family": "%FRONT_FAMILY_NAME%",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "volumes": []
+}

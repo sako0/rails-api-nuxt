@@ -65,5 +65,5 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
   # modelでurl_forなどを使う場合はこちらを指定しないと上手くいかない
   Rails.application.routes.default_url_options[:host] = ENV['RAILS_HOST_URL']
-  config.hosts << "api-rails-app-nuxt-alb-1356766250.ap-northeast-1.elb.amazonaws.com"
+  config.hosts << ENV['RAILS_HOST_URL']
 end
