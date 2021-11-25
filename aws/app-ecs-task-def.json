@@ -6,7 +6,7 @@
         "logDriver": "awslogs",
         "secretOptions": [],
         "options": {
-          "awslogs-group": "/ecs/nuxt-rails-task-definition",
+          "awslogs-group": "/ecs/diet-reader-task-definition",
           "awslogs-region": "ap-northeast-1",
           "awslogs-stream-prefix": "ecs"
         }

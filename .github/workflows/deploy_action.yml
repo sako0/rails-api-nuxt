@@ -17,7 +17,7 @@ jobs:
       WEB_MIGRATE_CONTAINER_NAME: web-migrate
       FRONTEND_CONTAINER_NAME: frontend
       TASK_DEFINITION_PATH: aws/app-ecs-task-def.json
-      FAMILY_NAME: nuxt-rails-task-definition
+      FAMILY_NAME: diet-reader-task-definition
 
     steps:
       - uses: actions/checkout@v2
