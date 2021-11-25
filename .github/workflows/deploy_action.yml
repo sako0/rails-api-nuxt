@@ -54,7 +54,7 @@ jobs:
         id: render-migration-web-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: aws/web-task-definition.json
+          task-definition: ${{ env.TASK_DEFINITION_PATH }}
           container-name: ${{ env.WEB_MIGRATE_CONTAINER_NAME }}
           image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
