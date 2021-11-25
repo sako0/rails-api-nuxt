@@ -1,0 +1,171 @@
+{
+  "ipcMode": "none",
+  "executionRoleArn": "arn:aws:iam::282706015608:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": [],
+        "options": {
+          "awslogs-group": "/ecs/nuxt-rails-task-definition",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "entryPoint": [],
+      "portMappings": [
+        {
+          "hostPort": 3000,
+          "protocol": "tcp",
+          "containerPort": 3000
+        }
+      ],
+      "command": [],
+      "cpu": 0,
+      "environment": [],
+      "secrets": [
+        {
+          "valueFrom": "RAILS_DB_HOST",
+          "name": "RAILS_DB_HOST"
+        },
+        {
+          "valueFrom": "RAILS_DB_NAME",
+          "name": "RAILS_DB_NAME"
+        },
+        {
+          "valueFrom": "RAILS_DB_PASSWORD",
+          "name": "RAILS_DB_PASSWORD"
+        },
+        {
+          "valueFrom": "RAILS_DB_USER",
+          "name": "RAILS_DB_USER"
+        },
+        {
+          "valueFrom": "RAILS_ENV",
+          "name": "RAILS_ENV"
+        },
+        {
+          "valueFrom": "RAILS_HOST_URL",
+          "name": "RAILS_HOST_URL"
+        }
+      ],
+      "memory": 0,
+      "image": "%IMAGE%",
+      "dependsOn": [
+        {
+          "containerName": "web-migrate",
+          "condition": "SUCCESS"
+        }
+      ],
+      "disableNetworking": false,
+      "essential": true,
+      "name": "%WEB_CONTAINER_NAME%"
+    },
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": [],
+        "options": {
+          "awslogs-group": "/ecs/nuxt-rails-task-definition",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "entryPoint": [],
+      "portMappings": [
+        {
+          "hostPort": 7777,
+          "protocol": "tcp",
+          "containerPort": 7777
+        }
+      ],
+      "command": [
+        "rails",
+        "db:migrate"
+      ],
+      "cpu": 0,
+      "environment": [],
+      "secrets": [
+        {
+          "valueFrom": "RAILS_DB_HOST",
+          "name": "RAILS_DB_HOST"
+        },
+        {
+          "valueFrom": "RAILS_DB_NAME",
+          "name": "RAILS_DB_NAME"
+        },
+        {
+          "valueFrom": "RAILS_DB_PASSWORD",
+          "name": "RAILS_DB_PASSWORD"
+        },
+        {
+          "valueFrom": "RAILS_DB_USER",
+          "name": "RAILS_DB_USER"
+        },
+        {
+          "valueFrom": "RAILS_ENV",
+          "name": "RAILS_ENV"
+        },
+        {
+          "valueFrom": "RAILS_HOST_URL",
+          "name": "RAILS_HOST_URL"
+        }
+      ],
+      "memory": 0,
+      "image": "%IMAGE%",
+      "dependsOn": [],
+      "disableNetworking": false,
+      "essential": false,
+      "name": "%WEB_MIGRATE_CONTAINER_NAME%"
+    },
+    {
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": [],
+        "options": {
+          "awslogs-group": "/ecs/nuxt-rails-task-definition",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "entryPoint": [],
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "command": [],
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "NODE_OPTIONS",
+          "value": "--openssl-legacy-provider"
+        }
+      ],
+      "mountPoints": [],
+      "secrets": [
+        {
+          "valueFrom": "NUXT_ENV_RAILS_URL",
+          "name": "NUXT_ENV_RAILS_URL"
+        }
+      ],
+      "memory": 0,
+      "volumesFrom": [],
+      "image": "%IMAGE%",
+      "dependsOn": [],
+      "essential": true,
+      "name": "%FRONTEND_CONTAINER_NAME%"
+    }
+  ],
+  "memory": "512",
+  "taskRoleArn": "arn:aws:iam::282706015608:role/ecsTaskExecutionRole",
+  "family": "%FAMILY_NAME%",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "volumes": []
+}
