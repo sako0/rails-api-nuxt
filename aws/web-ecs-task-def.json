@@ -114,7 +114,7 @@
       "name": "%WEB_MIGRATE_CONTAINER_NAME%"
     }
   ],
-  "memory": "512",
+  "memory": "1024",
   "taskRoleArn": "arn:aws:iam::282706015608:role/ecsTaskExecutionRole",
   "family": "%WEB_FAMILY_NAME%",
   "requiresCompatibilities": [
