@@ -152,7 +152,7 @@
       "name": "%FRONTEND_CONTAINER_NAME%"
     }
   ],
-  "memory": "512",
+  "memory": "1024",
   "taskRoleArn": "arn:aws:iam::282706015608:role/ecsTaskExecutionRole",
   "family": "%FAMILY_NAME%",
   "requiresCompatibilities": [
