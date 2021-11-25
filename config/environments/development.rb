@@ -29,7 +29,7 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   # S3を画像の保存先にする
-  config.active_storage.service = :local
+  config.active_storage.service = :amazon
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -65,5 +65,5 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
   # modelでurl_forなどを使う場合はこちらを指定しないと上手くいかない
   Rails.application.routes.default_url_options[:host] = ENV['RAILS_HOST_URL']
-  config.hosts << "api-rails-app-nuxt-alb-1356766250.ap-northeast-1.elb.amazonaws.com"
+  config.hosts << "api.diet-reader.link"
 end

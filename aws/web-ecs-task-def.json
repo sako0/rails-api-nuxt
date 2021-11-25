@@ -1,5 +1,4 @@
 {
-  "ipcMode": "none",
   "executionRoleArn": "arn:aws:iam::282706015608:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
@@ -7,7 +6,7 @@
         "logDriver": "awslogs",
         "secretOptions": [],
         "options": {
-          "awslogs-group": "/ecs/nuxt-rails-task-definition",
+          "awslogs-group": "/ecs/diet-reader-task-definition-api",
           "awslogs-region": "ap-northeast-1",
           "awslogs-stream-prefix": "ecs"
         }
@@ -15,13 +14,12 @@
       "entryPoint": [],
       "portMappings": [
         {
-          "hostPort": 3000,
+          "hostPort": 80,
           "protocol": "tcp",
-          "containerPort": 3000
+          "containerPort": 80
         }
       ],
       "command": [],
-      "cpu": 0,
       "environment": [],
       "secrets": [
         {
@@ -49,8 +47,7 @@
           "name": "RAILS_HOST_URL"
         }
       ],
-      "memory": 0,
-      "image": "%IMAGE%",
+      "image": "%WEB_IMAGE%",
       "dependsOn": [
         {
           "containerName": "web-migrate",
@@ -66,7 +63,7 @@
         "logDriver": "awslogs",
         "secretOptions": [],
         "options": {
-          "awslogs-group": "/ecs/nuxt-rails-task-definition",
+          "awslogs-group": "/ecs/diet-reader-task-definition-api",
           "awslogs-region": "ap-northeast-1",
           "awslogs-stream-prefix": "ecs"
         }
@@ -83,7 +80,6 @@
         "rails",
         "db:migrate"
       ],
-      "cpu": 0,
       "environment": [],
       "secrets": [
         {
@@ -111,57 +107,16 @@
           "name": "RAILS_HOST_URL"
         }
       ],
-      "memory": 0,
-      "image": "%IMAGE%",
+      "image": "%WEB_IMAGE%",
       "dependsOn": [],
       "disableNetworking": false,
       "essential": false,
       "name": "%WEB_MIGRATE_CONTAINER_NAME%"
-    },
-    {
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "secretOptions": [],
-        "options": {
-          "awslogs-group": "/ecs/nuxt-rails-task-definition",
-          "awslogs-region": "ap-northeast-1",
-          "awslogs-stream-prefix": "ecs"
-        }
-      },
-      "entryPoint": [],
-      "portMappings": [
-        {
-          "hostPort": 80,
-          "protocol": "tcp",
-          "containerPort": 80
-        }
-      ],
-      "command": [],
-      "cpu": 0,
-      "environment": [
-        {
-          "name": "NODE_OPTIONS",
-          "value": "--openssl-legacy-provider"
-        }
-      ],
-      "mountPoints": [],
-      "secrets": [
-        {
-          "valueFrom": "NUXT_ENV_RAILS_URL",
-          "name": "NUXT_ENV_RAILS_URL"
-        }
-      ],
-      "memory": 0,
-      "volumesFrom": [],
-      "image": "%IMAGE%",
-      "dependsOn": [],
-      "essential": true,
-      "name": "%FRONTEND_CONTAINER_NAME%"
     }
   ],
   "memory": "512",
   "taskRoleArn": "arn:aws:iam::282706015608:role/ecsTaskExecutionRole",
-  "family": "%FAMILY_NAME%",
+  "family": "%WEB_FAMILY_NAME%",
   "requiresCompatibilities": [
     "FARGATE"
   ],
