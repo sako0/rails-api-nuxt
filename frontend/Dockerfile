@@ -21,4 +21,4 @@ ENV PATH /frontend/node_modules/.bin:$PATH
 ENV HOST 0.0.0.0
 
 # Start the main process.
-CMD ["yarn", "dev"]
+CMD bash -c "yarn build && yarn start"
