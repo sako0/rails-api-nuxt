@@ -153,7 +153,7 @@
       ],
       "memory": 0,
       "volumesFrom": [],
-      "image": "%IMAGE%",
+      "image": "%IMAGE_FRONT%",
       "dependsOn": [],
       "essential": true,
       "name": "%FRONTEND_CONTAINER_NAME%"

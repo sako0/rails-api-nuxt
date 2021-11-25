@@ -11,6 +11,7 @@ jobs:
     env:
       ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
       ECR_REPOSITORY: diet-reader
+      ECR_REPOSITORY_FRONT: diet-reader-front
       IMAGE_TAG: latest
       WEB_CONTAINER_NAME: web
       WEB_MIGRATE_CONTAINER_NAME: web-migrate
@@ -24,6 +25,7 @@ jobs:
       - name: Replace Name In Task Definition Json
         run: |
           sed -i "s*%IMAGE%*${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}*g" ${{ env.TASK_DEFINITION_PATH }}
+          sed -i "s*%IMAGE_FRONT%*${ECR_REGISTRY}/${ECR_REPOSITORY_FRONT}:${IMAGE_TAG}*g" ${{ env.TASK_DEFINITION_PATH }}
           sed -i "s*%WEB_CONTAINER_NAME%*${WEB_CONTAINER_NAME}*g" ${{ env.TASK_DEFINITION_PATH }}
           sed -i "s*%WEB_MIGRATE_CONTAINER_NAME%*${WEB_MIGRATE_CONTAINER_NAME}*g" ${{ env.TASK_DEFINITION_PATH }}
           sed -i "s*%APP_CONTAINER_NAME%*${APP_CONTAINER_NAME}*g" ${{ env.TASK_DEFINITION_PATH }}
@@ -43,8 +45,10 @@ jobs:
 
       - name: Build, tag, and push image to Amazon ECR # apiのECRイメージPush
         run: |
-          docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker build -f ./Dockerfile -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker build -f ./frontend/Dockerfile -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONT }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONT }}:${{ env.IMAGE_TAG }}
 
       - name: Render migration task definition # migrationを行うECSタスク定義のレンダリング
         id: render-migration-web-task-definition
@@ -68,7 +72,7 @@ jobs:
         with:
           task-definition: ${{ steps.render-web-task-definition.outputs.task-definition }}
           container-name: ${{ env.FRONTEND_CONTAINER_NAME }}
-          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONT }}:${{ env.IMAGE_TAG }}
 
       - name: Deploy to Amazon ECS service # ECSサービスデプロイ
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
