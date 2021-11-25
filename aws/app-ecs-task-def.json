@@ -48,6 +48,7 @@
           "name": "RAILS_HOST_URL"
         }
       ],
+      "memory": 128,
       "image": "%IMAGE%",
       "dependsOn": [
         {
@@ -64,7 +65,7 @@
         "logDriver": "awslogs",
         "secretOptions": [],
         "options": {
-          "awslogs-group": "/ecs/nuxt-rails-task-definition",
+          "awslogs-group": "/ecs/diet-reader-task-definition",
           "awslogs-region": "ap-northeast-1",
           "awslogs-stream-prefix": "ecs"
         }
@@ -109,6 +110,7 @@
           "name": "RAILS_HOST_URL"
         }
       ],
+      "memory": 128,
       "image": "%IMAGE%",
       "dependsOn": [],
       "disableNetworking": false,
@@ -120,7 +122,7 @@
         "logDriver": "awslogs",
         "secretOptions": [],
         "options": {
-          "awslogs-group": "/ecs/nuxt-rails-task-definition",
+          "awslogs-group": "/ecs/diet-reader-task-definition",
           "awslogs-region": "ap-northeast-1",
           "awslogs-stream-prefix": "ecs"
         }
@@ -149,6 +151,7 @@
         }
       ],
       "volumesFrom": [],
+      "memory": 128,
       "image": "%IMAGE_FRONT%",
       "dependsOn": [],
       "essential": true,
