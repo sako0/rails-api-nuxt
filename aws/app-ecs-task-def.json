@@ -20,7 +20,6 @@
         }
       ],
       "command": [],
-      "cpu": 64,
       "environment": [],
       "secrets": [
         {
@@ -48,7 +47,6 @@
           "name": "RAILS_HOST_URL"
         }
       ],
-      "memoryReservation": 64,
       "image": "%IMAGE%",
       "dependsOn": [
         {
@@ -82,7 +80,6 @@
         "rails",
         "db:migrate"
       ],
-      "cpu": 64,
       "environment": [],
       "secrets": [
         {
@@ -110,7 +107,6 @@
           "name": "RAILS_HOST_URL"
         }
       ],
-      "memoryReservation": 64,
       "image": "%IMAGE%",
       "dependsOn": [],
       "disableNetworking": false,
@@ -136,7 +132,6 @@
         }
       ],
       "command": [],
-      "cpu": 128,
       "environment": [
         {
           "name": "NODE_OPTIONS",
@@ -151,7 +146,6 @@
         }
       ],
       "volumesFrom": [],
-      "memoryReservation": 384,
       "image": "%IMAGE_FRONT%",
       "dependsOn": [],
       "essential": true,
