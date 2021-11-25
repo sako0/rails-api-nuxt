@@ -60,7 +60,7 @@ jobs:
           container-name: ${{ env.WEB_MIGRATE_CONTAINER_NAME }}
           image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
-      - name: Render WEB ECS task definition # webのECSタスク定義のレンダリング
+      - name: Render Web ECS task definition # webのECSタスク定義のレンダリング
         id: render-web-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
@@ -75,10 +75,17 @@ jobs:
           service: ${{ secrets.SERVICE_NAME }}
           cluster: ${{ secrets.CLUSTER_NAME }}
 
-      - name: Frontend task definition # frontendのECSタスク定義のレンダリング
+      - name: Render Frontend ECS task definition # frontendのECSタスク定義のレンダリング
         id: render-frontend-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ env.FRONT_TASK_DEFINITION_PATH }}
           container-name: ${{ env.FRONTEND_CONTAINER_NAME }}
           image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONT }}:${{ env.IMAGE_TAG }}
+
+      - name: Frontend Deploy to Amazon ECS service # frontendのECSサービスデプロイ
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-frontend-task-definition.outputs.task-definition }}
+          service: ${{ secrets.FRONT_SERVICE_NAME }}
+          cluster: ${{ secrets.CLUSTER_NAME }}

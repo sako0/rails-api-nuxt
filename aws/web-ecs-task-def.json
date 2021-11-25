@@ -6,7 +6,7 @@
         "logDriver": "awslogs",
         "secretOptions": [],
         "options": {
-          "awslogs-group": "/ecs/diet-reader-task-definition",
+          "awslogs-group": "/ecs/diet-reader-task-definition-api",
           "awslogs-region": "ap-northeast-1",
           "awslogs-stream-prefix": "ecs"
         }
@@ -63,7 +63,7 @@
         "logDriver": "awslogs",
         "secretOptions": [],
         "options": {
-          "awslogs-group": "/ecs/diet-reader-task-definition",
+          "awslogs-group": "/ecs/diet-reader-task-definition-api",
           "awslogs-region": "ap-northeast-1",
           "awslogs-stream-prefix": "ecs"
         }
