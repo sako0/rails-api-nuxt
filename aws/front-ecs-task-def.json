@@ -40,13 +40,13 @@
       "name": "%FRONTEND_CONTAINER_NAME%"
     }
   ],
-  "memory": "512",
+  "memory": "1024",
   "taskRoleArn": "arn:aws:iam::282706015608:role/ecsTaskExecutionRole",
   "family": "%FRONT_FAMILY_NAME%",
   "requiresCompatibilities": [
     "FARGATE"
   ],
   "networkMode": "awsvpc",
-  "cpu": "256",
+  "cpu": "512",
   "volumes": []
 }
