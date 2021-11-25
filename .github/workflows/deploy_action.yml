@@ -45,9 +45,9 @@ jobs:
 
       - name: Build, tag, and push image to Amazon ECR # apiのECRイメージPush
         run: |
-          docker build -f ./Dockerfile -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker build -f ./Dockerfile -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-          docker build -f ./frontend/Dockerfile -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONT }}:${{ env.IMAGE_TAG }}
+          docker build -f ./frontend/Dockerfile -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONT }}:${{ env.IMAGE_TAG }} ./frontend
           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_FRONT }}:${{ env.IMAGE_TAG }}
 
       - name: Render migration task definition # migrationを行うECSタスク定義のレンダリング
