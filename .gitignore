@@ -164,3 +164,6 @@ dist
 frontend/node_modules/*
 #.idea
 .idea/*
+
+# env
+.env

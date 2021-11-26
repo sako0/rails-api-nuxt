@@ -87,15 +87,15 @@ class User < ApplicationRecord
 
   # 初期イメージのアタッチ
   def default_image
-    if !self.image.attached?
-      image_attach_by_url("http://free-photo.net/photo_img/0812105448.jpg")
+    unless self.image.attached?
+      image_attach_by_url("https://www.pakutaso.com/shared/img/thumb/KAZ19514004_TP_V.jpg")
     end
   end
 
   # 初期背景イメージのアタッチ
   def default_back_ground_image
-    if !self.back_ground.attached?
-      url = URI.parse("https://eiga.k-img.com/images/movie/90444/photo/4e9495e749834086/640.jpg?1554077750")
+    unless self.back_ground.attached?
+      url = URI.parse("https://www.pakutaso.com/shared/img/thumb/N845_mokumetex_TP_V.jpg")
       filename = File.basename(url.path)
       image = URI.open(url)
       self.back_ground.attach(io: image, filename: filename)

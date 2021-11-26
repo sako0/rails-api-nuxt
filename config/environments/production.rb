@@ -112,5 +112,5 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
   # modelでurl_forなどを使う場合はこちらを指定しないと上手くいかない
   Rails.application.routes.default_url_options[:host] = ENV['RAILS_HOST_URL']
-  config.hosts << "api-rails-app-nuxt-alb-1356766250.ap-northeast-1.elb.amazonaws.com"
+  config.hosts << "api.diet-reader.link"
 end

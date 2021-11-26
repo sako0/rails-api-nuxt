@@ -11,11 +11,13 @@ class Api::V1::SessionsController < ApplicationController
         logger.error(user)
         jwt_token = encode(user.id.to_s)
       else
-        user = User.create!(name: twitter_user['name'],
-                           twitter_id: twitter_user['user_id'])
-        user.image_attach_by_url(twitter_user['picture'])
-        user.build_profiles(age: 20, sex: false, height: 170, target_weight: 65, action_level: 1.5, notes: "プロフィールを修正して下さい")
-        user.save
+        ActiveRecord::Base.transaction do
+          user = User.create!(name: twitter_user['name'],
+                              twitter_id: twitter_user['user_id'])
+          user.image_attach_by_url("https://www.pakutaso.com/shared/img/thumb/KAZ19514004_TP_V.jpg")
+          user.save
+          Profile.create!(user_id: user.id, age: 20, sex: false, height: 170, target_weight: 65, action_level: 1.5, notes: "プロフィールを修正して下さい")
+        end
         jwt_token = encode(user.id.to_s)
       end
       # レスポンスヘッダーにトークンを設定
