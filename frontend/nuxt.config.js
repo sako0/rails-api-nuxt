@@ -66,7 +66,7 @@ export default {
   ],
   webfontloader: {
     google: {
-      families: ['Hachi+Maru+Pop&display=swap'], // Loads Lato font with weights 400 and 700
+      families: ['Noto+Sans+Japanese&display=swap'],
     },
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -103,7 +103,7 @@ export default {
     treeShake: true,
     defaultAssets: {
       font: {
-        family: 'Hachi Maru Pop',
+        family: 'Noto Sans Japanese',
       },
     },
     theme: {
