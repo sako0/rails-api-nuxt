@@ -31,6 +31,38 @@
         {
           "valueFrom": "NUXT_ENV_RAILS_URL",
           "name": "NUXT_ENV_RAILS_URL"
+        },
+        {
+          "valueFrom": "FIREBASE_API_KEY",
+          "name": "FIREBASE_API_KEY"
+        },
+        {
+          "valueFrom": "FIREBASE_AUTH_DOMAIN",
+          "name": "FIREBASE_AUTH_DOMAIN"
+        },
+        {
+          "valueFrom": "FIREBASE_DATABASE_URL",
+          "name": "FIREBASE_DATABASE_URL"
+        },
+        {
+          "valueFrom": "FIREBASE_PROJECT_ID",
+          "name": "FIREBASE_PROJECT_ID"
+        },
+        {
+          "valueFrom": "FIREBASE_STORAGE_BUCKET",
+          "name": "FIREBASE_STORAGE_BUCKET"
+        },
+        {
+          "valueFrom": "FIREBASE_MESSSAGE_SENDER_ID",
+          "name": "FIREBASE_MESSSAGE_SENDER_ID"
+        },
+        {
+          "valueFrom": "FIREBASE_APP_ID",
+          "name": "FIREBASE_APP_ID"
+        },
+        {
+          "valueFrom": "FIREBASE_MEASUREMENT_ID",
+          "name": "FIREBASE_MEASUREMENT_ID"
         }
       ],
       "volumesFrom": [],
