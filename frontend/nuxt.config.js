@@ -66,7 +66,7 @@ export default {
   ],
   webfontloader: {
     google: {
-      families: ['Noto+Sans+Japanese&display=swap'],
+      families: ['Noto+Sans+Japanese'],
     },
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
